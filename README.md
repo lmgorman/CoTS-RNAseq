@@ -24,7 +24,7 @@ Fed and unfed upon _Porites_ sp. and _A. hyacinthus_ colonies were chosen (**Fig
 <img width="389" alt="Fig1smallsnipfile" src="https://github.com/user-attachments/assets/9aa1e0fd-fe4d-4bc0-9086-7615f6f57231" />
 
 
-**Figure 1.** _Porites_ sp. (**A**, **B**) and _Acropora hyacinthus_ (**C**, **D**) individuals during a CoTS outbreak in Moorea, French Polynesia. Control colonies for each species were chosen based on no observable CoTS feeding scars (**A**, **C**). Colonies being fed upon by CoTS (**B**, **D**) were chosen that were actively consumed by CoTS during sampling and harboured both an observable feeding scar (skeleton devoid of coral tissue (red arrow)) in addition to harbouring areas with remaining coral tissue (pink arrow) for sampling. The white arrow in **A** depicts a feeding scar caused by corallivorous fish which were present on both fed and unfed _Porites_ sp. colonies. 
+**Figure 1.** _Porites_ sp. (**A**, **B**) and _Acropora hyacinthus_ (**C**, **D**) individuals during the 2023/24 CoTS outbreak in Moorea, French Polynesia. Control colonies for each species were chosen based on no observable CoTS feeding scars (**A**, **C**). Colonies being fed upon by CoTS (**B**, **D**) were chosen that were actively consumed by CoTS during sampling and harboured both an observable feeding scar (skeleton devoid of coral tissue (red arrow)) in addition to harbouring areas with remaining coral tissue (pink arrow) for sampling. The white arrow in **A** depicts a feeding scar caused by corallivorous fish which were present on both fed and unfed _Porites_ sp. colonies. 
 
 
 # RNA extraction
