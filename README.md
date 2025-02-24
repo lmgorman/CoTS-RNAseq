@@ -28,7 +28,7 @@ Fed and unfed upon _Porites_ sp. and _A. hyacinthus_ colonies were chosen (**Fig
 
 
 # RNA extraction
-Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortexed due to the tissue still remaining on the coral skeleton. Contrastingly, in _Acropora hyacinthus_ samples, the tissue had successfully dissociated from the skeleton into the DNA/DNA shield, so these samples were not cut. 300-1500 µL of sample was then transferred to a new tube and RNA was extracted using the Zymo RNA/ DNA quick prep mini kit. QC of RNA was conducted on both a nanodrop and a bioanalyser. Samples with a 260/280 ratio between 1.8-2.2 and containing two RNA peaks (18S and 28S) on the bioanalyser were sent to MGX-Montpellier GenomiX<sup>1</sup>  for sequencing.
+Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortexed due to the tissue still remaining on the coral skeleton. Contrastingly, in _Acropora hyacinthus_ samples, the tissue had successfully dissociated from the skeleton, so these samples were not cut. 300-1500 µL of sample was then transferred to a new tube and RNA was extracted using the Zymo RNA/ DNA quick prep mini kit. QC of RNA was conducted on both a nanodrop and a bioanalyser. Samples with a 260/280 ratio between 1.8-2.2 and containing two RNA peaks (18S and 28S) on the bioanalyser were sent to MGX-Montpellier GenomiX<sup>1</sup>  for sequencing.
 
 
 # Pure venom extraction 
