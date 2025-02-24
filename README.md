@@ -31,5 +31,10 @@ Fed and unfed upon _Porites_ sp. and _A. hyacinthus_ colonies were chosen (**Fig
 Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortexed due to the tissue still remaining on the coral skeleton. Contrastingly, in _Acropora hyacinthus_ samples, the tissue had successfully dissociated from the skeleton into the DNA/DNA shield, so these samples were not cut. 300-1500 µL of sample was then transferred to a new tube and RNA was extracted using the Zymo RNA/ DNA quick prep mini kit. QC of RNA was conducted on both a nanodrop and a bioanalyser. Samples with a 260/280 ratio between 1.8-2.2 and containing two RNA peaks (18S and 28S) on the bioanalyser were sent to MGX-Montpellier GenomiX<sup>1</sup>  for sequencing.
 
 
+# Pure venom extraction 
+To confirm whether the genes that were expressed during the transcriptomics were in fact venom-related, pure venom was extracted from _Porites_ sp. and _Acropora hyacinthus_ colonies. Pure venom from _Porites_ sp. colonies were taken from colonies at the same location as transcriptomic samples (Ta'ahiamanu, Moorea; -17.495210°, -149.851340°), whereas _A. hyacinthus_ pure venom was taken from colonies at a slightly different location in Moorea (-17.480528°, -149.84791667°). Pure venom was extracted during October 2024 (9-10 months after transcriptomic samples were taken). Small coral nubbins (_n_ = 5) around ~2.5cm in length were taken from _Porites_ sp. and _Acropora hyacinthus_ and placed into 98% EtOH for 30 seconds, allowing nematocysts to successfully discharge venom. Extra care was taken to make sure minimal mechanical pressure was applied to the nubbins prior to placing in ethanol and nubbins were only touched with forceps. This procedure was repeated five times for each species to get a total of 5 biological replicates _per_ species. Samples were then transported at room temperature to CNRS, Montpellier where they underwent proteomic analysis.
+
+
+
 # References
 1. MGX-Montpellier GenomiX, Univ. Montpellier, CNRS, INSERM, Montpellier, France
