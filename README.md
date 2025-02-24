@@ -1,5 +1,5 @@
 # CoTS-RNAseq
-Bioinformatics analysis of RNA-seq data retrived from corals (_Acropora hyacinthus_ and _Porites_ sp.) being eaten by CoTS in Moorea, French Polynesia during the 2023/24 CoTS outbreak.
+Bioinformatics analysis of RNA-seq data collected from corals (_Acropora hyacinthus_ and _Porites_ sp.) being eaten by CoTS in Moorea, French Polynesia during the 2023/24 CoTS outbreak.
 
 
 Four treatments:
