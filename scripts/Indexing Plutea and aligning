@@ -1,0 +1,84 @@
+##Navigate to Porites spp. genome folder
+cd /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por
+
+## Download Porites evermanni genome - tara pacific expedition 2023 to this directory
+##Tell HPC which website to go to
+https://www.genoscope.cns.fr/corals/genomes.html
+##Download the GFF3 file
+wget https://www.genoscope.cns.fr/corals/genomes.html/Porites_evermanni_v1.annot.gff wget
+##Download the Fasta file
+https://www.genoscope.cns.fr/corals/genomes.html/Porites_evermanni_v1.annot.pep.fa wget
+
+cd scripts 
+nano por-ever-genome.sh
+
+#!/bin/bash
+#SBATCH --job-name=STAR_genome_index_Pevermanni
+#SBATCH --nodes=1 --cpus-per-task=8
+#SBATCH --mem=100G  # Requested Memory
+#SBATCH -p gpu  # Partition
+#SBATCH -G 1  # Number of GPUs
+#SBATCH --time=24:00:00  # Job time limit
+#SBATCH -o slurm-por-ever-genome.out  # %j = job ID
+#SBATCH -e slurm-por-ever-genome.err  # %j = job ID
+#SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por
+
+#load modules
+module load uri/main
+module load STAR/2.7.11b-GCC-12.3.0
+
+STAR --runThreadN 6 \
+--runMode genomeGenerate \
+--genomeDir Pevermanni_index \
+--genomeFastaFiles /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/Porites_evermanni_v1.annot.pep.fa \
+--sjdbGTFfile /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/Porites_evermanni_v1.annot.gff \
+--sjdbGTFtagExonParentTranscript Parent \
+--sjdbOverhang 99 \
+--genomeSAindexNbases 13
+
+sbatch por-ever-genome.sh
+
+##Align trimmed reads to Porites evermanni genome
+cd scripts 
+nano por-ever-align.sh
+
+#!/bin/bash
+#SBATCH --job-name=por-ever-align
+#SBATCH --nodes=1 --cpus-per-task=8
+#SBATCH --mem=250G  # Requested Memory
+#SBATCH -p gpu  # Partition
+#SBATCH -G 1  # Number of GPUs
+#SBATCH --time=24:00:00  # Job time limit
+#SBATCH -o slurm-por-ever-align.out  # %j = job ID
+#SBATCH -e slurm-por-ever-align.err  # %j = job ID
+#SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/
+
+#load modules
+echo "Loading programs" $(date)
+module load uri/main
+module load STAR/2.7.11b-GCC-12.3.0
+
+echo "Starting read alignment." $(date)
+#loop through all files to align them to genome
+for i in /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/*_R1_001.fastq.gz; do
+
+# Define the corresponding R2 file by replacing _R1_ with _R2_
+    r2_file="${i/_R1_001.fastq.gz/_R2_001.fastq.gz}"
+    
+# Define output prefix
+    output_prefix="/scratch3/workspace/ashuffmyer_uri_edu-cots/por/$(basename "${i%_R1_001.fastq.gz}")_"
+    
+# Run STAR alignment
+    STAR --runMode alignReads \
+        --genomeDir /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/Pevermanni_index \
+        --runThreadN 10 \
+        --readFilesCommand zcat \
+        --readFilesIn "$i" "$r2_file" \
+        --outSAMtype BAM SortedByCoordinate \
+        --outSAMunmapped Within \
+        --outSAMattributes Standard \
+        --outFileNamePrefix "$output_prefix"
+done
+
+echo "Alignment of Trimmed Seq data complete." $(date)
+sbatch por-ever-align
