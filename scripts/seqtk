@@ -22,6 +22,6 @@ nano seqtk.sh
 ##Load seqtk module
 module load seqtk
 
-## Subsample 100,000 paired reads from the 211R sample
-seqtk sample -s100 211R_R1_001.fastq.gz 100000 > sub1_211R_R1.fq
-seqtk sample -s100 211R_R2_001.fastq.gz 100000 > sub2_211R_R2.fq
+## Subsample 90,000,000 paired reads from the 211R sample
+seqtk sample -s100 211R_R1_001.fastq.gz 90000000 > sub1_211R_R1.fq
+seqtk sample -s100 211R_R2_001.fastq.gz 90000000 > sub2_211R_R2.fq
