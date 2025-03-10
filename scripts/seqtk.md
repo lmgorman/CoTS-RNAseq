@@ -1,7 +1,6 @@
 ## Downloading the seqtk software to trim huge raw 211R files (R1 and R2) to subset of sequences
-
-- seqtk (already a module) so no need to download
-
+https://github.com/lh3/seqtk 
+- seqtk already a module on Unity cluster so no need to download from github
 
 ## Make script for seqtk
 ```
