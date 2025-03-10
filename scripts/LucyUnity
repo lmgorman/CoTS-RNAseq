@@ -1,0 +1,15 @@
+## Lucy creating directories on unity
+
+Home directory: /home/lucy_gorman_uri_edu
+
+mkdir RawData
+ln -s /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/raw_data /home/lucy_gorman_uri_edu/RawData
+
+mkdir TrimmedData
+ln -s /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/trimmed_data /home/lucy_gorman_uri_edu/TrimmedData
+
+mkdir PorAlign
+ln -s /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/ /home/lucy_gorman_uri_edu/PorAlign
+
+mkdir AcrAlign
+ln -s /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr/ /home/lucy_gorman_uri_edu/AcrAlign
