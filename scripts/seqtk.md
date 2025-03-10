@@ -8,7 +8,7 @@
 cd /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/scripts
 nano seqtk.sh
 ```
-Run script on trimmed 211 files as it saves time vs running on raw data:
+Run script on trimmed 211R files as it saves time vs running on raw data:
 ```
 #!/bin/bash
 #SBATCH --job-name=fastqc_raw
@@ -31,3 +31,9 @@ module load seqtk
 seqtk sample -s100 211R_R1_001.fastq 90000000 > sub1_211R_R1.fq
 seqtk sample -s100 211R_R2_001.fastq 90000000 > sub2_211R_R2.fq
 ```
+
+Kept random seed at 100 "-s100" like on documentation
+
+New sample names:
+- sub1_211R_R1.fq
+- sub2_211R_R2.fq
