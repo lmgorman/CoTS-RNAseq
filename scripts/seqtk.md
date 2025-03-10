@@ -19,7 +19,7 @@ Run script on trimmed 211 files as it saves time vs running on raw data:
 #SBATCH --time=24:00:00  # Job time limit
 #SBATCH -o slurm-seqtk_211R.out  # %j = job ID
 #SBATCH -e slurm-seqtk_211R.err  # %j = job ID
-#SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/raw_data
+#SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/trimmed_data
 ```
 ## Load seqtk module
 ```
