@@ -1,5 +1,6 @@
 ## Uploading Raw Data to NCBI
-Follow steps detailed at: https://github.com/Putnam-Lab/Lab_Management/blob/master/Bioinformatics_%26_Coding/Data_Mangament/SRA-Upload_Protocol.md****
+Follow steps detailed at: https://github.com/Putnam-Lab/Lab_Management/blob/master/Bioinformatics_%26_Coding/Data_Mangament/SRA-Upload_Protocol.md
+
 1. Add biosamples and attributes
 2. Add bioproject for biosamples
 3. Add SRA metadata
