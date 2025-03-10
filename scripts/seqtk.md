@@ -1,13 +1,15 @@
 ## Downloading the seqtk software to trim huge raw 211R files (R1 and R2) to subset of sequences
 
-##Download seqtk
-git clone https://github.com/lh3/seqtk.git;
-cd seqtk; make
+- seqtk (already a module) so no need to download
 
-##Make script for seqtk
+
+## Make script for seqtk
+```
 cd /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/scripts
 nano seqtk.sh
-
+```
+Run script on trimmed 211 files as it saves time vs running on raw data:
+```
 #!/bin/bash
 #SBATCH --job-name=fastqc_raw
 #SBATCH --nodes=1 --cpus-per-task=8
@@ -18,10 +20,14 @@ nano seqtk.sh
 #SBATCH -o slurm-seqtk_211R.out  # %j = job ID
 #SBATCH -e slurm-seqtk_211R.err  # %j = job ID
 #SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/raw_data
-
-##Load seqtk module
+```
+## Load seqtk module
+```
 module load seqtk
+```
 
 ## Subsample 90,000,000 paired reads from the 211R sample
-seqtk sample -s100 211R_R1_001.fastq.gz 90000000 > sub1_211R_R1.fq
-seqtk sample -s100 211R_R2_001.fastq.gz 90000000 > sub2_211R_R2.fq
+```
+seqtk sample -s100 211R_R1_001.fastq 90000000 > sub1_211R_R1.fq
+seqtk sample -s100 211R_R2_001.fastq 90000000 > sub2_211R_R2.fq
+```
