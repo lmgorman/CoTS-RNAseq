@@ -1,6 +1,7 @@
 Ariana’s terminal command notes - https://ahuffmyer.github.io/ASH_Putnam_Lab_Notebook/2023-UW-Software-Carpentry-Workshop-in-Terminal-Git-and-R/ 
 
 ls = lists everything in current directory you are in
+ls -h -l = lists everything PLUS size of files
 Everything before $ sign tells you where you are
 pwd = prints working directory 
 cd = change directory “cd mcap-2023”
