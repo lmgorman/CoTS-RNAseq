@@ -1,5 +1,10 @@
-Ariana’s terminal command notes - https://ahuffmyer.github.io/ASH_Putnam_Lab_Notebook/2023-UW-Software-Carpentry-Workshop-in-Terminal-Git-and-R/ 
+## Coding - Lucy's Intro
 
+Ariana’s terminal command notes 
+https://ahuffmyer.github.io/ASH_Putnam_Lab_Notebook/2023-UW-Software-Carpentry-Workshop-in-Terminal-Git-and-R/ 
+
+## Useful commands
+```
 ls = lists everything in current directory you are in
 ls -h -l = lists everything PLUS size of files
 Everything before $ sign tells you where you are
@@ -27,7 +32,10 @@ cp = copy
 * = Asterix refers to everything 
 interactive = mini session with supercomputer
 Run test script on one file in interactive mode = lets you check script works before doing all files
+```
 
+## Supercomputer header for each shell script
+```
 “#SBATCH” = language that supercomputer needs to read
 e.g. each nano shell script needs this at the beginning:
 #!/bin/bash
@@ -40,8 +48,10 @@ e.g. each nano shell script needs this at the beginning:
 #SBATCH -o slurm-fastqc_raw.out  # %j = job ID
 #SBATCH -e slurm-fastqc_raw.err  # %j = job ID
 #SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/raw_data
+```
 
-Easy example nano shell script:
+## Easy example nano shell script
+```
 #!/bin/bash
 #SBATCH --job-name=fastqc_raw
 #SBATCH --nodes=1 --cpus-per-task=8
@@ -69,5 +79,16 @@ Then close the shell script and save as "raw_qc.sh"
 
 #Run the job, type:
 sbatch raw_qc.sh
+```
 
-
+## File Transfer Protocols
+Use the command 
+```
+ftp
+```
+and then enter the server to transfer the files to
+You can use the command 
+```
+mput
+```
+to move files to the server
