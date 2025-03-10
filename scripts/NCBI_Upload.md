@@ -9,18 +9,28 @@ Follow steps detailed at: https://github.com/Putnam-Lab/Lab_Management/blob/mast
 4. Upload data
 
 Navigate to folder with raw data on Unity
+```
 /project/pi_hputnam_uri_edu/20250107_COTS_LG
+```
 Establish remote connection using ftp command
+```
 ftp ftp-private.wip.ncbi.nlm.nih.gov
+```
 Login using credentials NCBI give you
 Now you are in NCBI server
 Create folder in NCBI server
+```
 mkdir CoTS_gorman
+```
 Navigate to folder in NCBI
+
+
 Transfer multiple files in your home directory folder (/project/pi_hputnam_uri_edu/20250107_COTS_LG) using 'mput' command 
+```
 mput *fastq.gz
+```
 Then the ftp will ask '[anpqy?]'
 And you want to type 'a' for all files
 
-
+This will transfer all the files ending in "fastq.gz" to your NCBI folder
 
