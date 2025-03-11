@@ -128,7 +128,7 @@ Started 211R_R1_001.fastq.gz at 12:11am
 put 211R_R1_001.fastq.gz
 ```
 Re-uploading the whole file versus the 235R_R1_001.fastq.gz this morning - maybe if you log back in on the same day it carries on where the file left off uploading? Will try this if connection gets terminated during upload....
-Connection terminated after 25 mintes; checked and if i log in again straigh after it looks to be transferring reads from where it left off (similar to 235R_R1_001.fastq.gz this morning):
+Connection terminated after 25 minutes; checked and if i log in again straight after it looks to be transferring reads from where it left off (similar to 235R_R1_001.fastq.gz this morning):
 only 16 minutes remaining - need to check true file size after upload completed
 ```
 put 211R_R1_001.fastq.gz
@@ -149,26 +149,81 @@ Transfer complete
 ```
 Started 211R_R1_001.fastq.gz at 14:55pm
 ```
-put 211R_R1_001.fastq.gz
+put 211R_R2_001.fastq.gz 
+```
+- did 50/55 minutes and got to ~90% and connection terminated
+
+- Started re running at 15:55pm - can't tell whether its started from the beginning again or just continuing from where it left off....
+```
+put 211R_R2_001.fastq.gz 
+```
+I exited because it was just going to do the same again - try and transfer for 50 minutes and then loose conneciton...
+*Not completed 211R_R2_001.fastq.gz*
+
+Started 244R_R2_001.fastq.gz at 16:12pm
+```
+put 244R_R2_001.fastq.gz
+Transfer complete
+6603779223 bytes sent in 09:39 (10.87 MiB/s)
+```
+Started 253R_R1_001.fastq.gz at 16:22pm
+```
+put 253R_R1_001.fastq.gz
+Transfer complete
+6368047803 bytes sent in 09:47 (10.33 MiB/s)
+```
+Started 253R_R2_001.fastq.gz at 16:34pm
+```
+put 253R_R2_001.fastq.gz
+Transfer complete
+6723438891 bytes sent in 10:30 (10.16 MiB/s)
+```
+Started 321RA_R1_001.fastq.gz at 16:42pm
+```
+put 321RA_R1_001.fastq.gz
+Transfer complete
+6001367402 bytes sent in 10:23 (9.18 MiB/s)
+```
+Started 321RA_R2_001.fastq.gz at 16:53pm
+```
+put 321RA_R2_001.fastq.gz
+Transfer complete
+6269993774 bytes sent in 09:35 (10.39 MiB/s)
+```
+Started 331RA_R1_001.fastq.gz at 17:06pm
+```
+put 331RA_R1_001.fastq.gz
+Transfer complete
+5813803998 bytes sent in 10:08 (9.10 MiB/s)
+```
+Started 331RA_R2_001.fastq.gz at 17:16pm
+```
+put 331RA_R2_001.fastq.gz
 ```
 
 
-
-| File name          | Original file size | File size in NCBI |
-| ------------------ | ------------------ | ----------------- |
-| 16_R1_001.fastq.gz | 6.9G | 6.9G |
-| 16_R2_001.fastq.gz | 7.2G | 7.2G |
-| 211R_R1_001.fastq.gz | 42G | |
-| 211R_R2_001.fastq.gz | 44G | |
-| 218R_R1_001.fastq.gz | 5.3G | |
-| 218R_R2_001.fastq.gz | 5.7G | |
-| 225R_R1_001.fastq.gz | 2.8G | |
-| 225R_R2_001.fastq.gz | 2.9G | |
-| 227R_R1_001.fastq.gz | 6.8G | |
-| 227R_R2_001.fastq.gz | 7.0G | |
-| 235R_R1_001.fastq.gz | 6.0G | |
-| 235R_R2_001.fastq.gz | 6.4G | |
-| 236R_R1_001.fastq.gz | 6.6G | |
-| 236R_R2_001.fastq.gz | 6.9G | |
-| 244R_R1_001.fastq.gz | 5.9G | |
-| 244R_R2_001.fastq.gz | 
+| File name          | Original file size | File size in NCBI | Date uploaded to NCBI |
+| ------------------ | ------------------ | ----------------- | --------------------- |
+| 16_R1_001.fastq.gz | 6.9G | 6.9G | 10.03.25 |
+| 16_R2_001.fastq.gz | 7.2G | 7.2G | 10.03.25 |
+| 211R_R1_001.fastq.gz | 42G | 41.2G | 11.03.25 |
+| 211R_R2_001.fastq.gz | 44G | | |
+| 218R_R1_001.fastq.gz | 5.3G | 5.2G | 11.03.25 |
+| 218R_R2_001.fastq.gz | 5.7G | 5.6G | 11.03.25 |
+| 225R_R1_001.fastq.gz | 2.8G | | 11.03.25 |
+| 225R_R2_001.fastq.gz | 2.9G | | 11.03.25 |
+| 227R_R1_001.fastq.gz | 6.8G | | 11.03.25 |
+| 227R_R2_001.fastq.gz | 7.0G | | 11.03.25 |
+| 235R_R1_001.fastq.gz | 6.0G | | 11.03.25 |
+| 235R_R2_001.fastq.gz | 6.4G | | 11.03.25 |
+| 236R_R1_001.fastq.gz | 6.6G | | 11.03.25 |
+| 236R_R2_001.fastq.gz | 6.9G | | 11.03.25 |
+| 244R_R1_001.fastq.gz | 5.9G | | 11.03.25 |
+| 244R_R2_001.fastq.gz | | | 11.03.25 |
+| 253R_R1_001.fastq.gz | | | 11.03.25 |
+| 253R_R2_001.fastq.gz | | | 11.03.25 |
+| 321RA_R1_001.fastq.gz | | | 11.03.25 |
+| 321RA_R2_001.fastq.gz | | | 11.03.25 |
+| 331RA_R1_001.fastq.gz | | | 11.03.25 |
+| 331RA_R2_001.fastq.gz | | |
+| 336R_R1_001.fastq.gz | | |
