@@ -34,3 +34,7 @@ And you want to type 'a' for all files
 
 This will transfer all the files ending in "fastq.gz" to your NCBI folder
 
+As of 10.03.25
+2 samples fully uploaded in NCBI files:
+CoTS_gorman (16_R1; 16_R2)
+CoTS_gorman2 (16_R1; 16_R2)
