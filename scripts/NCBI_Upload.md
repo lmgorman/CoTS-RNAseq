@@ -38,17 +38,28 @@ As of 10.03.25
 2 samples fully uploaded in NCBI files:
 CoTS_gorman (16_R1; 16_R2)
 CoTS_gorman2 (16_R1; 16_R2)
-Connection terminated after about 20 minutes of trying to move 211R_R1 so only partially moved over in both files (CoTS_gorman; CoTS_gorman2)
+Connection terminated after about 20 minutes of trying to move 211R_R1 so only partially moved over in both folders (CoTS_gorman; CoTS_gorman2)
 
-Folder with files (CoTS_gorman; CoTS_gorman2) on NCBI server for 30 days before it will be removed = 09.04.25
+Folder with files (CoTS_gorman; CoTS_gorman2) on NCBI server for 30 days before it will be removed = 09.04.25 - need to upload and submit all data before this date
 
 
 # 11.03.25
 I am going to try and upload all files individually (using just the 'put' command not 'mput') to original 'CoTS_gorman' folder
+
 
 Navigated to NCBI source folder 
 ```
 cd uploads/kiwielemgee_gmail.com_f7k2V6eS
 cd CoTS_gorman
 put 218R_R1_001.fastq.gz
+```
+Completed at 10.51am
+
+```
+Transfer complete
+5619521752 bytes sent in 08:31 (10.47 MiB/s)
+```
+Started 218R_R2_001.fastq.gz at 10:52am:
+```
+put 218R_R2_001.fastq.gz
 ```
