@@ -46,6 +46,11 @@ Folder with files (CoTS_gorman; CoTS_gorman2) on NCBI server for 30 days before 
 # 11.03.25
 I am going to try and upload all files individually (using just the 'put' command not 'mput') to original 'CoTS_gorman' folder
 
+I am uploading the files in sequential order when you list the files in the folder:
+```
+/project/pi_hputnam_uri_edu/20250107_COTS_LG ls
+```
+The ONLY exception = I am leaving the 211R_R1 and 211R_R2 until last due to their size (takes around one hour to transfer one file to NCBI)
 
 Navigated to NCBI source folder 
 ```
