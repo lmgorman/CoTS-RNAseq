@@ -1,4 +1,4 @@
-## Uploading Raw Data to NCBI
+## Uploading Raw Data to NCBI - 10.03.25
 Follow steps detailed at: https://github.com/Putnam-Lab/Lab_Management/blob/master/Bioinformatics_%26_Coding/Data_Mangament/SRA-Upload_Protocol.md
 
 1. Add biosamples and attributes
@@ -38,3 +38,17 @@ As of 10.03.25
 2 samples fully uploaded in NCBI files:
 CoTS_gorman (16_R1; 16_R2)
 CoTS_gorman2 (16_R1; 16_R2)
+Connection terminated after about 20 minutes of trying to move 211R_R1 so only partially moved over in both files (CoTS_gorman; CoTS_gorman2)
+
+Folder with files (CoTS_gorman; CoTS_gorman2) on NCBI server for 30 days before it will be removed = 09.04.25
+
+
+# 11.03.25
+I am going to try and upload all files individually (using just the 'put' command not 'mput') to original 'CoTS_gorman' folder
+
+Navigated to NCBI source folder 
+```
+cd uploads/kiwielemgee_gmail.com_f7k2V6eS
+cd CoTS_gorman
+put 218R_R1_001.fastq.gz
+```
