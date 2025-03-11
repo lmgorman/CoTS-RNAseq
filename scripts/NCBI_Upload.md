@@ -52,19 +52,97 @@ I am uploading the files in sequential order when you list the files in the fold
 ```
 The ONLY exception = I am leaving the 211R_R1 and 211R_R2 until last due to their size (takes around one hour to transfer one file to NCBI)
 
-Navigated to NCBI source folder 
+Navigated to NCBI source folder and started transferring 218R_R1_001.fastq.gz at 10:43am
 ```
 cd uploads/kiwielemgee_gmail.com_f7k2V6eS
 cd CoTS_gorman
 put 218R_R1_001.fastq.gz
-```
-Completed at 10.51am
-
-```
 Transfer complete
 5619521752 bytes sent in 08:31 (10.47 MiB/s)
 ```
 Started 218R_R2_001.fastq.gz at 10:52am:
 ```
 put 218R_R2_001.fastq.gz
+Transfer complete
+6013697096 bytes sent in 09:16 (10.30 MiB/s)
 ```
+Started 225R_R1_001.fastq.gz at 11:02am
+
+```
+put 225R_R1_001.fastq.gz
+Transfer complete
+2948199684 bytes sent in 04:32 (10.32 MiB/s)
+```
+
+Started 225R_R2_001.fastq.gz at 11:06am
+```
+put 225R_R2_001.fastq.gz
+Transfer complete
+3060671251 bytes sent in 04:30 (10.78 MiB/s)
+```
+
+Started 227R_R1_001.fastq.gz at 11:12am
+```
+put 227R_R1_001.fastq.gz
+Transfer complete
+7235529321 bytes sent in 11:12 (10.25 MiB/s)
+```
+Started 227R_R2_001.fastq.gz at 11:23am
+```
+put 227R_R2_001.fastq.gz
+Transfer complete
+7513266707 bytes sent in 12:14 (9.75 MiB/s)
+```
+Started 235R_R1_001.fastq.gz at 11:36am
+```
+put 235R_R1_001.fastq.gz
+```
+Connection to remote server was terminated during = seems that I can access for one hour
+
+Relogged in:
+```
+cd /project/pi_hputnam_uri_edu/20250107_COTS_LG
+Connected using ftp credentials
+cd uploads/kiwielemgee_gmail.com_f7k2V6eS
+cd CoTS_gorman
+put 235R_R1_001.fastq.gz
+Transfer complete
+6397379460 bytes sent in 02:24 (42.17 MiB/s)
+```
+Taking way less time ~only 2 mins? Has this transfer worked correctly? Need to check size of file in folder on NCBI
+
+Started 235R_R2_001.fastq.gz at 11:48am
+```
+put 235R_R2_001.fastq.gz
+Transfer complete
+6832723749 bytes sent in 10:51 (10.00 MiB/s)
+```
+Started 236R_R1_001.fastq.gz at 11:58am
+```
+put 236R_R1_001.fastq.gz
+Transfer complete
+6998357089 bytes sent in 09:39 (11.50 MiB/s)
+```
+Started 211R_R1_001.fastq.gz at 12:11am
+```
+put 211R_R1_001.fastq.gz
+```
+Re-uploading the whole file versus the 235R_R1_001.fastq.gz this morning - maybe if you log back in on the same day it carries on where the file left off uploading? Will try this if connection gets terminated during upload....
+
+
+| File name          | Original file size | File size in NCBI |
+| ------------------ | ------------------ | ----------------- |
+| 16_R1_001.fastq.gz | 6.9G | 6.9G |
+| 16_R2_001.fastq.gz | 7.2G | 7.2G |
+| 211R_R1_001.fastq.gz | 42G | |
+| 211R_R2_001.fastq.gz | 44G | |
+| 218R_R1_001.fastq.gz | 5.3G | |
+| 218R_R2_001.fastq.gz | 5.7G | |
+| 225R_R1_001.fastq.gz | 2.8G | |
+| 225R_R2_001.fastq.gz | 2.9G | |
+| 227R_R1_001.fastq.gz | 6.8G | |
+| 227R_R2_001.fastq.gz | 7.0G | |
+| 235R_R1_001.fastq.gz | 6.0G | |
+| 235R_R2_001.fastq.gz | 6.4G | |
+| 236R_R1_001.fastq.gz | 6.6G | |
+| 236R_R2_001.fastq.gz
