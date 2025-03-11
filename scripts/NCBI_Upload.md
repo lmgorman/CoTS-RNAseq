@@ -128,6 +128,30 @@ Started 211R_R1_001.fastq.gz at 12:11am
 put 211R_R1_001.fastq.gz
 ```
 Re-uploading the whole file versus the 235R_R1_001.fastq.gz this morning - maybe if you log back in on the same day it carries on where the file left off uploading? Will try this if connection gets terminated during upload....
+Connection terminated after 25 mintes; checked and if i log in again straigh after it looks to be transferring reads from where it left off (similar to 235R_R1_001.fastq.gz this morning):
+only 16 minutes remaining - need to check true file size after upload completed
+```
+put 211R_R1_001.fastq.gz
+Transfer complete
+44198100612 bytes sent in 28:50 (24.35 MiB/s)
+```
+Started 236R_R2_001.fastq.gz at 13:14pm 
+```
+put 236R_R2_001.fastq.gz
+Transfer complete
+7347856690 bytes sent in 10:51 
+```
+Started 244R_R1_001.fastq.gz at 13:25pm
+```
+put 244R_R1_001.fastq.gz
+Transfer complete
+6228927206 bytes sent in 09:11 (10.76 MiB/s)
+```
+Started 211R_R1_001.fastq.gz at 14:55pm
+```
+put 211R_R1_001.fastq.gz
+```
+
 
 
 | File name          | Original file size | File size in NCBI |
@@ -145,4 +169,6 @@ Re-uploading the whole file versus the 235R_R1_001.fastq.gz this morning - maybe
 | 235R_R1_001.fastq.gz | 6.0G | |
 | 235R_R2_001.fastq.gz | 6.4G | |
 | 236R_R1_001.fastq.gz | 6.6G | |
-| 236R_R2_001.fastq.gz
+| 236R_R2_001.fastq.gz | 6.9G | |
+| 244R_R1_001.fastq.gz | 5.9G | |
+| 244R_R2_001.fastq.gz | 
