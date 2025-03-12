@@ -300,7 +300,17 @@ Transfer complete
 10557980635 bytes sent in 17:28 (9.60 MiB/s)
 ```
 Started 419R_R1_001.fastq.gz at 15:00pm
+```
+put 419R_R1_001.fastq.gz
+Transfer complete
+7010002584 bytes sent in 11:35 (9.60 MiB/s)
+```
 
+Started 419R_R2_001.fastq.gz at 16:05pm
+```
+put 419R_R2_001.fastq.gz
+
+```
 
 
 
@@ -341,5 +351,6 @@ Started 419R_R1_001.fastq.gz at 15:00pm
 | 410R_R2_001.fastq.gz | 7.2G | | 12.03.25 |
 | 414R_R1_001.fastq.gz | 9.4G | | 12.03.25 | 
 | 414R_R2_001.fastq.gz | 9.9G | | 12.03.25 | 
-| 419R_R1_001.fastq.gz | 6.6G | |
+| 419R_R1_001.fastq.gz | 6.6G | | 12.03.25 |
 | 419R_R2_001.fastq.gz | 6.8G | |
+| 43R_R1_001.fastq.gz | 5.8G | |
