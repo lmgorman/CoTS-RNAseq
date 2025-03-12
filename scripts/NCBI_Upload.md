@@ -259,13 +259,36 @@ Started  370R_R2_001.fastq.gz at 12:14pm
 put  370R_R2_001.fastq.gz
 Transfer complete
 6806173546 bytes sent in 09:44 (11.10 MiB/s)
-
 ```
 Started 380R_R1_001.fastq.gz at 12:27pm
 ```
 put  380R_R1_001.fastq.gz
+Transfer complete
+5935710125 bytes sent in 09:21 (10.07 MiB/s)
+```
+Started 380R_R2_001.fastq.gz at 12:37pm
+```
+put  380R_R2_001.fastq.gz
+Transfer complete
+6182693572 bytes sent in 09:12 (10.66 MiB/s)
 ```
 
+Started 410R_R1_001.fastq.gz at 12:47pm
+```
+put 410R_R1_001.fastq.gz
+Transfer complete
+7446617126 bytes sent in 11:23 (10.39 MiB/s)
+```
+
+Started 410R_R2_001.fastq.gz at 12:58pm
+```
+put 410R_R2_001.fastq.gz
+```
+
+Started 414R_R1_001.fastq.gz at 14:26pm
+```
+put 414R_R1_001.fastq.gz
+```
 
 
 | File name          | Original file size | File size in NCBI | Date uploaded to NCBI |
@@ -285,18 +308,22 @@ put  380R_R1_001.fastq.gz
 | 236R_R1_001.fastq.gz | 6.6G | | 11.03.25 |
 | 236R_R2_001.fastq.gz | 6.9G | | 11.03.25 |
 | 244R_R1_001.fastq.gz | 5.9G | | 11.03.25 |
-| 244R_R2_001.fastq.gz | | | 11.03.25 |
-| 253R_R1_001.fastq.gz | | | 11.03.25 |
-| 253R_R2_001.fastq.gz | | | 11.03.25 |
-| 321RA_R1_001.fastq.gz | | | 11.03.25 |
-| 321RA_R2_001.fastq.gz | | | 11.03.25 |
-| 331RA_R1_001.fastq.gz | | | 11.03.25 |
-| 331RA_R2_001.fastq.gz | | | 11.03.25 |
-| 336R_R1_001.fastq.gz | | | 11.03.25 |
-| 336R_R2_001.fastq.gz | | | 11.03.25 |
-| 34R_R1_001.fastq.gz | | | 11.03.25 |
-| 34R_R2_001.fastq.gz | | | 12.03.25 |
-| 370R_R1_001.fastq.gz | | | 12.03.25 |
-| 370R_R2_001.fastq.gz | | | 12.03.25 |
-| 380R_R1_001.fastq.gz | | |
-| 380R_R2_001.fastq.gz
+| 244R_R2_001.fastq.gz | 6.2G | | 11.03.25 |
+| 253R_R1_001.fastq.gz | 6.0G | | 11.03.25 |
+| 253R_R2_001.fastq.gz | 6.3G | | 11.03.25 |
+| 321RA_R1_001.fastq.gz | 5.6G | | 11.03.25 |
+| 321RA_R2_001.fastq.gz | 5.9G | | 11.03.25 |
+| 331RA_R1_001.fastq.gz | 5.5G | | 11.03.25 |
+| 331RA_R2_001.fastq.gz | 5.7G | | 11.03.25 |
+| 336R_R1_001.fastq.gz | 7.5G | | 11.03.25 |
+| 336R_R2_001.fastq.gz | 8.0G | | 11.03.25 |
+| 34R_R1_001.fastq.gz | 3.1G | | 11.03.25 |
+| 34R_R2_001.fastq.gz | 3.3G | | 12.03.25 |
+| 370R_R1_001.fastq.gz | 6.1G | | 12.03.25 |
+| 370R_R2_001.fastq.gz | 6.4G | | 12.03.25 |
+| 380R_R1_001.fastq.gz | 5.6G | | 12.03.25 |
+| 380R_R2_001.fastq.gz | 5.8G | | 12.03.25 |
+| 410R_R1_001.fastq.gz | 7.0G | | 12.03.25 |
+| 410R_R2_001.fastq.gz | 7.2G | |  12.03.25 |
+| 414R_R1_001.fastq.gz | 9.4G | | 
+| 414R_R2_001.fastq.gz | 9.9G | |
