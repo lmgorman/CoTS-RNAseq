@@ -334,7 +334,32 @@ Transfer complete
 Started 468R_R2_001.fastq.gz at 16:47pm
 ```
 put 468R_R2_001.fastq.gz
+Transfer complete
+6572885885 bytes sent in 13:25 (7.78 MiB/s)
 ```
+Started 497R_R1_001.fastq.gz at 17:00pm
+```
+put 497R_R1_001.fastq.gz
+Transfer complete
+```
+Started 497R_R2_001.fastq.gz at 17:12pm
+```
+put 497R_R2_001.fastq.gz
+Transfer complete
+6162695969 bytes sent in 09:54 (9.89 MiB/s)
+```
+
+Started 512R_R1_001.fastq.gz at 17:22pm
+```
+put 512R_R1_001.fastq.gz
+Transfer complete
+7664953698 bytes sent in 12:04 (10.09 MiB/s)
+```
+
+
+
+
+
 
 
 | File name          | Original file size | File size in NCBI | Date uploaded to NCBI |
@@ -378,6 +403,9 @@ put 468R_R2_001.fastq.gz
 | 43R_R1_001.fastq.gz | 5.8G | | 12.03.25 |
 | 43R_R2_001.fastq.gz | 6.0G | | 12.03.25 |
 | 468R_R1_001.fastq.gz | 6.0G | | 12.03.25 |
-| 468R_R2_001.fastq.gz | 6.2G | |
-| 497R_R1_001.fastq.gz | 5.5G | |
-| 497R_R2_001.fastq.gz | 5.8G | |
+| 468R_R2_001.fastq.gz | 6.2G | | 12.03.25 |
+| 497R_R1_001.fastq.gz | 5.5G | | 12.03.25 |
+| 497R_R2_001.fastq.gz | 5.8G | | 12.03.25 |
+| 512R_R1_001.fastq.gz | 7.2G | | 12.03.25 |
+| 512R_R2_001.fastq.gz | 7.5G | |
+
