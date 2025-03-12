@@ -96,3 +96,12 @@ to move files to the server
 
 ## Github text editing
 https://gist.github.com/luigiMinardi/4574708d404cdf4fe0da7ac6fe2314db#colors = changing colour texts in markdowns
+
+```diff
+- Red
++ Green
+! Orange
+# Grey
+@@ Purple @@
+```
+
