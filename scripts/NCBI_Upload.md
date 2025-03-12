@@ -233,16 +233,44 @@ Terminal lost connection
 So today I am trying on WindowsPowerShell as I noticed Unity OnDemand had a time out of 15 minutes at top of the On Demand Server - this may have been why my connection was terminated
 
 Started by trying biggest file 211R_R2_001.fastq.gz at 10:47am
-'''
+```
 put 211R_R2_001.fastq.gz
-'''
+Transfer complete
+46647610132 bytes sent in  1:06:30 (11.14 MiB/s)
+```
+
+Ok found out the reason why now - OpenDemand Unity cuts off after 15 minutes so always use powershell!
+
+Started 34R_R2_001.fastq.gz at 11:54am
+```
+put 34R_R2_001.fastq.gz
+Transfer complete
+3481257485 bytes sent in 05:00 (11.04 MiB/s)
+```
+
+Started  370R_R1_001.fastq.gz at 12:04pm
+```
+put  370R_R1_001.fastq.gz
+Transfer complete
+6449298320 bytes sent in 10:11 (10.05 MiB/s)
+```
+Started  370R_R2_001.fastq.gz at 12:14pm
+```
+put  370R_R2_001.fastq.gz
+
+```
+
+
+
+
+
 
 | File name          | Original file size | File size in NCBI | Date uploaded to NCBI |
 | ------------------ | ------------------ | ----------------- | --------------------- |
 | 16_R1_001.fastq.gz | 6.9G | 6.9G | 10.03.25 |
 | 16_R2_001.fastq.gz | 7.2G | 7.2G | 10.03.25 |
 | 211R_R1_001.fastq.gz | 42G | 41.2G | 11.03.25 |
-| 211R_R2_001.fastq.gz | 44G | | Unsuccessful on 11.03.25 |
+| 211R_R2_001.fastq.gz | 44G | | 12.03.25 |
 | 218R_R1_001.fastq.gz | 5.3G | 5.2G | 11.03.25 |
 | 218R_R2_001.fastq.gz | 5.7G | 5.6G | 11.03.25 |
 | 225R_R1_001.fastq.gz | 2.8G | | 11.03.25 |
@@ -264,4 +292,7 @@ put 211R_R2_001.fastq.gz
 | 336R_R1_001.fastq.gz | | | 11.03.25 |
 | 336R_R2_001.fastq.gz | | | 11.03.25 |
 | 34R_R1_001.fastq.gz | | | 11.03.25 |
-| 34R_R2_001.fastq.gz | | |
+| 34R_R2_001.fastq.gz | | | 12.03.25 |
+| 370R_R1_001.fastq.gz | | | 12.03.25 |
+| 370R_R2_001.fastq.gz | | |
+| 380R_R1_001.fastq.gz |
