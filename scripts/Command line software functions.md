@@ -15,6 +15,7 @@ rm = removes a file
 mkdir = makes a folder in the current directory
 nano = good text editor program
 .sh = shell script
+module --show_hidden spider fastp = shows whether fastp has been downloaded as a program in the HPC - helps you see whether a program is present in the HPC 
 
 To run a shell script “sbatch align.sh” = submits job you have coded in nano as a shell script 
 Always a header at the start of the scripts in the nano text software as the computer reads this to understand how much memory and cpu to dedicate to the jobs
