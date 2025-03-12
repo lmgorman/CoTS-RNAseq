@@ -226,9 +226,16 @@ Transfer complete
 Started 34R_R1_001.fastq.gz at 18:00pm
 ```
 put 34R_R2_001.fastq.gz
+Terminal lost connection
 ```
 
+## 12.03.25
+So today I am trying on WindowsPowerShell as I noticed Unity OnDemand had a time out of 15 minutes at top of the On Demand Server - this may have been why my connection was terminated
 
+Started by trying biggest file 211R_R2_001.fastq.gz at 10:47am
+'''
+put 211R_R2_001.fastq.gz
+'''
 
 | File name          | Original file size | File size in NCBI | Date uploaded to NCBI |
 | ------------------ | ------------------ | ----------------- | --------------------- |
