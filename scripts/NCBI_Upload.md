@@ -288,7 +288,17 @@ put 410R_R2_001.fastq.gz
 Started 414R_R1_001.fastq.gz at 14:26pm
 ```
 put 414R_R1_001.fastq.gz
+Transfer complete
+10039996557 bytes sent in 16:22 (9.74 MiB/s)
 ```
+Started 414R_R2_001.fastq.gz at 14:42pm
+```
+put 414R_R2_001.fastq.gz
+```
+
+
+
+
 
 
 | File name          | Original file size | File size in NCBI | Date uploaded to NCBI |
@@ -324,6 +334,8 @@ put 414R_R1_001.fastq.gz
 | 380R_R1_001.fastq.gz | 5.6G | | 12.03.25 |
 | 380R_R2_001.fastq.gz | 5.8G | | 12.03.25 |
 | 410R_R1_001.fastq.gz | 7.0G | | 12.03.25 |
-| 410R_R2_001.fastq.gz | 7.2G | |  12.03.25 |
-| 414R_R1_001.fastq.gz | 9.4G | | 
+| 410R_R2_001.fastq.gz | 7.2G | | 12.03.25 |
+| 414R_R1_001.fastq.gz | 9.4G | | 12.03.25 | 
 | 414R_R2_001.fastq.gz | 9.9G | |
+| 419R_R1_001.fastq.gz | 6.6G | |
+| 419R_R2_001.fastq.gz | 6.8G | |
