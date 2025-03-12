@@ -239,7 +239,7 @@ Transfer complete
 46647610132 bytes sent in  1:06:30 (11.14 MiB/s)
 ```
 
-Ok found out the reason why now - OpenDemand Unity cuts off after 15 minutes so always use powershell!
+$\color{red}{\textsf{Ok OpenDemand Unity cuts off after 15 minutes so use powershell!}}$ 
 
 Started 34R_R2_001.fastq.gz at 11:54am
 ```
@@ -257,11 +257,14 @@ Transfer complete
 Started  370R_R2_001.fastq.gz at 12:14pm
 ```
 put  370R_R2_001.fastq.gz
+Transfer complete
+6806173546 bytes sent in 09:44 (11.10 MiB/s)
 
 ```
-
-
-
+Started 380R_R1_001.fastq.gz at 12:27pm
+```
+put  380R_R1_001.fastq.gz
+```
 
 
 
@@ -294,5 +297,6 @@ put  370R_R2_001.fastq.gz
 | 34R_R1_001.fastq.gz | | | 11.03.25 |
 | 34R_R2_001.fastq.gz | | | 12.03.25 |
 | 370R_R1_001.fastq.gz | | | 12.03.25 |
-| 370R_R2_001.fastq.gz | | |
-| 380R_R1_001.fastq.gz |
+| 370R_R2_001.fastq.gz | | | 12.03.25 |
+| 380R_R1_001.fastq.gz | | |
+| 380R_R2_001.fastq.gz
