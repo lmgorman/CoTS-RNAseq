@@ -33,7 +33,9 @@ cp = copy
 * = Asterix refers to everything 
 interactive = mini session with supercomputer
 Run test script on one file in interactive mode = lets you check script works before doing all files
+du -hs /directory = shows how much space is in a directory
 ```
+
 
 ## Supercomputer header for each shell script
 ```
