@@ -11,5 +11,8 @@ All samples (Acr and Por) have > 1 million total mapped reads
 Only one sample (Por eaten; 34R) has < 1 million primary mapped reads 
  (Primary mapped reads = Number of reads mapped without multiple or chimeric aligments (i.e. the most reliable ones))[Mapping_120325.xlsx](https://github.com/user-attachments/files/19208834/Mapping_120325.xlsx)
 
+All samples apart from 34R (Por eaten), 225R (Por eaten) and 497R (A. hyacinthus eaten) have > 5million mapped and primary mapped reads - 5 million is usually the min threshold for gene expression
+
+
 See attachment for data 
 
