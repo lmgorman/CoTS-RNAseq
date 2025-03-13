@@ -20,6 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # The following setting is important, do not omit.
 options(stringsAsFactors = FALSE) #Set Strings to character
+install.packages("BiocManager", repos = "https://cloud.r-project.org")
 ```
 
 ```{r}
