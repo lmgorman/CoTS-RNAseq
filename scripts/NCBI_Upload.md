@@ -463,11 +463,27 @@ Transfer complete
 Started 82R_R1_001.fastq.gz at 13:51pm
 ```
 put 82R_R1_001.fastq.gz
+Transfer complete
+5439924597 bytes sent in 08:22 (10.32 MiB/s)
 ```
-
-
-
-
+Started 82R_R2_001.fastq.gz at 14:00pm
+```
+put 82R_R2_001.fastq.gz
+Transfer complete
+5804378836 bytes sent in 08:01 (11.49 MiB/s)
+```
+Started 86R_R1_001.fastq.gz at 14:08pm
+```
+put 86R_R1_001.fastq.gz
+Transfer complete
+5191500924 bytes sent in 08:02 (10.25 MiB/s)
+```
+Started 86R_R2_001.fastq.gz at 14:16pm
+```
+put 86R_R2_001.fastq.gz
+Transfer complete
+5492476297 bytes sent in 10:00 (8.71 MiB/s)
+```
 
 | File name          | Original file size | File size in NCBI | Date uploaded to NCBI |
 | ------------------ | ------------------ | ----------------- | --------------------- |
@@ -531,7 +547,79 @@ put 82R_R1_001.fastq.gz
 | 71R_R2_001.fastq.gz  | 5.8G | | 13.03.25 |
 | 76R_R1_001.fastq.gz  | 6.1G | | 13.03.25 |
 | 76R_R2_001.fastq.gz  | 6.5G | | 13.03.25 |
-| 82R_R1_001.fastq.gz  | 5.1G | |
-| 82R_R2_001.fastq.gz  | 5.5G | |
-| 86R_R1_001.fastq.gz  | 4.9G | |
-| 86R_R2_001.fastq.gz  | 5.2G | |
+| 82R_R1_001.fastq.gz  | 5.1G | | 13.03.25 |
+| 82R_R2_001.fastq.gz  | 5.5G | | 13.03.25 |
+| 86R_R1_001.fastq.gz  | 4.9G | | 13.03.25 |
+| 86R_R2_001.fastq.gz  | 5.2G | | 13.03.25 |
+
+Total GB of folder should be around 456G
+```
+ls -lh
+-rw-rw-r--   1 subftp   submit   7391768242 Mar 10 15:43 16R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7696270619 Mar 10 15:57 16R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   44198100612 Mar 11 13:14 211R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   46647610132 Mar 12 11:53 211R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5619521752 Mar 11 10:51 218R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6013697096 Mar 11 11:01 218R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   2948199684 Mar 11 11:06 225R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   3060671251 Mar 11 11:11 225R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7235529321 Mar 11 11:23 227R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7513266707 Mar 11 11:35 227R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6397379460 Mar 11 11:46 235R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6832723749 Mar 11 11:58 235R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6998357089 Mar 11 12:08 236R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7347856690 Mar 11 13:25 236R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6228927206 Mar 11 13:34 244R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6603779223 Mar 11 16:22 244R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6368047803 Mar 11 16:31 253R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6723438891 Mar 11 16:42 253R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6001367402 Mar 11 16:52 321RA_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6269993774 Mar 11 17:02 321RA_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5813803998 Mar 11 17:16 331RA_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6089363269 Mar 11 17:27 331RA_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   8030925877 Mar 11 17:41 336R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   8499368533 Mar 11 17:54 336R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   3314376167 Mar 11 18:00 34R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   3481257485 Mar 12 11:58 34R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6449298320 Mar 12 12:13 370R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6806173546 Mar 12 12:23 370R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5935710125 Mar 12 12:36 380R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6182693572 Mar 12 12:46 380R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7446617126 Mar 12 12:58 410R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7700205975 Mar 12 13:09 410R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   10039996557 Mar 12 14:42 414R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   10557980635 Mar 12 14:59 414R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7010002584 Mar 12 15:11 419R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7263856969 Mar 12 16:17 419R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6120591622 Mar 12 16:26 43R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6390333397 Mar 12 16:36 43R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6371225058 Mar 12 16:46 468R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6572885885 Mar 12 17:00 468R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5867836245 Mar 12 17:09 497R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6162695969 Mar 12 17:22 497R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7664953698 Mar 12 17:34 512R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7988983277 Mar 13 11:10 512R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5206074821 Mar 13 11:18 549R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5453582556 Mar 13 11:26 549R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6391960484 Mar 13 11:37 568R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6667686438 Mar 13 11:48 568R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7136928118 Mar 13 12:03 571R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   7506695130 Mar 13 12:15 571R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5901914637 Mar 13 12:25 581R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6194699006 Mar 13 12:33 581R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5652557770 Mar 13 12:41 586R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5881746435 Mar 13 12:52 586R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5666923581 Mar 13 13:01 61R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5954980341 Mar 13 13:11 61R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5823011337 Mar 13 13:21 71R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6167294038 Mar 13 13:30 71R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6487379605 Mar 13 13:41 76R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   6912449754 Mar 13 13:51 76R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5439924597 Mar 13 14:00 82R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5804378836 Mar 13 14:08 82R_R2_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5191500924 Mar 13 14:16 86R_R1_001.fastq.gz
+-rw-rw-r--   1 subftp   submit   5492476297 Mar 13 14:26 86R_R2_001.fastq.gz
+```
+Total files = 64 (32 samples x 2 reads _per_ sample)
+Total file size was 455.2GB
+Submitted to NCBI for processing on 13.03.25 at 14:44pm
