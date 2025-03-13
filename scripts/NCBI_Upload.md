@@ -356,7 +356,114 @@ Transfer complete
 7664953698 bytes sent in 12:04 (10.09 MiB/s)
 ```
 
+## 13.03.25
+Started 512R_R2_001.fastq.gz at 10:59am
+```
+put 512R_R2_001.fastq.gz
+Transfer complete
+7988983277 bytes sent in 11:58 (10.60 MiB/s)
+```
+Started 549R_R1_001.fastq.gz at 11:11am
+```
+put 549R_R1_001.fastq.gz
+Transfer complete
+5206074821 bytes sent in 07:50 (10.55 MiB/s)
+```
+Started 549R_R2_001.fastq.gz at 11:19am
+```
+put 549R_R2_001.fastq.gz
+Transfer complete
+5453582556 bytes sent in 07:35 (11.40 MiB/s)
+```
+Started 568R_R1_001.fastq.gz at 11:26am
+```
+put 568R_R1_001.fastq.gz
+Transfer complete
+6391960484 bytes sent in 11:00 (9.22 MiB/s)
+```
+Started 568R_R2_001.fastq.gz at 11:37am
+```
+put 568R_R2_001.fastq.gz
+Transfer complete
+6667686438 bytes sent in 10:15 (10.32 MiB/s)
+```
+Started 571R_R1_001.fastq.gz
+```
+put 571R_R1_001.fastq.gz
+Transfer complete
+7136928118 bytes sent in 10:46 (10.52 MiB/s)
+```
+Started 571R_R2_001.fastq.gz
+```
+put 571R_R2_001.fastq.gz
+Transfer complete
+7506695130 bytes sent in 11:53 (10.02 MiB/s)
+```
+Started 581R_R1_001.fastq.gz at 12:16pm
+```
+put 581R_R1_001.fastq.gz
+Transfer complete
+5901914637 bytes sent in 09:13 (10.16 MiB/s)
+```
 
+Started 581R_R2_001.fastq.gz at 12:25pm
+```
+put 581R_R2_001.fastq.gz
+Transfer complete
+6194699006 bytes sent in 08:49 (11.16 MiB/s)
+```
+Started 586R_R1_001.fastq.gz at 12:34pm
+```
+put 586R_R1_001.fastq.gz
+Transfer complete
+5652557770 bytes sent in 07:47 (11.52 MiB/s)
+```
+Started 586R_R2_001.fastq.gz at 12:34pm
+```
+put 586R_R2_001.fastq.gz
+Transfer complete
+5881746435 bytes sent in 10:44 (8.69 MiB/s)
+```
+Started 61R_R1_001.fastq.gz at 12:52pm
+```
+put 61R_R1_001.fastq.gz
+Transfer complete
+5666923581 bytes sent in 09:01 (9.97 MiB/s)
+```
+Started 61R_R2_001.fastq.gz at 13:03pm
+```
+put 61R_R2_001.fastq.gz
+Transfer complete
+5954980341 bytes sent in 09:39 (9.79 MiB/s)
+```
+Started 71R_R1_001.fastq.gz at 13:11pm
+```
+put 71R_R1_001.fastq.gz
+Transfer complete
+5823011337 bytes sent in 09:21 (9.89 MiB/s)
+```
+Started 71R_R2_001.fastq.gz at 13:21pm
+```
+put 71R_R2_001.fastq.gz
+Transfer complete
+6167294038 bytes sent in 09:45 (10.03 MiB/s)
+```
+Started 76R_R1_001.fastq.gz at 13:31pm
+```
+put 76R_R1_001.fastq.gz
+Transfer complete
+6487379605 bytes sent in 10:03 (10.24 MiB/s)
+```
+Started 76R_R2_001.fastq.gz at 13:41pm
+```
+put 76R_R2_001.fastq.gz
+Transfer complete
+6912449754 bytes sent in 10:19 (10.63 MiB/s)
+```
+Started 82R_R1_001.fastq.gz at 13:51pm
+```
+put 82R_R1_001.fastq.gz
+```
 
 
 
@@ -407,5 +514,24 @@ Transfer complete
 | 497R_R1_001.fastq.gz | 5.5G | | 12.03.25 |
 | 497R_R2_001.fastq.gz | 5.8G | | 12.03.25 |
 | 512R_R1_001.fastq.gz | 7.2G | | 12.03.25 |
-| 512R_R2_001.fastq.gz | 7.5G | |
-
+| 512R_R2_001.fastq.gz | 7.5G | | 13.03.25 |
+| 549R_R1_001.fastq.gz | 4.9G | | 13.03.25 |
+| 549R_R2_001.fastq.gz | 5.1G | | 13.03.25 |
+| 568R_R1_001.fastq.gz | 6.0G | | 13.03.25 |
+| 568R_R2_001.fastq.gz | 6.3G | | 13.03.25 |
+| 571R_R1_001.fastq.gz | 6.7G | | 13.03.25 |
+| 571R_R2_001.fastq.gz | 7.0G | | 13.03.25 |
+| 581R_R1_001.fastq.gz | 5.5G | | 13.03.25 |
+| 581R_R2_001.fastq.gz | 5.8G | | 13.03.25 |
+| 586R_R1_001.fastq.gz | 5.3G | | 13.03.25 |
+| 586R_R2_001.fastq.gz | 5.5G | | 13.03.25 |
+| 61R_R1_001.fastq.gz  | 5.3G | | 13.03.25 |
+| 61R_R2_001.fastq.gz  | 5.6G | | 13.03.25 |
+| 71R_R1_001.fastq.gz  | 5.5G | | 13.03.25 |
+| 71R_R2_001.fastq.gz  | 5.8G | | 13.03.25 |
+| 76R_R1_001.fastq.gz  | 6.1G | | 13.03.25 |
+| 76R_R2_001.fastq.gz  | 6.5G | | 13.03.25 |
+| 82R_R1_001.fastq.gz  | 5.1G | |
+| 82R_R2_001.fastq.gz  | 5.5G | |
+| 86R_R1_001.fastq.gz  | 4.9G | |
+| 86R_R2_001.fastq.gz  | 5.2G | |
