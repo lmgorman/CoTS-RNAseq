@@ -41,7 +41,7 @@ if ("rtracklayer" %in% rownames(installed.packages()) == 'FALSE') BiocManager::i
 if ("GenomicRanges" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GenomicRanges")
 if ("plyranges" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("plyranges")
 if ("GSEABase" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GSEABase")
-#if ("GOSim" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GOSim")
+if ("GOSim" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GOSim")
 if ("stats" %in% rownames(installed.packages()) == 'FALSE') install.packages("stats")
 if ("ggdendro" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("ggdendro")
 if ("GO.db" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GO.db")
