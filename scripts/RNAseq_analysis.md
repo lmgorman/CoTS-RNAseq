@@ -7,6 +7,10 @@ editor_options:
   chunk_output_type: console
 ---
 
+Based on code from Ariana S Huffmyer:
+https://github.com/AHuffmyer/larval_symbiont_TPC/blob/main/scripts/rna-seq_DEG.Rmd
+https://github.com/AHuffmyer/larval_symbiont_TPC/blob/main/scripts/rna-seq_functional_enrichment_topGO.Rmd
+
 Functional enrichment of _Acropora hyacinthus_ and _Porites_ sp. eaten versus non-eaten by CoTS DEGs.  
 
 # Set up 
@@ -77,6 +81,8 @@ library("biomaRt")
 library("Rgraphviz")
 ```
 #Load A. hyacinthus gene count matrix generated from stringtie
+```
 gcount <- as.data.frame(read.csv("data/rna_seq/Acropora_gene_count_matrix.csv", row.names="gene_id"), colClasses = double)
 head(gcount)
+```
 # Read in data files 
