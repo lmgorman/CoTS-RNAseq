@@ -15,6 +15,8 @@ Functional enrichment of _Acropora hyacinthus_ and _Porites_ sp. eaten versus no
 
 # Set up 
 
+Before loading R make sure you click "Run as Administrator"
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
