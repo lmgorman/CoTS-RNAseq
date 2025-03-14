@@ -34,8 +34,8 @@ Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortex
 # Pure venom extraction 
 To confirm whether the genes that were expressed during the transcriptomics were in fact venom-related, pure venom was extracted from _Porites_ sp. and _Acropora hyacinthus_ colonies. Pure venom from _Porites_ sp. colonies were taken from colonies at the same location as transcriptomic samples (Ta'ahiamanu, Moorea; -17.495210°, -149.851340°), whereas _A. hyacinthus_ pure venom was taken from colonies at a slightly different location in Moorea (-17.480528°, -149.84791667°). Pure venom was extracted during October 2024 (9-10 months after transcriptomic samples were taken). Small coral nubbins (_n_ = 5) around ~2.5cm in length were taken from _Porites_ sp. and _Acropora hyacinthus_ and placed into 96% EtOH for 30 seconds, allowing nematocysts to successfully discharge venom. Extra care was taken to make sure minimal mechanical pressure was applied to the nubbins prior to placing in ethanol and nubbins were only touched with forceps. This procedure was repeated five times for each species to get a total of 5 biological replicates _per_ species. Samples were then transported at room temperature to CNRS, Montpellier where they underwent proteomic analysis.
 
-# Samples uploaded to NCBI database:
-See here - https://github.com/lmgorman/CoTS-RNAseq/blob/main/scripts/NCBI_Upload.md
+# Data Availability
+Raw sequences can be found at NCBI under the BioProject accession: PRJNA1230057. 
 # Bioinformatics Analysis happening:
 See here - https://github.com/AHuffmyer/ASH_Putnam_Lab_Notebook/blob/master/_posts/2025-02-22-COTS-Project-Bioinformatics-Analysis.md 
 
