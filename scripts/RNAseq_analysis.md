@@ -125,6 +125,12 @@ Conduct data filtering, this includes:
 Filter in the package "genefilter". Pre-filtering our dataset to reduce the memory size dataframe, increase the speed of the transformation and testing functions, and improve quality of statistical analysis by removing low-coverage counts. Removed counts could represent outliers in the data and removing these improves sensitivity of statistical tests.
 
 ```{r}
+# Check you have genefilter downloaded
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("genefilter")
+library("genefilter")
+
 filt <- filterfun(pOverA(0.1,10))
 
 #create filter for the counts data
@@ -141,10 +147,12 @@ gcount_filt <- as.data.frame(gcount[which(rownames(gcount) %in% gn.keep),])
 
 #How many rows do we have before and after filtering?
 nrow(gcount) #Before
+[1] 25287
 nrow(gcount_filt) #After
+[1] 22719
 ```
 
-Before filtering, we had approximately X genes. After filtering for pOverA, we have approximately X genes. This indicates that there were X genes present in X% of samples at <10 counts per gene. X/X = 0.X, so I selected X% filter because I want to keep genes that are uniquely expressed in one treatment group (n=X out of X).  
+Before filtering, we had approximately 25287 genes. After filtering for pOverA, we have approximately 22719 genes. This indicates that there were X genes present in X% of samples at <10 counts per gene. X/X = 0.X, so I selected X% filter because I want to keep genes that are uniquely expressed in one treatment group (n=X out of X).  
 
 Prepare sample names. Keep R and any numbers following R in the colnames of gcount_filt.  
 
@@ -172,3 +180,46 @@ Print the sample names in the metadata file.
 ```{r}
 metadata$sample
 ```
+In order for the DESeq2 algorithms to work, the SampleIDs on the metadata file and count matrices have to match exactly and in the same order. They are.  
+
+# Format metadata and count data columns  
+
+Convert temperature and metadata categories to factors. 
+```{r}
+metadata$eatenvscontrol<-as.factor(metadata$eatenvscontrol)
+metadata$code<-as.factor(metadata$code)
+```
+
+Set levels of factors. 
+```{r}
+metadata$eatenvscontrol<-factor(metadata$eatenvscontrol, levels=c("eaten", "control"))
+metadata$code<-factor(metadata$code, levels=c("Ahya_eaten", "Ahya_control"))
+```
+
+Make sure the metadata and the columns in the gene count matrix are all the same.  
+```{r}
+metadata$sample
+colnames(gcount_filt)
+```
+
+Reorder them automatically if needed.  
+```{r}
+list<-colnames(gcount_filt)
+list<-as.factor(list)
+
+metadata$sample<-as.factor(metadata$sample)
+
+# Re-order the levels
+metadata$sample <- factor(as.character(metadata$sample), levels=list)
+# Re-order the data.frame
+metadata_ordered <- metadata[order(metadata$sample),]
+metadata_ordered$sample
+
+head(metadata_ordered)
+
+metadata_ordered$sample
+colnames(gcount_filt)
+head(gcount_filt)
+```
+
+These match we are good to continue to the next step!    
