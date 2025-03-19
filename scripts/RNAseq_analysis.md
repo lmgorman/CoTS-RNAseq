@@ -64,7 +64,6 @@ library("flashClust")
 library("gridExtra")
 library("ComplexHeatmap")
 library("goseq")
-library("dplyr")
 library("clusterProfiler")
 library("pheatmap")
 library("magrittr")
@@ -78,7 +77,8 @@ library("ggdendro")
 library("GO.db")
 library("rrvgo")
 library("cowplot")
-
+library(dbplyr)
+library(dplyr)
 library("topGO")
 library("biomaRt")
 library("Rgraphviz")
@@ -87,27 +87,35 @@ library("Rgraphviz")
 
 ```
 #Load metadata sheet with sample name and eaten vs control information
-metadata <- read.csv("data/rna_seq/sample_rnaseq_metadata.csv", header = TRUE, sep = ",")%>%dplyr::select(sample, eaten_vs_control)
-metadata$code<-paste0(metadata$eaten_vs_control)
+metadata <- read.csv("D:/RNAseq/sample_rnaseq_metadata_gorman.csv", header = TRUE, sep = ",")%>%dplyr::select(sample, eatenvscontrol)
+metadata$code<-paste0(metadata$eatenvscontrol)
 head(metadata)
 ```
 ```
 #Load A. hyacinthus gene count matrix generated from stringtie
-gcount <- as.data.frame(read.csv("data/rna_seq/Acropora_gene_count_matrix.csv", row.names="gene_id"), colClasses = double)
+gcount <- as.data.frame(read.csv("D:/RNAseq/acropora_gene_count_matrix.csv", row.names="gene_id"), colClasses = double)
 head(gcount)
 ```
-Check that there are no genes with 0 counts across all samples. 
+#Check that there are no genes with 0 counts across all samples. 
 
 ```{r}
-dim(gcount) 
-
+#Check that there are no genes with 0 counts across all samples (remember only 16 columns since we are just looking at Acropora!). 
+dim(gcount)
+#Output 
+[1] 27110    16
+```
+```
 gcount<-gcount %>%
-     mutate(Total = rowSums(.[, 1:54]))%>%
-    filter(!Total==0)%>%
-    dplyr::select(!Total)
+  mutate(Total = rowSums(.[, 1:16]))%>%
+  filter(!Total==0)%>%
+  dplyr::select(!Total)
 
 dim(gcount)
+#Output
+[1] 25287    16
 ```
+
+
 We started with X genes. which is the total number in the annotation. About X genes that had 0's across all samples (not detected) with X remaining.
 
 Conduct data filtering, this includes:  
