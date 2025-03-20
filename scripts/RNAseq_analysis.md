@@ -111,36 +111,46 @@ gkeep <- gcount[gfilt,]
 gn.keep <- rownames(gkeep)
 ```
 #gene count data filtered in PoverA, P percent of the samples have counts over A
+```
 gcount_filt <- as.data.frame(gcount[which(rownames(gcount) %in% gn.keep),])
-
+```
 #How many rows do we have before and after filtering?
+```
 nrow(gcount) #Before
 nrow(gcount_filt) #After
 # Function to extract 'R' followed by numbers from column names
 extract_R_numbers <- function(col_names) {
   sub("R(\\d+).*", "\\1", col_names)
 }
+```
 
 # Apply the function to all column names
+```
 new_col_names <- sapply(names(gcount_filt), extract_R_numbers)
+```
 
 # Rename the columns - do I need to do this?
+```
 #names(gcount_filt) <- paste0("R", new_col_names)
 # Output the modified dataframe
 names(gcount_filt)
 length(names(gcount_filt))
 #Column names are now correct and there are X as expected.
-
+```
 
 # Print the sample names in the metadata file. 
+```
 metadata$sample<-as.factor(metadata$sample)
 metadata$eatenvscontrol<-as.factor(metadata$eatenvscontrol)
 metadata$code<-as.factor(metadata$code)
+```
 
 # Set levels of factors. 
+```
 metadata$eatenvscontrol<-factor(metadata$eatenvscontrol, levels=c("eaten", "control"))
 metadata$code<-factor(metadata$code, levels=c("Ahya_eaten", "Ahya_control"))
-
+```
+```
 #Make sure the metadata and the columns in the gene count matrix are all the same.  
 metadata$sample
 colnames(gcount_filt)
@@ -154,8 +164,9 @@ colnames(gcount_filt) <- tolower(trimws(colnames(gcount_filt)))
 identical(metadata$sample, colnames(gcount_filt))
 
 metadata$sample<-as.factor(metadata$sample)
-##Metadata = fine til line 122
-
+```
+##Metadata 
+```
 ## Re-order the levels - havent included this as it was messing my code up!
 ##metadata$sample <- factor(as.character(metadata$sample), levels=list)
 
@@ -169,33 +180,38 @@ metadata_ordered$sample
 colnames(gcount_filt)
 head(gcount_filt)
 
-
 gcount_filt <- gcount_filt[, order(colnames(gcount_filt))]
 identical(metadata_ordered$sample, colnames(gcount_filt))
-
+```
+```
 ## Check unique sample names from metadata
 unique(metadata_ordered$sample)
 # Check unique column names from gcount_filt
 unique(colnames(gcount_filt))
 # Clean up metadata sample names
 metadata_ordered$sample <- tolower(trimws(metadata_ordered$sample))
+```
 
 # Clean up gcount column names
+```
 colnames(gcount_filt) <- tolower(trimws(colnames(gcount_filt)))
 identical(metadata_ordered$sample, colnames(gcount_filt))
 
 gdds <- DESeqDataSetFromMatrix(countData = gcount_filt,
                                colData = metadata,
                                design = ~eatenvscontrol)
-
+```
+```
 SF.gdds <- estimateSizeFactors(gdds) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 for us to use vst
 print(sizeFactors(SF.gdds)) #View size factors
 
 all(sizeFactors(SF.gdds)) < 4
-
-#All size factors are less than 4, so we can use VST transformation.  
+```
+All size factors are less than 4, so we can use VST transformation. 
+```
 gvst <- vst(gdds, blind=FALSE) #apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
-head(assay(gvst), 3) #view transformed gene count data for the first three genes in the dataset. 
+head(assay(gvst), 3) #view transformed gene count data for the first three genes in the dataset.
+
    trim.321ra.gtf trim.331ra.gtf trim.336r.gtf trim.370r.gtf
 Ahyacinthus26340       6.502666       6.867042      6.502666      6.502666
 Ahyacinthus26341       7.217751       6.722764      6.502666      6.502666
@@ -215,7 +231,7 @@ Ahyacinthus26342      6.502666      7.039807      6.502666      6.502666
 
 dim(gvst)
 [1] 22719    16
-
+```
 
 #Plot a heatmap to sample distances
 gsampleDists <- dist(t(assay(gvst))) #calculate distance matix
