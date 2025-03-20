@@ -234,6 +234,7 @@ dim(gvst)
 ```
 
 #Plot a heatmap to sample distances
+```
 gsampleDists <- dist(t(assay(gvst))) #calculate distance matix
 gsampleDistMatrix <- as.matrix(gsampleDists) #distance matrix
 rownames(gsampleDistMatrix) <- colnames(gvst) #assign row names
@@ -255,8 +256,10 @@ pht<-pheatmap(gsampleDistMatrix, #plot matrix
 
 save_pheatmap_pdf(pht, "D:/RNAseq/sample_distances.pdf")
 dev.off()
+```
 
 # Conduct PERMANOVA and PCA for all genes
+```
 #Export data for PERMANOVA test.  
 test<-t(assay(gvst)) #export as matrix
 test<-as.data.frame(test)
@@ -291,11 +294,11 @@ Residual 14   296784 0.87088
 Total    15   340785 1.00000                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
+```
 
 
 ## Examine PCA and sample distances of all genes  
-
+```
 #Plot a PCA of samples by eatenvscontrol phenotype for all genes.        
 
 gPCAdata <- plotPCA(gvst, intgroup = c("eatenvscontrol"), returnData=TRUE)
@@ -323,9 +326,10 @@ ggsave("D:/RNAseq/pca.jpeg", allgenesfilt_PCA, width=8, height=4)
 allgenes_ellipse<-allgenesfilt_PCA + stat_ellipse();allgenes_ellipse
 ggsave("D:/RNAseq/pca_ellipse.pdf", allgenes_ellipse, width=9, height=5)
 ggsave("D:/RNAseq/pca_ellipse.jpeg", allgenes_ellipse, width=9, height=5)
+```
 
 # Run DEG analysis of eatenvscontrol   
-
+```
 #Use the likelihood ratio approach based on guidance from DESeq2: "DESeq2 offers two kinds of hypothesis tests: the Wald test, where we use the estimated standard error of a log2 fold change to test if it is equal to zero, and the likelihood ratio test (LRT). The LRT examines two models for the counts, a full model with a certain number of terms and a reduced model, in which some of the terms of the full model are removed. The test determines if the increased likelihood of the data using the extra terms in the full model is more than expected if those extra terms are truly zero.
 
 #The LRT is therefore useful for testing multiple terms at once, for example testing 3 or more levels of a factor at once, or all interactions between two variables. The LRT for count data is conceptually similar to an analysis of variance (ANOVA) calculation in linear regression, except that in the case of the Negative Binomial GLM, we use an analysis of deviance (ANODEV), where the deviance captures the difference in likelihood between a full and a reduced model." 
@@ -349,10 +353,10 @@ rownames(eatenvscontrol) <- NULL
 
 dim(eatenvscontrol)
 # [1] 470   8
-
+```
 
 #There are 470 genes differentially expressed between
-
+```
 #Combine this list of DEGs into one dataframe. 
 DEG_eatenvscontrol<-rbind(eatenvscontrol)
 dim(DEG_eatenvscontrol)
@@ -365,10 +369,12 @@ DEG_eatenvscontrol_vst <- gdds[unique(DEG_eatenvscontrol$gene)]
 dim(DEG_eatenvscontrol_vst)
 
 DEG_eatenvscontrol_vst <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst) 
+```
 
 ### Upset plot of genes between species at later R session - Acropora vs Porites
 ##Need more than one comparison to look at!
 #Create an upset diagram showing genes unique and shared
+```
 #BiocManager::install("VennDetail")
 #library("VennDetail")
 #list1<-DEG_eatenvscontrol%>%
@@ -379,8 +385,10 @@ DEG_eatenvscontrol_vst <- varianceStabilizingTransformation(DEG_eatenvscontrol_v
 #par(mar = c(5, 5, 5, 5))
 #plot(ven, type = "upset")
 #dev.off()
+```
 
 ### Plot a volcano plot for these comparisons.   
+```
 class(DEG_eatenvscontrol)
 DEG_eatenvscontrol <- DESeq(gdds)
 #Eaten vs control
@@ -401,6 +409,8 @@ volcano_eatenvscontrol<-EnhancedVolcano(res,
 
 ggsave("D:/RNAseq/volcano_eatenvscontrol.pdf", plot=volcano_eatenvscontrol, width=18, height=6)
 ggsave("D:/RNAseq/volcano_eatenvscontrol.png", plot=volcano_eatenvscontrol, width=18, height=6)
+```
+
 
 (https://github.com/user-attachments/assets/88333f73-3b6e-4a16-998b-269ba2b6a551)
 [acropora_gene_count_matrix.csv](https://github.com/user-attachments/files/19368199/acropora_gene_count_matrix.csv)
