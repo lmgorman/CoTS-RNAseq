@@ -16,7 +16,7 @@ Functional enrichment of _Acropora hyacinthus_ and _Porites_ sp. eaten versus no
 # Set up 
 
 Before loading R make sure you click "Run as Administrator"
-
+```
 knitr::opts_chunk$set(echo = TRUE)
 options(stringsAsFactors = FALSE)
 if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
@@ -46,9 +46,9 @@ BiocManager::install("topGO")
 BiocManager::install("biomaRt")
 BiocManager::install("Rgraphviz")
 BiocManager::install("EnhancedVolcano")
+```
 
-
-
+```
 library("DESeq2")
 library("tidyverse")
 library("genefilter")
@@ -76,32 +76,40 @@ library("topGO")
 library("biomaRt")
 library("Rgraphviz")
 library("EnhancedVolcano")
+```
 
 #Load metadata sheet with sample name and eaten vs control information
+```
 metadata <- read.csv("D:/RNAseq/sample_rnaseq_metadata_gorman.csv", header = TRUE, sep = ",")%>%dplyr::select(sample, eatenvscontrol, code)
 metadata$code<-paste0(metadata$code)
 head(metadata)
+```
 #Load A. hyacinthus gene count matrix generated from stringtie
+```
 gcount <- as.data.frame(read.csv("D:/RNAseq/acropora_gene_count_matrix.csv", row.names="gene_id"), colClasses = double)
 head(gcount)
+```
 #Check that there are no genes with 0 counts across all samples (remember only 16 columns since we are just looking at Acropora!). 
+```
 dim(gcount) 
 gcount<-gcount %>%
   mutate(Total = rowSums(.[, 1:16]))%>%
   filter(!Total==0)%>%
   dplyr::select(!Total)
 dim(gcount)
-
+```
+```
 filt <- filterfun(pOverA(0.1,10))
 #create filter for the counts data
 gfilt <- genefilter(gcount, filt)
-
+```
 #identify genes to keep by count filter
+```
 gkeep <- gcount[gfilt,]
 
 #identify gene lists
 gn.keep <- rownames(gkeep)
-
+```
 #gene count data filtered in PoverA, P percent of the samples have counts over A
 gcount_filt <- as.data.frame(gcount[which(rownames(gcount) %in% gn.keep),])
 
