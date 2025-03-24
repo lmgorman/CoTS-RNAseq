@@ -287,14 +287,16 @@ permanova<-adonis2(vegan ~ eatenvscontrol, data = test, method='eu')
 permanova
 
 [1] Output
-adonis2(formula = vegan ~ eatenvscontrol, data = test, method = "eu")
-         Df SumOfSqs      R2      F Pr(>F)   
-Model     1    44001 0.12912 2.0756  0.005 **
-Residual 14   296784 0.87088                 
-Total    15   340785 1.00000                 
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-```
+#Permutation test for adonis under reduced model
+#Permutation: free
+#Number of permutations: 999
+#adonis2(formula = vegan ~ eatenvscontrol, data = test, method = "eu")
+#Df SumOfSqs      R2      F Pr(>F)   
+#Model     1    44001 0.12912 2.0756  0.003 **
+#  Residual 14   296784 0.87088                 
+#Total    15   340785 1.00000                 
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 ## Examine PCA and sample distances of all genes  
@@ -310,7 +312,7 @@ allgenesfilt_PCA <- ggplot(gPCAdata, aes(PC1, PC2, color=eatenvscontrol)) +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) +
   scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
-  geom_text(x=0, y=10, label="p[eatenvscontrol]=0.001", color="black")+
+  geom_text(x=0, y=10, label="p[eatenvscontrol]=0.003", color="black")+
   theme_classic() + #Set background color
   theme(panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines 
