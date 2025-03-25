@@ -1,0 +1,117 @@
+---
+title: "Acropora DEG Analysis" 
+author: "L Gorman, AS Huffmyer"
+date: '2025'
+output:
+  html_document:
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
+  pdf_document:
+    keep_tex: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+# Setup  
+
+Set up workspace, set options, and load required packages.    
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+Load libraries. 
+```{r}
+options(stringsAsFactors = FALSE)
+#if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
+#if ("genefilter" %in% rownames(installed.packages()) == 'FALSE') install.packages('genefilter') 
+#if ("RColorBrewer" %in% rownames(installed.packages()) == 'FALSE') install.packages('RColorBrewer') 
+#if ("WGCNA" %in% rownames(installed.packages()) == 'FALSE') install.packages('WGCNA') 
+#if ("flashClust" %in% rownames(installed.packages()) == 'FALSE') install.packages('flashClust') 
+#if ("gridExtra" %in% rownames(installed.packages()) == 'FALSE') install.packages('gridExtra') 
+#if ("ComplexHeatmap" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("ComplexHeatmap")
+#if ("DESeq2" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("DESeq2")
+#if ("goseq" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("goseq") 
+#if ("dplyr" %in% rownames(installed.packages()) == 'FALSE') install.packages('dplyr') 
+#if ("clusterProfiler" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("clusterProfiler") 
+#if ("pheatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('pheatmap') 
+#if ("magrittr" %in% rownames(installed.packages()) == 'FALSE') install.packages('magrittr') 
+#if ("rtracklayer" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("rtracklayer")
+#if ("GenomicRanges" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GenomicRanges")
+#if ("plyranges" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("plyranges")
+#if ("GSEABase" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GSEABase")
+#if ("GOSim" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GOSim")
+#if ("stats" %in% rownames(installed.packages()) == 'FALSE') install.packages("stats")
+#if ("ggdendro" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("ggdendro")
+#if ("GO.db" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GO.db")
+#if ("rrvgo" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("rrvgo")
+#if ("viridis" %in% rownames(installed.packages()) == 'FALSE') install.packages("viridis")
+#if ("topGO" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("topGO")
+#if ("biomaRt" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("biomaRt")
+#if ("Rgraphviz" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("Rgraphviz")
+#if ("EnhancedVolcano" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("EnhancedVolcano")
+#if ("vegan" %in% rownames(installed.packages()) == 'FALSE') install.packages("vegan") 
+#if ("factoextra" %in% rownames(installed.packages()) == 'FALSE') install.packages("factoextra") 
+
+library("vegan")
+library("factoextra")
+library("viridis")
+library("DESeq2")
+library("tidyverse")
+library("genefilter")
+library("RColorBrewer")
+library("WGCNA")
+library("flashClust")
+library("gridExtra")
+library("ComplexHeatmap")
+library("goseq")
+library("dplyr")
+library("clusterProfiler")
+library("pheatmap")
+library("magrittr")
+library("rtracklayer")
+library("GenomicRanges")
+library("plyranges")
+library("GSEABase")
+#library("GOSlim")
+library("stats")
+library("ggdendro")
+library("GO.db")
+library("rrvgo")
+library("cowplot")
+library("topGO")
+library("biomaRt")
+library("Rgraphviz")
+library("EnhancedVolcano")
+```
+
+# Load and format data 
+
+Load metadata file. 
+
+```{r}
+#Load metadata sheet with sample name and eaten vs control information
+metadata <- read.csv("data/acr_rnaseq_metadata_gorman.csv", header = TRUE, sep = ",")%>%dplyr::select(sample, eatenvscontrol, code)
+head(metadata)
+```
+
+Load gene count matrix. 
+```{r}
+#Load A. hyacinthus gene count matrix generated from stringtie
+gcount <- as.data.frame(read.csv("data/gene-count-matrix/acropora_gene_count_matrix.csv", row.names="gene_id"), colClasses = double)
+head(gcount)
+```
+
+Remove genes with 0 counts in all samples. 
+```{r}
+dim(gcount)
+
+gcount<-gcount %>%
+  mutate(Total = rowSums(.[, 1:16]))%>%
+  filter(!Total==0)%>%
+  dplyr::select(!Total)
+
+dim(gcount)
+```
+Started with 27110 genes, ended with 25387 genes.  
+
