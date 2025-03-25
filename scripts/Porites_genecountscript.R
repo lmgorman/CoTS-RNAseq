@@ -251,6 +251,7 @@ percentVar_por <- round(100*attr(gPCAdata_por, "percentVar")) #plot PCA of sampl
 allgenesfilt_PCA_por <- ggplot(gPCAdata_por, aes(PC1, PC2, color=eatenvscontrol)) + 
   geom_point(size=3) + 
   ggtitle(expression(bold("All genes (16279 genes)")))+
+  geom_text(aes(x = PC1, y = PC2, label = name), vjust = -0.5) +
   xlab(paste0("PC1: ",percentVar_por[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_por[2],"% variance")) +
   scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
@@ -269,6 +270,11 @@ ggsave("D:/RNAseq/pca_por.jpeg", allgenesfilt_PCA_por, width=8, height=4)
 allgenes_ellipse_por<-allgenesfilt_PCA_por + stat_ellipse();allgenes_ellipse_por
 ggsave("D:/RNAseq/pca_ellipse_por.pdf", allgenes_ellipse_por, width=9, height=5)
 ggsave("D:/RNAseq/pca_ellipse_por.jpeg", allgenes_ellipse_por, width=9, height=5)
+###### Remove left cluster as it is clusering only based on read depth (225R, 34R, 43R, 16R)
+
+
+
+
 
 ### Run DEG analysis of eatenvscontrol   
 

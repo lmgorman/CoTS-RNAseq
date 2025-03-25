@@ -1,3 +1,8 @@
+#Remove 497R as it only mapped 2%, remove column from gcount matrix
+#Remove 497R from metadata
+#Rerun
+
+
 knitr::opts_chunk$set(echo = TRUE)
 options(stringsAsFactors = FALSE)
 if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
@@ -201,6 +206,8 @@ pht<-pheatmap(gsampleDistMatrix, #plot matrix
 
 save_pheatmap_pdf(pht, "D:/RNAseq/sample_distances.pdf")
 dev.off()
+## Need a diagnol line in the heatmap -shows  metadata is mapping correctly/ calling name of samples correctly
+## not mapping correctly to sample name = no diagnol line 
 
 # Conduct PERMANOVA and PCA for all genes
 #Export data for PERMANOVA test.  
@@ -243,6 +250,7 @@ percentVar <- round(100*attr(gPCAdata, "percentVar")) #plot PCA of samples with 
 allgenesfilt_PCA <- ggplot(gPCAdata, aes(PC1, PC2, color=eatenvscontrol)) + 
   geom_point(size=3) + 
   ggtitle(expression(bold("All genes (17634 genes)")))+
+  geom_text(aes(x = PC1, y = PC2, label = name), vjust = -0.5) +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) +
   scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
@@ -262,6 +270,10 @@ ggsave("D:/RNAseq/pca.jpeg", allgenesfilt_PCA, width=8, height=4)
 allgenes_ellipse<-allgenesfilt_PCA + stat_ellipse();allgenes_ellipse
 ggsave("D:/RNAseq/pca_ellipse.pdf", allgenes_ellipse, width=9, height=5)
 ggsave("D:/RNAseq/pca_ellipse.jpeg", allgenes_ellipse, width=9, height=5)
+##Run analysis with and without data point PCA -> DEGS 
+##Add sample label to PCA ggplot = shows outlier sample name
+
+####Add code removing 497R after here
 
 ### Run DEG analysis of eatenvscontrol   
 #Use the likelihood ratio approach based on guidance from DESeq2: "DESeq2 offers two kinds of hypothesis tests: the Wald test, where we use the estimated standard error of a log2 fold change to test if it is equal to zero, and the likelihood ratio test (LRT). The LRT examines two models for the counts, a full model with a certain number of terms and a reduced model, in which some of the terms of the full model are removed. The test determines if the increased likelihood of the data using the extra terms in the full model is more than expected if those extra terms are truly zero.
