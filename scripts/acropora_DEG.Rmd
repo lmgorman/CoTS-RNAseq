@@ -552,9 +552,9 @@ DEG_eatenvscontrol_vst <- varianceStabilizingTransformation(DEG_eatenvscontrol_v
 Plot a volcano plot for these comparisons. 
 ```{r}
 class(DEG_eatenvscontrol)
-DEG_eatenvscontrol <- DESeq(gdds_2)
+DEG_eatenvscontrol_vol <- DESeq(gdds_2)
 #Eaten vs control
-res <- results(DEG_eatenvscontrol, contrast=c("eatenvscontrol","control","eaten"))
+res <- results(DEG_eatenvscontrol_vol, contrast=c("eatenvscontrol","control","eaten"))
 
 volcano_acr_eatenvscontrol<-EnhancedVolcano(res,
                                      lab = rownames(res),
