@@ -1,6 +1,6 @@
 ---
 title: "Acropora DEG Analysis" 
-author: "L Gorman, AS Huffmyer"
+author: "LM Gorman, AS Huffmyer"
 date: '2025'
 output:
   html_document:
@@ -73,7 +73,7 @@ library("rtracklayer")
 library("GenomicRanges")
 library("plyranges")
 library("GSEABase")
-#library("GOSlim")
+library("GOSlim")
 library("stats")
 library("ggdendro")
 library("GO.db")
@@ -115,3 +115,506 @@ dim(gcount)
 ```
 Started with 27110 genes, ended with 25387 genes.  
 
+Filter the genes based on sample size using pOverA.
+
+Currently have 16 samples total; 8 in eaten and 8 in control. Therefore 8/16 = 0.5 so we will use this filter parameter to make sure 50% of the genes have a gene count of >10.
+```{r}
+filt <- filterfun(pOverA(0.5,10))
+#create filter for the counts data
+gfilt <- genefilter(gcount, filt)
+#identify genes to keep by count filter
+gkeep <- gcount[gfilt,]
+#identify gene lists
+gn.keep <- rownames(gkeep)
+gcount_filt <- as.data.frame(gcount[which(rownames(gcount) %in% gn.keep),])
+#How many rows do we have before and after filtering?
+nrow(gcount) #before
+nrow(gcount_filt) #after
+```
+We had 25287 genes before filtering. After filtering we have 17634 genes.
+
+
+```{r}
+#Function to extract 'R' followed by numbers from column names
+extract_R_numbers <- function(col_names) {
+  sub("R(\\d+).*", "\\1", col_names)
+}
+
+# Apply the function to all column names
+new_col_names <- sapply(names(gcount_filt), extract_R_numbers)
+
+# Rename the columns - do I need to do this?
+#names(gcount_filt) <- paste0("R", new_col_names)
+# Output the modified dataframe
+names(gcount_filt)
+length(names(gcount_filt))
+```
+
+Editing the metadata files
+
+```{r}
+#Print the sample names in the metadata file
+metadata$sample<-as.factor(metadata$sample)
+metadata$eatenvscontrol<-as.factor(metadata$eatenvscontrol)
+metadata$code<-as.factor(metadata$code)
+
+# Set levels of factors. 
+metadata$eatenvscontrol<-factor(metadata$eatenvscontrol, levels=c("eaten", "control"))
+metadata$code<-factor(metadata$code, levels=c("Ahya_eaten", "Ahya_control"))
+
+#Make sure the metadata and the columns in the gene count matrix are all the same.  
+metadata$sample
+colnames(gcount_filt)
+list<-colnames(gcount_filt)
+list<-as.factor(list)
+
+#Make sure metadata$sample and column names are identical
+metadata$sample <- tolower(trimws(metadata$sample))
+colnames(gcount_filt) <- tolower(trimws(colnames(gcount_filt)))
+identical(metadata$sample, colnames(gcount_filt))
+ 
+# Re-order the data.frame
+metadata$sample<-as.factor(metadata$sample)
+metadata_ordered <- metadata[order(metadata$sample),]
+metadata_ordered$sample
+head(metadata_ordered)
+colnames(gcount_filt)
+head(gcount_filt)
+gcount_filt <- gcount_filt[, order(colnames(gcount_filt))]
+#Clean up metadata and gcount names by removing white spaces
+metadata_ordered$sample <- tolower(trimws(metadata_ordered$sample))
+colnames(gcount_filt) <- tolower(trimws(colnames(gcount_filt)))
+#Check sample names are the same
+identical(metadata_ordered$sample, colnames(gcount_filt))
+#Make sure that the reference level for estimating effect size is control
+metadata$eatenvscontrol <- relevel(metadata$eatenvscontrol, ref = "control")
+```
+
+Estimate size factors 
+```{r}
+#Construct DESEQDataSet Object called "gdds"
+gdds <- DESeqDataSetFromMatrix(countData = gcount_filt,
+                               colData = metadata,
+                               design = ~eatenvscontrol)
+#Estimate size factors
+SF.gdds <- estimateSizeFactors(gdds)
+print(sizeFactors(SF.gdds)) 
+all(sizeFactors(SF.gdds)) < 4
+```
+[1] TRUE - all size factors are less than 4, so we can use VST transformation.
+
+Run vst to transform data
+```{r}
+gvst <- vst(gdds, blind=FALSE) #apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
+head(assay(gvst), 3) #view transformed gene count data for the first three genes. 
+dim(gvst)
+```
+
+Plot a heatmap to sample distances
+```{r}
+gsampleDists <- dist(t(assay(gvst))) #calculate distance matix
+gsampleDistMatrix <- as.matrix(gsampleDists) #distance matrix
+rownames(gsampleDistMatrix) <- colnames(gvst) #assign row names
+colnames(gsampleDistMatrix) <- NULL #assign col names
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255) #assign colors
+save_pheatmap_pdf <- function(x, filename, width=7, height=7) {
+  stopifnot(!missing(x))
+  stopifnot(!missing(filename))
+  pdf(filename, width=width, height=height)
+  grid::grid.newpage()
+  grid::grid.draw(x$gtable)
+  dev.off()
+}
+
+pht<-pheatmap(gsampleDistMatrix, #plot matrix
+              clustering_distance_rows=gsampleDists, #cluster rows
+              clustering_distance_cols=gsampleDists, #cluster columns
+              col=colors) #set colors
+
+save_pheatmap_pdf(pht, "data/plots/acr_sample_distances.pdf")
+dev.off()
+```
+Heatmap shows a clear diagnol line emphasising that the metadata is correctly mapping to the right sample in the genecount matrix. No diagonal line would mean it is not mapping correctly to sample name. 
+
+# Conduct a PERMANOVA and PCA for all genes
+```{r}
+#Export data for PERMANOVA test.  
+test<-t(assay(gvst)) #export as matrix
+test<-as.data.frame(test)
+#add category columns
+test$sample<-rownames(test)
+test$eatenvscontrol<-metadata$eatenvscontrol[match(test$sample, metadata$sample)]
+dim(test)
+    #[1]    16 17636 #two of these 17,636 columns are metadata so real value = 17,634 genes as expected
+scaled_test <-prcomp(test[c(1:17634)], scale=TRUE, center=TRUE)
+fviz_eig(scaled_test)
+# scale data
+vegan <- scale(test[c(1:17634)])
+
+# PerMANOVA 
+permanova<-adonis2(vegan ~ eatenvscontrol, data = test, method='eu')
+permanova
+```
+Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+adonis2(formula = vegan ~ eatenvscontrol, data = test, method = "eu")
+Df SumOfSqs      R2      F Pr(>F)    
+Model     1    38615 0.14599 2.3932  0.001 ***
+  Residual 14   225895 0.85401                  
+Total    15   264510 1.00000                  
+---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Plot a PCA of samples by eatenvscontrol phenotype for all genes.        
+```{r}
+gPCAdata <- plotPCA(gvst, intgroup = c("eatenvscontrol"), returnData=TRUE)
+percentVar <- round(100*attr(gPCAdata, "percentVar")) 
+
+allgenesfilt_PCA <- ggplot(gPCAdata, aes(PC1, PC2, color=eatenvscontrol)) + 
+  geom_point(size=3) + 
+  ggtitle(expression(bold("All genes (17634 genes)")))+
+  geom_text(aes(x = PC1, y = PC2, label = name), vjust = -0.5) +
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) +
+  scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
+  geom_text(x=0, y=10, label="p[eatenvscontrol]=0.001", color="black")+
+  theme_classic() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines 
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()); allgenesfilt_PCA
+
+ggsave("data/plots/pca_acr.pdf", allgenesfilt_PCA, width=8, height=4)
+ggsave("data/plots/pca_acr.jpeg", allgenesfilt_PCA, width=8, height=4)
+
+#Add a plot with elipses.  
+allgenes_ellipse<-allgenesfilt_PCA + stat_ellipse();allgenes_ellipse
+ggsave("data/plots/pca_acr_ellipse.pdf", allgenes_ellipse, width=9, height=5)
+ggsave("data/plots/pca_acr_ellipse.jpeg", allgenes_ellipse, width=9, height=5)
+```
+We can see from the PCA that sample 497R is a clear outlier. This same sample only has 2 million mapped reads. Therefore as it is mapping separately due to the low number of mapped reads, we need to remove this sample from the dataset as it could be affecting our DEGs.
+
+#Removing 497R and rerunning analysis
+
+```{r}
+#Create new dataset without 497R
+metadata_2 <- metadata[-10,]
+metadata_2
+```
+
+Remove 497R from gene count matrix. 
+```{r}
+#Remove 497R
+gcount_2 <- gcount[,-10]
+```
+
+Re-run all previous analysis by adding "_2" to previous names of data objects
+Remove genes with 0 counts in all samples. 
+```{r}
+dim(gcount_2)
+
+gcount_2<-gcount_2 %>%
+  mutate(Total = rowSums(.[, 1:15]))%>%
+  filter(!Total==0)%>%
+  dplyr::select(!Total)
+
+dim(gcount_2)
+```
+Started with 27110 genes, ended with 25283 genes.  
+
+Filter the genes based on sample size using pOverA.
+
+Currently have 15 samples total; 7 in eaten and 8 in control. Therefore 7/16 = 0.44 so we will use this filter parameter to make sure 44% of the genes have a gene count of >10.
+```{r}
+filt_2 <- filterfun(pOverA(0.44,10))
+#create filter for the counts data
+gfilt_2 <- genefilter(gcount_2, filt_2)
+#identify genes to keep by count filter
+gkeep_2 <- gcount_2[gfilt_2,]
+#identify gene lists
+gn.keep_2 <- rownames(gkeep_2)
+gcount_filt_2 <- as.data.frame(gcount_2[which(rownames(gcount_2) %in% gn.keep_2),])
+#How many rows do we have before and after filtering?
+nrow(gcount_2) #before
+nrow(gcount_filt_2) #after
+```
+We had 25283 genes before filtering. After filtering we have 18258 genes.
+
+
+```{r}
+#Function to extract 'R' followed by numbers from column names
+extract_R_numbers_2 <- function(col_names) {
+  sub("R(\\d+).*", "\\1", col_names)
+}
+
+# Apply the function to all column names
+new_col_names_2 <- sapply(names(gcount_filt_2), extract_R_numbers_2)
+
+# Rename the columns - do I need to do this?
+#names(gcount_filt) <- paste0("R", new_col_names)
+# Output the modified dataframe
+names(gcount_filt_2)
+length(names(gcount_filt_2)
+```
+
+Editing the metadata files
+
+```{r}
+#Print the sample names in the metadata file
+metadata_2$sample<-as.factor(metadata_2$sample)
+metadata_2$eatenvscontrol<-as.factor(metadata_2$eatenvscontrol)
+metadata_2$code<-as.factor(metadata_2$code)
+
+# Set levels of factors. 
+metadata_2$eatenvscontrol<-factor(metadata_2$eatenvscontrol, levels=c("eaten", "control"))
+metadata_2$code<-factor(metadata_2$code, levels=c("Ahya_eaten", "Ahya_control"))
+
+#Make sure the metadata and the columns in the gene count matrix are all the same.  
+metadata_2$sample
+colnames(gcount_filt_2)
+list_2<-colnames(gcount_filt_2)
+list_2<-as.factor(list_2)
+
+#Make sure metadata_2$sample and column names are identical
+metadata_2$sample <- tolower(trimws(metadata_2$sample))
+colnames(gcount_filt_2) <- tolower(trimws(colnames(gcount_filt_2)))
+identical(metadata_2$sample, colnames(gcount_filt_2))
+ 
+# Re-order the data.frame
+metadata_2$sample<-as.factor(metadata_2$sample)
+metadata_ordered_2 <- metadata_2[order(metadata_2$sample),]
+metadata_ordered_2$sample
+head(metadata_ordered_2)
+colnames(gcount_filt_2)
+head(gcount_filt_2)
+gcount_filt_2 <- gcount_filt_2[, order(colnames(gcount_filt_2))]
+#Clean up metadata and gcount names by removing white spaces
+metadata_ordered_2$sample <- tolower(trimws(metadata_ordered_2$sample))
+colnames(gcount_filt_2) <- tolower(trimws(colnames(gcount_filt_2)))
+#Check sample names are the same
+identical(metadata_ordered_2$sample, colnames(gcount_filt_2))
+#Make sure that the reference level for estimating effect size is control
+metadata_ordered_2$eatenvscontrol <- relevel(metadata_ordered_2$eatenvscontrol, ref = "control")
+```
+
+Estimate size factors 
+```{r}
+#Construct DESEQDataSet Object called "gdds"
+gdds_2 <- DESeqDataSetFromMatrix(countData = gcount_filt_2,
+                               colData = metadata_2,
+                               design = ~eatenvscontrol)
+#Estimate size factors
+SF.gdds_2 <- estimateSizeFactors(gdds_2)
+print(sizeFactors(SF.gdds_2)) 
+all(sizeFactors(SF.gdds_2)) < 4
+```
+[1] TRUE - all size factors are less than 4, so we can use VST transformation.
+
+Run vst to transform data
+```{r}
+gvst_2 <- vst(gdds_2, blind=FALSE) #apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
+head(assay(gvst_2), 3) #view transformed gene count data for the first three genes. 
+dim(gvst_2)
+```
+
+Plot a heatmap to sample distances
+```{r}
+gsampleDists_2 <- dist(t(assay(gvst_2))) #calculate distance matix
+gsampleDistMatrix_2 <- as.matrix(gsampleDists_2) #distance matrix
+rownames(gsampleDistMatrix_2) <- colnames(gvst_2) #assign row names
+colnames(gsampleDistMatrix_2) <- NULL #assign col names
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255) #assign colors
+save_pheatmap_pdf <- function(x, filename, width=7, height=7) {
+  stopifnot(!missing(x))
+  stopifnot(!missing(filename))
+  pdf(filename, width=width, height=height)
+  grid::grid.newpage()
+  grid::grid.draw(x$gtable)
+  dev.off()
+}
+
+pht_2<-pheatmap(gsampleDistMatrix_2, #plot matrix
+              clustering_distance_rows=gsampleDists_2, #cluster rows
+              clustering_distance_cols=gsampleDists_2, #cluster columns
+              col=colors) #set colors
+
+save_pheatmap_pdf(pht, "data/plots/acr_sample_distances_2.pdf")
+dev.off()
+```
+Heatmap shows a clear diagnol line emphasising that the metadata is correctly mapping to the right sample in the genecount matrix.
+
+# Conduct a PERMANOVA and PCA for all genes
+```{r}
+#Export data for PERMANOVA test.  
+test_2<-t(assay(gvst_2)) #export as matrix
+test_2<-as.data.frame(test_2)
+#add category columns
+test_2$sample<-rownames(test_2)
+test_2$eatenvscontrol<-metadata_2$eatenvscontrol[match(test_2$sample, metadata_2$sample)]
+dim(test_2)
+    #[1]    15 18260 #two of these 18,260 columns are metadata so real value = 18,258 genes as expected
+scaled_test_2 <-prcomp(test_2[c(1:18258)], scale=TRUE, center=TRUE)
+fviz_eig(scaled_test_2)
+# scale data
+vegan_2 <- scale(test_2[c(1:18258)])
+
+# PerMANOVA 
+permanova_2<-adonis2(vegan_2 ~ eatenvscontrol, data = test_2, method='eu')
+permanova_2
+```
+Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+adonis2(formula = vegan_2 ~ eatenvscontrol, data = test_2, method = "eu")
+         Df SumOfSqs      R2      F Pr(>F)   
+Model     1    39100 0.15297 2.3477  0.002 **
+Residual 13   216512 0.84703                 
+Total    14   255612 1.00000                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Plot a PCA of samples by eatenvscontrol phenotype for all genes.        
+```{r}
+gPCAdata_2 <- plotPCA(gvst_2, intgroup = c("eatenvscontrol"), returnData=TRUE)
+percentVar_2 <- round(100*attr(gPCAdata_2, "percentVar")) 
+
+allgenesfilt_PCA_2 <- ggplot(gPCAdata_2, aes(PC1, PC2, color=eatenvscontrol)) +   geom_point(size=3) + 
+  ggtitle(expression(bold("All genes (18258 genes)")))+
+  geom_text(aes(x = PC1, y = PC2, label = name), vjust = -0.5) +
+  xlab(paste0("PC1: ",percentVar_2[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_2[2],"% variance")) +
+  scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
+  geom_text(x=0, y=10, label="p[eatenvscontrol]=0.002", color="black")+
+  theme_classic() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines 
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()); allgenesfilt_PCA_2
+
+ggsave("data/plots/pca_acr_2.pdf", allgenesfilt_PCA_2, width=8, height=4)
+ggsave("data/plots/pca_acr_2.jpeg", allgenesfilt_PCA_2, width=8, height=4)
+
+#Add a plot with elipses.  
+allgenes_ellipse_2<-allgenesfilt_PCA_2 + stat_ellipse();allgenes_ellipse_2
+ggsave("data/plots/pca_acr_ellipse_2.pdf", allgenes_ellipse_2, width=9, height=5)
+ggsave("data/plots/pca_acr_ellipse_2.jpeg", allgenes_ellipse_2, width=9, height=5)
+```
+We can see from the PCA that removing sample 497R has reduced PC2 variance from 14 to 12%. PC1 variance has increased from 41 to 46%.
+
+# Run DEG analysis of eatenvscontrol   
+Use the likelihood ratio approach based on guidance from DESeq2: "DESeq2 offers two kinds of hypothesis tests: the Wald test, where we use the estimated standard error of a log2 fold change to test if it is equal to zero, and the likelihood ratio test (LRT). The LRT examines two models for the counts, a full model with a certain number of terms and a reduced model, in which some of the terms of the full model are removed. The test determines if the increased likelihood of the data using the extra terms in the full model is more than expected if those extra terms are truly zero.
+The LRT is therefore useful for testing multiple terms at once, for example testing 3 or more levels of a factor at once, or all interactions between two variables. The LRT for count data is conceptually similar to an analysis of variance (ANOVA) calculation in linear regression, except that in the case of the Negative Binomial GLM, we use an analysis of deviance (ANODEV), where the deviance captures the difference in likelihood between a full and a reduced model." 
+
+1. View DEG's by eatenvscontrol
+```{r}
+#Run Wald test.  
+DEG_T <- DESeq(gdds_2, test="Wald")
+
+#View results by eatenvscontrol effects. Create dataframe for each comparison and add a column for the specific contrast.  
+resultsNames(DEG_T)
+#this shows the comparisons made (shown similar to lm output in terms of interactions)
+head(DEG_T)
+eatenvscontrol<-results(DEG_T, contrast=c("eatenvscontrol","control","eaten"))
+eatenvscontrol <- as.data.frame(subset(eatenvscontrol, padj<0.01))
+eatenvscontrol <- as.data.frame(subset(eatenvscontrol, abs(log2FoldChange)>1.5))
+eatenvscontrol$contrast <- c("eatenvscontrol")
+eatenvscontrol$gene <- rownames(eatenvscontrol)
+rownames(eatenvscontrol) <- NULL
+dim(eatenvscontrol)
+```
+We now have 566 DEGS across samples. When 497R was previously included this value was 480, therefore removing this sample has also influenced how many DEGs are in our dataset!
+
+```{r}
+#Combine this list of DEGs into one dataframe. 
+DEG_eatenvscontrol<-rbind(eatenvscontrol)
+DEG_eatenvscontrol
+
+# Extract the 'sample' column from eatenvscontrol
+sample_column <- eatenvscontrol$sample
+# Add the 'sample' column to DEG_eatenvscontrol
+DEG_eatenvscontrol$sample <- sample_column
+# Check the result
+head(DEG_eatenvscontrol)
+dim(DEG_eatenvscontrol)
+length(unique(DEG_eatenvscontrol$gene))
+
+#Get a VST normalized gene count matrix for these DEGs. 
+DEG_eatenvscontrol_vst <- gdds_2[unique(DEG_eatenvscontrol$gene)]
+dim(DEG_eatenvscontrol_vst)
+DEG_eatenvscontrol_vst <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst)
+```
+
+Plot a volcano plot for these comparisons. 
+```{r}
+class(DEG_eatenvscontrol)
+DEG_eatenvscontrol <- DESeq(gdds_2)
+#Eaten vs control
+res <- results(DEG_eatenvscontrol, contrast=c("eatenvscontrol","control","eaten"))
+
+volcano_acr_eatenvscontrol<-EnhancedVolcano(res,
+                                     lab = rownames(res),
+                                     x = 'log2FoldChange',
+                                     y = 'pvalue',
+                                     title = 'Acropora hyacinthus DEGS eaten by CoTS vs control',
+                                     pCutoff = 0.01,
+                                     FCcutoff = 1.5,
+                                     pointSize = 3.0,
+                                     labSize = 0.0, 
+                                     legendPosition = 'none')
+
+
+
+ggsave("data/plots/volcano_acr_eatenvscontrol.pdf", plot=volcano_acr_eatenvscontrol, width=18, height=6)
+ggsave("data/plots/volcano_acr_eatenvscontrol.png", plot=volcano_acr_eatenvscontrol, width=18, height=6)
+```
+
+Plot a heatmap for eatenvscontrol DEGs.
+```{r}
+#Set themes and metadata.  
+colnames(colData(gdds_2))
+legend_names_col <- colnames(assay(DEG_eatenvscontrol_vst))
+df <- as.data.frame(colData(gdds_2))
+colnames(df) <- tolower(trimws(colnames(df)))
+df$eatenvscontrol <- factor(as.character(df$eatenvscontrol), levels=c("eaten", "control"))
+df$eatenvscontrol <- relevel(df$eatenvscontrol, ref = "control")
+
+df<-df%>%
+  arrange(eatenvscontrol)
+
+ann_colors = list(eatenvscontrol = c("control" = "lightblue", "eaten"= "red2"))
+
+
+DEG_acr_eatenvscontrol <- pheatmap(assay(DEG_eatenvscontrol_vst), cluster_rows=TRUE, show_rownames=FALSE, color=inferno(10), show_colnames=TRUE, fontsize_row=3, scale="row", cluster_cols=TRUE, annotation_col=df, annotation_colors = ann_colors, labels_col=legend_names_col)
+
+save_pheatmap_pdf(DEG_acr_eatenvscontrol, "data/plots/DEG_acr_eatenvscontrol.pdf", width=15, height=20)
+dev.off()
+```
+
+#Plot a volcano plot for DEGs these comparisons. 
+```{r}
+#dont know which data to input for just the 566 DEGS? Keeps using the full dataset
+DEG_acr_eatenvscontrol_vol <- DESeq(gdds_2)
+#Eaten vs control
+res <- results(DEG_acr_eatenvscontrol_vol, contrast=c("eatenvscontrol","control","eaten"))
+
+volcano_acr_DEGS_eatenvscontrol<-EnhancedVolcano(res,
+                                        lab = rownames(res),
+                                        x = 'log2FoldChange',
+                                        y = 'pvalue',
+                                        title = 'eatenvscontrol',
+                                        pCutoff = 0.01,
+                                        FCcutoff = 1.5,
+                                        pointSize = 3.0,
+                                        labSize = 0.0, 
+                                        legendPosition = 'none')
+
+
+
+ggsave("data/plots/volcano_acr_DEGS_eatenvscontrol.pdf", plot=volcano_acr_DEGS_eatenvscontrol, width=18, height=6)
+ggsave("data/plots/volcano_acr_DEGS_eatenvscontrol.png", plot=volcano_acr_DEGS_eatenvscontrol, width=18, height=6)
+```

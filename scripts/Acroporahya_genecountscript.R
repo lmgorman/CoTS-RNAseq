@@ -271,9 +271,8 @@ allgenes_ellipse<-allgenesfilt_PCA + stat_ellipse();allgenes_ellipse
 ggsave("D:/RNAseq/pca_ellipse.pdf", allgenes_ellipse, width=9, height=5)
 ggsave("D:/RNAseq/pca_ellipse.jpeg", allgenes_ellipse, width=9, height=5)
 ##Run analysis with and without data point PCA -> DEGS 
-##Add sample label to PCA ggplot = shows outlier sample name
 
-####Add code removing 497R after here
+####
 
 ### Run DEG analysis of eatenvscontrol   
 #Use the likelihood ratio approach based on guidance from DESeq2: "DESeq2 offers two kinds of hypothesis tests: the Wald test, where we use the estimated standard error of a log2 fold change to test if it is equal to zero, and the likelihood ratio test (LRT). The LRT examines two models for the counts, a full model with a certain number of terms and a reduced model, in which some of the terms of the full model are removed. The test determines if the increased likelihood of the data using the extra terms in the full model is more than expected if those extra terms are truly zero.
@@ -320,7 +319,6 @@ head(DEG_eatenvscontrol)
 dim(DEG_eatenvscontrol)
 length(unique(DEG_eatenvscontrol$gene))
 
-#There are 481 total genes and 8 unique genes, indicating that some are shared in the contrasts. 
 #Get a VST normalized gene count matrix for these DEGs. 
 
 DEG_eatenvscontrol_vst <- gdds[unique(DEG_eatenvscontrol$gene)]
