@@ -50,3 +50,6 @@ rsconnect/
 
 #DS Store
 .DS_Store
+.Rproj.user
+.Rdata
+.quarto
