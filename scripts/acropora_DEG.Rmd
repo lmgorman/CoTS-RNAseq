@@ -582,7 +582,7 @@ df <- as.data.frame(colData(gdds_2))
 colnames(df) <- tolower(trimws(colnames(df)))
 df$eatenvscontrol <- factor(as.character(df$eatenvscontrol), levels=c("eaten", "control"))
 df$eatenvscontrol <- relevel(df$eatenvscontrol, ref = "control")
-
+ 
 df<-df%>%
   arrange(eatenvscontrol)
 
