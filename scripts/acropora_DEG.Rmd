@@ -113,7 +113,7 @@ gcount<-gcount %>%
 
 dim(gcount)
 ```
-Started with 27110 genes, ended with 25387 genes.  
+Started with 27110 genes, ended with 25287 genes.  
 
 Filter the genes based on sample size using pOverA.
 
@@ -258,7 +258,7 @@ Permutation: free
 Number of permutations: 999
 adonis2(formula = vegan ~ eatenvscontrol, data = test, method = "eu")
 Df SumOfSqs      R2      F Pr(>F)    
-Model     1    38615 0.14599 2.3932  0.001 ***
+Model     1    38615 0.14599 2.3932  0.002 ***
   Residual 14   225895 0.85401                  
 Total    15   264510 1.00000                  
 
@@ -336,6 +336,7 @@ gcount_filt_2 <- as.data.frame(gcount_2[which(rownames(gcount_2) %in% gn.keep_2)
 #How many rows do we have before and after filtering?
 nrow(gcount_2) #before
 nrow(gcount_filt_2) #after
+write.csv(gcount_filt_2,"data/allgenes_acr.csv", row.names = FALSE)
 ```
 We had 25283 genes before filtering. After filtering we have 18258 genes.
 
@@ -464,7 +465,7 @@ Permutation: free
 Number of permutations: 999
 adonis2(formula = vegan_2 ~ eatenvscontrol, data = test_2, method = "eu")
          Df SumOfSqs      R2      F Pr(>F)   
-Model     1    39100 0.15297 2.3477  0.002 **
+Model     1    39100 0.15297 2.3477  0.001 **
 Residual 13   216512 0.84703                 
 Total    14   255612 1.00000                 
 
@@ -521,7 +522,7 @@ rownames(eatenvscontrol) <- NULL
 dim(eatenvscontrol)
 write.csv(eatenvscontrol,"data/DEG_acr.csv", row.names = FALSE)
 ```
-We now have 1405 DEGS between eaten and control. When 497R was previously included this value was 480, therefore removing this sample has also influenced how many DEGs are in our dataset!
+We now have 1405 DEGS between eaten and control. 
 
 ```{r}
 #Combine this list of DEGs into one dataframe. 
