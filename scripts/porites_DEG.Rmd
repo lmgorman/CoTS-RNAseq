@@ -570,10 +570,16 @@ eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, padj<0.01))
 eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, abs(log2FoldChange)>1.5)
 eatenvscontrol_por2$contrast <- c("eatenvscontrol_por")
 eatenvscontrol_por2$gene <- rownames(eatenvscontrol_por2)
-eatenvscontrol_por2$sample <- rownames(DEG_T_por2@colData)
+
 #Try extracting column names
 # Subset row names from colData in DEG_T_por2 - need help to do this to correct genes
 colData_rownames <- rownames(DEG_T_por2@colData)
+#Not working
+eatenvscontrol_por2$sample <- ifelse(
+  abs(DEG_T_por2$log2FoldChange) > 1.5 & DEG_T_por2$padj < 0.01, 
+  DEG_T_por2$colData, 
+  NA
+)
 
 # Check the result
 head(eatenvscontrol_por2)
