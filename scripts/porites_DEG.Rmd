@@ -71,7 +71,7 @@ library("rtracklayer")
 library("GenomicRanges")
 library("plyranges")
 library("GSEABase")
-library("GOSlim")
+#library("GOSlim")
 library("stats")
 library("ggdendro")
 library("GO.db")
@@ -128,6 +128,8 @@ nrow(gcount_por) #Before
 nrow(gcount_filt_por) #After
     #[1] 16279
 ```
+
+16279 genes after filtering. 
 
 ```{r}
 # Function to extract 'R' followed by numbers from column names
@@ -285,8 +287,6 @@ Df SumOfSqs     R2      F Pr(>F)
 Model     1    38800 0.1589 2.6448  0.064 .
 Residual 14   205385 0.8411                
 Total    15   244185 1.0000                
----
-  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 #Plot a PCA of samples by eatenvscontrol phenotype for all genes. 
@@ -301,7 +301,7 @@ allgenesfilt_PCA_por <- ggplot(gPCAdata_por, aes(PC1, PC2, color=eatenvscontrol)
   xlab(paste0("PC1: ",percentVar_por[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_por[2],"% variance")) +
   scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
-  geom_text(x=0, y=10, label="p[eatenvscontrol]=0.065", color="black")+
+  geom_text(x=0, y=-20, label="p[eatenvscontrol]=0.065", color="black")+
   theme_classic() + #Set background color
   theme(panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines 
@@ -319,18 +319,20 @@ ggsave("figures/porites/pca_ellipse_por.jpeg", allgenes_ellipse_por, width=9, he
 ```
 Remove left cluster as it is clusering only based on read depth (225R, 34R, 43R, 16R)
 
-#Remove 225R, 34R, 43R and 16R from metadata 
+# Filter to remove low read depth samples 
+
+Remove 225R, 34R, 43R and 16R from metadata 
 ```{r}
 metadata_por2 <- metadata_por[c(-1, -4, -10, -11), ]
 ```
 
-#Remove 225R, 34R, 43R and 16R from gene count matrix. 
+Remove 225R, 34R, 43R and 16R from gene count matrix. 
 ```{r}
 #Remove 497R
 gcount_por2 <- gcount_por[,c(-1, -4, -10, -11)]
 ```
 
-#Re-run code with removed samples (225R, 34R, 43R and 16R)
+Re-run code with removed samples (225R, 34R, 43R and 16R)
 ```{r}
 dim(gcount_por2) 
    #[1] 
@@ -342,10 +344,10 @@ dim(gcount_por2)
   #[1] 35577    12
 ```
 
-##pOver A 4/12=0.33
+pOver A 4/12=0.33 (round to 0.34 )
 ```{r}
 #Create filter for the counts data
-filt_por2 <- filterfun(pOverA(0.33,10))
+filt_por2 <- filterfun(pOverA(0.34,10))
 gfilt_por2 <- genefilter(gcount_por2, filt_por2)
 #identify genes to keep by count filter
 gkeep_por2 <- gcount_por2[gfilt_por2,]
@@ -360,7 +362,7 @@ nrow(gcount_por2) #Before
 nrow(gcount_filt_por2) #After
     #[1] 24301
 ```
-Now has around 8,000 more genes after removing samples (24,000 versus 16,000)
+We now have 22,214 genes remaining after filtering.  
 
 ```{r}
 # Function to extract 'R' followed by numbers from column names
@@ -379,7 +381,6 @@ length(names(gcount_filt_por2))
     #[1] 12
 ```
 Column names are now correct and there are 12 as expected.
-
 
 ```{r}
 # Print the sample names in the metadata_por file. 
@@ -458,7 +459,6 @@ gvst_por2 <- vst(gdds_por2, blind=FALSE) #apply a variance stabilizing transfora
 head(assay(gvst_por2), 3) #view transformed gene count data for the first three genes in the dataset. 
 
 dim(gvst_por2)
-    #[1] 24301    12
 ```
 
 
@@ -486,14 +486,13 @@ pht_por2<-pheatmap(gsampleDistMatrix_por2, #plot matrix
 save_pheatmap_pdf(pht_por2, "figures/porites/sample_distances_por2.pdf")
 dev.off()
 ```
-Diagnol = great
-
 
 #Conduct PERMANOVA and PCA for all genes
 ```{r}
 #Export data for PERMANOVA test.  
 test_por2<-t(assay(gvst_por2)) #export as matrix
 test_por2<-as.data.frame(test_por2)
+dim(test_por2)
 
 #add category columns
 test_por2$sample<-rownames(test_por2)
@@ -501,12 +500,12 @@ test_por2$eatenvscontrol<-metadata_por2$eatenvscontrol[match(test_por2$sample, m
 
 #Build PERMANOVA model for all genes in the dataset.  
 dim(test_por2)
-    #[1]    12 24303 (remember two of the values are for the right measurement are just names so actually = 24301)
-scaled_test_por2 <-prcomp(test_por2[c(1:24301)], scale=TRUE, center=TRUE)
+#remember two of the values are for the right measurement are just names so actually = 22214)
+scaled_test_por2 <-prcomp(test_por2[c(1:22214)], scale=TRUE, center=TRUE)
 fviz_eig(scaled_test_por2)
 
 # scale data
-vegan_por2 <- scale(test_por2[c(1:24301)])
+vegan_por2 <- scale(test_por2[c(1:22214)])
 
 # PerMANOVA 
 permanova_por2<-adonis2(vegan_por2 ~ eatenvscontrol, data = test_por2, method='eu')
@@ -515,14 +514,13 @@ permanova_por2
 Permutation test for adonis under reduced model
 Permutation: free
 Number of permutations: 999
-adonis2(formula = vegan_por ~ eatenvscontrol, data = test_por, method = "eu")
- Df SumOfSqs      R2      F Pr(>F)
-Model     1    21700 0.08118 0.8835  0.559
-Residual 10   245611 0.91882              
-Total    11   267311 1.00000                   
----
-  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+adonis2(formula = vegan_por2 ~ eatenvscontrol, data = test_por2, method = "eu")
+               Df SumOfSqs     R2     F Pr(>F)
+eatenvscontrol  1    19743 0.0808 0.879   0.57
+Residual       10   224611 0.9192             
+Total          11   244354 1.0000   
 
+No difference in total gene expression - there may be individual DEGs.
 
 #Plot a PCA of samples by eatenvscontrol phenotype for all genes. 
 ```{r}
@@ -536,7 +534,7 @@ allgenesfilt_PCA_por2 <- ggplot(gPCAdata_por2, aes(PC1, PC2, color=eatenvscontro
   xlab(paste0("PC1: ",percentVar_por2[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_por[2],"% variance")) +
   scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
-  geom_text(x=0, y=10, label="p[eatenvscontrol]=0.559", color="black")+
+  geom_text(x=0, y=-20, label="p[eatenvscontrol]=0.57", color="black")+
   theme_classic() + #Set background color
   theme(panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines 
@@ -553,11 +551,9 @@ ggsave("figures/porites/pca_ellipse_por2.pdf", allgenes_ellipse_por2, width=9, h
 ggsave("figures/porites/pca_ellipse_por2.jpeg", allgenes_ellipse_por2, width=9, height=5)
 ```
 
+# Run DEG analysis of eatenvscontrol   
 
-#Run DEG analysis of eatenvscontrol   
-Use the likelihood ratio approach based on guidance from DESeq2: "DESeq2 offers two kinds of hypothesis tests: the Wald test, where we use the estimated standard error of a log2 fold change to test if it is equal to zero, and the likelihood ratio test (LRT). The LRT examines two models for the counts, a full model with a certain number of terms and a reduced model, in which some of the terms of the full model are removed. The test determines if the increased likelihood of the data using the extra terms in the full model is more than expected if those extra terms are truly zero.
-The LRT is therefore useful for testing multiple terms at once, for example testing 3 or more levels of a factor at once, or all interactions between two variables. The LRT for count data is conceptually similar to an analysis of variance (ANOVA) calculation in linear regression, except that in the case of the Negative Binomial GLM, we use an analysis of deviance (ANODEV), where the deviance captures the difference in likelihood between a full and a reduced model." 
-
+Using Wald model for comparison of two gropus. 
 
 ```{r} 
 #Run Wald test.  
@@ -566,30 +562,19 @@ DEG_T_por2 <- DESeq(gdds_por2, test="Wald")
 resultsNames(DEG_T_por2)
 #this shows the comparisons made (shown similar to lm output in terms of interactions)
 eatenvscontrol_por2<-results(DEG_T_por2, contrast=c("eatenvscontrol","control","eaten"))
-eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, padj<0.01))
-eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, abs(log2FoldChange)>1.5)
+eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, padj<0.05))
 eatenvscontrol_por2$contrast <- c("eatenvscontrol_por")
 eatenvscontrol_por2$gene <- rownames(eatenvscontrol_por2)
-
-#Try extracting column names
-# Subset row names from colData in DEG_T_por2 - need help to do this to correct genes
-colData_rownames <- rownames(DEG_T_por2@colData)
-#Not working
-eatenvscontrol_por2$sample <- ifelse(
-  abs(DEG_T_por2$log2FoldChange) > 1.5 & DEG_T_por2$padj < 0.01, 
-  DEG_T_por2$colData, 
-  NA
-)
 
 # Check the result
 head(eatenvscontrol_por2)
 
 rownames(eatenvscontrol_por2) <- NULL
 dim(eatenvscontrol_por2)
-# [1] 16   8
+# [1] 18   8
 write.csv(eatenvscontrol_por2,"data/DEG_por.csv", row.names = FALSE)
 ```
-16 DEGs between eaten and control Porites colonies.
+18 DEGs between eaten and control Porites colonies.
 
 Combine this list of DEGs into one dataframe. 
 ```{r}
@@ -597,15 +582,13 @@ DEG_eatenvscontrol_por2<-rbind(eatenvscontrol_por2)
 dim(DEG_eatenvscontrol_por2)
 length(unique(DEG_eatenvscontrol_por2$gene))
 
-#There are 16 total DEGs.
+#There are 18 total DEGs.
 #Get a VST normalized gene count matrix for these DEGs. 
 DEG_eatenvscontrol_vst_por2 <- gdds_por2[unique(DEG_eatenvscontrol_por2$gene)]
 dim(DEG_eatenvscontrol_vst_por2)
 
 # Now apply variance stabilizing transformation
-DEG_eatenvscontrol_vst_por2 <- varianceStabilizingTransformation(gcount_filt_por2)
-
-DEG_eatenvscontrol_vst_por2 <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst_por2) 
+DEG_eatenvscontrol_vst_por2 <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst_por2)
 ```
 
 #Plot a heatmap for eatenvscontrol DEGs.
@@ -619,13 +602,13 @@ df_por2$eatenvscontrol <- factor(as.character(df_por2$eatenvscontrol), levels=c(
 df_por2$eatenvscontrol <- relevel(df_por2$eatenvscontrol, ref = "control")
  
 df_por2<-df_por2%>%
-  arrange(eatenvscontrol)
+  arrange(eatenvscontrol)%>%dplyr::select(!c(code, sample))
 
-ann_colors_por = list(eatenvscontrol = c("control" = "lightblue", "eaten"= "red2"))
-
+ann_colors_por = list(eatenvscontrol = c("control" = "gray", "eaten"= "orange"))
 
 DEG_por2_eatenvscontrol_heatmap <- pheatmap(assay(DEG_eatenvscontrol_vst_por2), cluster_rows=TRUE, show_rownames=FALSE, color=inferno(10), show_colnames=TRUE, fontsize_row=3, scale="row", cluster_cols=TRUE, annotation_col=df_por2, annotation_colors = ann_colors_por, labels_col=legend_names_col_por)
 
 save_pheatmap_pdf(DEG_por2_eatenvscontrol_heatmap, "figures/porites/DEG_por2_eatenvscontrol_heatmap.pdf", width=15, height=20)
 dev.off()
 ```
+

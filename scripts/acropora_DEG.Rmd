@@ -73,7 +73,7 @@ library("rtracklayer")
 library("GenomicRanges")
 library("plyranges")
 library("GSEABase")
-library("GOSlim")
+#library("GOSim")
 library("stats")
 library("ggdendro")
 library("GO.db")
@@ -261,8 +261,6 @@ Df SumOfSqs      R2      F Pr(>F)
 Model     1    38615 0.14599 2.3932  0.001 ***
   Residual 14   225895 0.85401                  
 Total    15   264510 1.00000                  
----
-  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Plot a PCA of samples by eatenvscontrol phenotype for all genes.        
@@ -325,7 +323,7 @@ Started with 27110 genes, ended with 25283 genes.
 
 Filter the genes based on sample size using pOverA.
 
-Currently have 15 samples total; 7 in eaten and 8 in control. Therefore 7/16 = 0.44 so we will use this filter parameter to make sure 44% of the genes have a gene count of >10.
+Currently have 15 samples total; 7 in eaten and 8 in control. Therefore 7/16 = 0.44 so we will use this filter parameter to make sure 44% of the genes have a gene count of >10. 
 ```{r}
 filt_2 <- filterfun(pOverA(0.44,10))
 #create filter for the counts data
@@ -341,7 +339,6 @@ nrow(gcount_filt_2) #after
 ```
 We had 25283 genes before filtering. After filtering we have 18258 genes.
 
-
 ```{r}
 #Function to extract 'R' followed by numbers from column names
 extract_R_numbers_2 <- function(col_names) {
@@ -355,7 +352,7 @@ new_col_names_2 <- sapply(names(gcount_filt_2), extract_R_numbers_2)
 #names(gcount_filt) <- paste0("R", new_col_names)
 # Output the modified dataframe
 names(gcount_filt_2)
-length(names(gcount_filt_2)
+length(names(gcount_filt_2))
 ```
 
 Editing the metadata files
@@ -470,8 +467,6 @@ adonis2(formula = vegan_2 ~ eatenvscontrol, data = test_2, method = "eu")
 Model     1    39100 0.15297 2.3477  0.002 **
 Residual 13   216512 0.84703                 
 Total    14   255612 1.00000                 
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Plot a PCA of samples by eatenvscontrol phenotype for all genes.        
@@ -485,7 +480,7 @@ allgenesfilt_PCA_2 <- ggplot(gPCAdata_2, aes(PC1, PC2, color=eatenvscontrol)) + 
   xlab(paste0("PC1: ",percentVar_2[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_2[2],"% variance")) +
   scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
-  geom_text(x=0, y=10, label="p[eatenvscontrol]=0.002", color="black")+
+  geom_text(x=0, y=-20, label="p[eatenvscontrol]=0.002", color="black")+
   theme_classic() + #Set background color
   theme(panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines 
@@ -504,10 +499,11 @@ ggsave("figures/acropora/pca_acr_ellipse_2.jpeg", allgenes_ellipse_2, width=9, h
 We can see from the PCA that removing sample 497R has reduced PC2 variance from 14 to 12%. PC1 variance has increased from 41 to 46%.
 
 # Run DEG analysis of eatenvscontrol   
-Use the likelihood ratio approach based on guidance from DESeq2: "DESeq2 offers two kinds of hypothesis tests: the Wald test, where we use the estimated standard error of a log2 fold change to test if it is equal to zero, and the likelihood ratio test (LRT). The LRT examines two models for the counts, a full model with a certain number of terms and a reduced model, in which some of the terms of the full model are removed. The test determines if the increased likelihood of the data using the extra terms in the full model is more than expected if those extra terms are truly zero.
-The LRT is therefore useful for testing multiple terms at once, for example testing 3 or more levels of a factor at once, or all interactions between two variables. The LRT for count data is conceptually similar to an analysis of variance (ANOVA) calculation in linear regression, except that in the case of the Negative Binomial GLM, we use an analysis of deviance (ANODEV), where the deviance captures the difference in likelihood between a full and a reduced model." 
+
+Examine DEGs - using the Wald test for comparisons between the two groups. 
 
 1. View DEG's by eatenvscontrol
+
 ```{r}
 #Run Wald test.  
 DEG_T <- DESeq(gdds_2, test="Wald")
@@ -517,8 +513,7 @@ resultsNames(DEG_T)
 #this shows the comparisons made (shown similar to lm output in terms of interactions)
 head(DEG_T)
 eatenvscontrol<-results(DEG_T, contrast=c("eatenvscontrol","control","eaten"))
-eatenvscontrol <- as.data.frame(subset(eatenvscontrol, padj<0.01))
-eatenvscontrol <- as.data.frame(subset(eatenvscontrol, abs(log2FoldChange)>1.5))
+eatenvscontrol <- as.data.frame(subset(eatenvscontrol, padj<0.05))
 eatenvscontrol$contrast <- c("eatenvscontrol")
 eatenvscontrol$gene <- rownames(eatenvscontrol)
 
@@ -526,17 +521,18 @@ rownames(eatenvscontrol) <- NULL
 dim(eatenvscontrol)
 write.csv(eatenvscontrol,"data/DEG_acr.csv", row.names = FALSE)
 ```
-We now have 566 DEGS across samples. When 497R was previously included this value was 480, therefore removing this sample has also influenced how many DEGs are in our dataset!
+We now have 1405 DEGS between eaten and control. When 497R was previously included this value was 480, therefore removing this sample has also influenced how many DEGs are in our dataset!
 
 ```{r}
 #Combine this list of DEGs into one dataframe. 
 DEG_eatenvscontrol<-rbind(eatenvscontrol)
 DEG_eatenvscontrol
+head(DEG_eatenvscontrol)
 
 # Extract the 'sample' column from eatenvscontrol
-sample_column <- eatenvscontrol$sample
+#sample_column <- eatenvscontrol$sample
 # Add the 'sample' column to DEG_eatenvscontrol
-DEG_eatenvscontrol$sample <- sample_column
+#DEG_eatenvscontrol$sample <- sample_column
 # Check the result
 head(DEG_eatenvscontrol)
 dim(DEG_eatenvscontrol)
@@ -559,10 +555,9 @@ df$eatenvscontrol <- factor(as.character(df$eatenvscontrol), levels=c("eaten", "
 df$eatenvscontrol <- relevel(df$eatenvscontrol, ref = "control")
  
 df<-df%>%
-  arrange(eatenvscontrol)
+  arrange(eatenvscontrol)%>%dplyr::select(!code)%>%dplyr::select(!sample)
 
-ann_colors = list(eatenvscontrol = c("control" = "lightblue", "eaten"= "red2"))
-
+ann_colors = list(eatenvscontrol = c("control" = "gray", "eaten"= "orange"))
 
 DEG_acr_eatenvscontrol <- pheatmap(assay(DEG_eatenvscontrol_vst), cluster_rows=TRUE, show_rownames=FALSE, color=inferno(10), show_colnames=TRUE, fontsize_row=3, scale="row", cluster_cols=TRUE, annotation_col=df, annotation_colors = ann_colors, labels_col=legend_names_col)
 
