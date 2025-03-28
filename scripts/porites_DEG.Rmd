@@ -567,13 +567,22 @@ resultsNames(DEG_T_por2)
 #this shows the comparisons made (shown similar to lm output in terms of interactions)
 eatenvscontrol_por2<-results(DEG_T_por2, contrast=c("eatenvscontrol","control","eaten"))
 eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, padj<0.01))
-eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, abs(log2FoldChange)>1.5))
+eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, abs(log2FoldChange)>1.5)
 eatenvscontrol_por2$contrast <- c("eatenvscontrol_por")
 eatenvscontrol_por2$gene <- rownames(eatenvscontrol_por2)
+eatenvscontrol_por2$sample <- rownames(DEG_T_por2@colData)
+#Try extracting column names
+# Subset row names from colData in DEG_T_por2 - need help to do this to correct genes
+colData_rownames <- rownames(DEG_T_por2@colData)
+
+# Check the result
+head(eatenvscontrol_por2)
+
 rownames(eatenvscontrol_por2) <- NULL
 dim(eatenvscontrol_por2)
 # [1] 16   8
 ```
+16 DEGs between eaten and control Porites colonies.
 
 Combine this list of DEGs into one dataframe. 
 ```{r}
