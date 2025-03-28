@@ -587,6 +587,7 @@ head(eatenvscontrol_por2)
 rownames(eatenvscontrol_por2) <- NULL
 dim(eatenvscontrol_por2)
 # [1] 16   8
+write.csv(eatenvscontrol_por2,"data/DEG_por.csv", row.names = FALSE)
 ```
 16 DEGs between eaten and control Porites colonies.
 

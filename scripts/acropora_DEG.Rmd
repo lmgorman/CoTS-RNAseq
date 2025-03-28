@@ -521,8 +521,10 @@ eatenvscontrol <- as.data.frame(subset(eatenvscontrol, padj<0.01))
 eatenvscontrol <- as.data.frame(subset(eatenvscontrol, abs(log2FoldChange)>1.5))
 eatenvscontrol$contrast <- c("eatenvscontrol")
 eatenvscontrol$gene <- rownames(eatenvscontrol)
+
 rownames(eatenvscontrol) <- NULL
 dim(eatenvscontrol)
+write.csv(eatenvscontrol,"data/DEG_acr.csv", row.names = FALSE)
 ```
 We now have 566 DEGS across samples. When 497R was previously included this value was 480, therefore removing this sample has also influenced how many DEGs are in our dataset!
 
