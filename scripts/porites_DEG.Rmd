@@ -1,5 +1,5 @@
 ---
-title: "porites_DEG"
+title: "Porites_DEG"
 author: "LM Gorman, AS Huffmyer"
 date: "2025-03-26"
 output:
@@ -13,13 +13,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+# Set up
 Set up workspace, set options, and load required packages.    
 ```{r}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 Load libraries. 
-```{r}
+```{r Load libraries}
 options(stringsAsFactors = FALSE)
 #if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
 #if ("genefilter" %in% rownames(installed.packages()) == 'FALSE') install.packages('genefilter') 
@@ -58,7 +60,7 @@ library("DESeq2")
 library("tidyverse")
 library("genefilter")
 library("RColorBrewer")
-library("WGCNA")
+#library("WGCNA")
 library("flashClust")
 library("gridExtra")
 library("ComplexHeatmap")
@@ -71,7 +73,7 @@ library("rtracklayer")
 library("GenomicRanges")
 library("plyranges")
 library("GSEABase")
-#library("GOSlim")
+library("GOSim")
 library("stats")
 library("ggdendro")
 library("GO.db")
@@ -89,29 +91,29 @@ library("EnhancedVolcano")
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Load metadata
-```{r}
+Load metadata
+```{r Load metadata}
 metadata_por <- read.csv("data/metadata_porites.csv", header = TRUE, sep = ",")%>%dplyr::select(sample, eatenvscontrol, code)
 metadata_por$code<-paste0(metadata_por$code)
 head(metadata_por)
 ```
 
-#Load Porites gene count matrix generated from stringtie
-```{r}
+Load Porites gene count matrix generated from stringtie
+```{r Load Porites gene count matrix}
 gcount_por <- as.data.frame(read.csv("data/gene-count-matrix/porites_gene_count_matrix.csv", row.names="gene_id"), colClasses = double)
 head(gcount_por)
 #Check that there are no genes with 0 counts across all samples (remember only 16 columns since we are just looking at Porites). 
 dim(gcount_por) 
-   #[1] 40389    16
 gcount_por<-gcount_por %>%
   mutate(Total = rowSums(.[, 1:16]))%>%
   filter(!Total==0)%>%
   dplyr::select(!Total)
 dim(gcount_por)
-  #[1] 35599    16
 ```
+Started with 40389 and ended with `r nrow(gcount_por)` genes after removing 0's. 
 
-```{r}
+# Filtering using pOverA
+```{r Filtering using pOverA}
 #Create filter for the counts data
 filt_por <- filterfun(pOverA(0.5,10))
 gfilt_por <- genefilter(gcount_por, filt_por)
@@ -124,33 +126,25 @@ gcount_filt_por <- as.data.frame(gcount_por[which(rownames(gcount_por) %in% gn.k
 
 #How many rows do we have before and after filtering?
 nrow(gcount_por) #Before
-    #[1] 35599
 nrow(gcount_filt_por) #After
-    #[1] 16279
 ```
+We had `r nrow(gcount_por)` genes before filtering and have `r nrow(gcount_filt_por)` genes after filtering. 
 
-16279 genes after filtering. 
-
-```{r}
+```{r edit dataframe}
 # Function to extract 'R' followed by numbers from column names
 extract_R_numbers_por <- function(col_names) {
   sub("R(\\d+).*", "\\1", col_names)
 }
-
 # Apply the function to all column names
 new_col_names_por <- sapply(names(gcount_filt_por), extract_R_numbers_por)
-
-# Rename the columns - do I need to do this?
-# names(gcount_filt_por) <- paste0("R", new_col_names_por)
 # Output the modified dataframe
 names(gcount_filt_por)
 length(names(gcount_filt_por))
-    #[1] 16
 ```
 Column names are now correct and there are 16 as expected.
 
 
-```{r}
+```{r Editing the metadata files}
 # Print the sample names in the metadata_por file. 
 metadata_por$sample<-as.factor(metadata_por$sample)
 metadata_por$eatenvscontrol<-as.factor(metadata_por$eatenvscontrol)
@@ -170,22 +164,17 @@ list_por<-as.factor(list_por)
 metadata_por$sample <- tolower(trimws(metadata_por$sample))
 colnames(gcount_filt_por) <- tolower(trimws(colnames(gcount_filt_por)))
 identical(metadata_por$sample, colnames(gcount_filt_por))
-    #[1] TRUE
 
-## Re-order the levels - havent included the second part as it was messing my code up!
+# Re-order the levels
 metadata_por$sample<-as.factor(metadata_por$sample)
-##metadata_por$sample <- factor(as.character(metadata_por$sample), levels=list)
 
 # Re-order the data.frame
 metadata_por_ordered <- metadata_por[order(metadata_por$sample),]
 metadata_por_ordered$sample
-
 head(metadata_por_ordered)
-
 metadata_por_ordered$sample
 colnames(gcount_filt_por)
 head(gcount_filt_por)
-
 gcount_filt_por <- gcount_filt_por[, order(colnames(gcount_filt_por))]
 
 # Remove all spaces from the 'sample' column
@@ -194,9 +183,8 @@ metadata_por_ordered$sample <- gsub("\\s+", "", metadata_por_ordered$sample)
 colnames(gcount_filt_por) <- gsub("\\s+", "", colnames(gcount_filt_por))
 #Check names are the same
 identical(metadata_por_ordered$sample, colnames(gcount_filt_por))
-    #[1] TRUE
 
-## Check unique sample names from metadata
+# Check unique sample names from metadata
 unique(metadata_por_ordered$sample)
 # Check unique column names from gcount_filt_por
 unique(colnames(gcount_filt_por))
@@ -211,7 +199,8 @@ identical(metadata_por_ordered$sample, colnames(gcount_filt_por))
 metadata_por$eatenvscontrol <- relevel(metadata_por$eatenvscontrol, ref = "control")
 ```
 
-```{r}
+# Estimating the size factors
+```{r Estimate size factors}
 gdds_por <- DESeqDataSetFromMatrix(countData = gcount_filt_por,
                                colData = metadata_por,
                                design = ~eatenvscontrol)
@@ -220,19 +209,18 @@ SF.gdds_por <- estimateSizeFactors(gdds_por) #estimate size factors to determine
 print(sizeFactors(SF.gdds_por)) #View size factors
 
 all(sizeFactors(SF.gdds_por)) < 4
-    #[1] TRUE (but look like we have 11 and 8 when we print the factors - ask Ariana)
+```
+Says true but look like we have 11 and 8 when we print the factors - **ask Ariana**. If all size factors are less than 4, use VST transformation.  
 
-#All size factors are less than 4, so we can use VST transformation.  
+# Run vst
+```{r Run vst to transform data}
 gvst_por <- vst(gdds_por, blind=FALSE) #apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
 head(assay(gvst_por), 3) #view transformed gene count data for the first three genes in the dataset. 
-
 dim(gvst_por)
-    #[1] 16279    16
 ```
 
-
-#Plot a heatmap to sample distances
-```{r}
+# Plot a heatmap to sample distances
+```{r heatmap of sample distances}
 gsampleDists_por <- dist(t(assay(gvst_por))) #calculate distance matix
 gsampleDistMatrix_por <- as.matrix(gsampleDists_por) #distance matrix
 rownames(gsampleDistMatrix_por) <- colnames(gvst_por) #assign row names
@@ -252,12 +240,12 @@ pht_por<-pheatmap(gsampleDistMatrix_por, #plot matrix
               clustering_distance_cols=gsampleDists_por, #cluster columns
               col=colors) #set colors
 
-save_pheatmap_pdf(pht, "figures/porites/sample_distances_por.pdf")
+save_pheatmap_pdf(pht_por, "figures/porites/sample_distances_por.pdf")
 dev.off()
 ```
 
-#Conduct PERMANOVA and PCA for all genes
-```{r}
+# Conduct PERMANOVA for all genes
+```{r edit data for PERMANOVA}
 #Export data for PERMANOVA test.  
 test_por<-t(assay(gvst_por)) #export as matrix
 test_por<-as.data.frame(test_por)
@@ -268,7 +256,10 @@ test_por$eatenvscontrol<-metadata_por$eatenvscontrol[match(test_por$sample, meta
 
 #Build PERMANOVA model for all genes in the dataset.  
 dim(test_por)
-    #[1]    16 16281 (remember two of the values are for the right measurement are just names so actually = 16279)
+```
+Remember two of the `r ncol(test_por)`so real value is `r ncol(test_por) - 2` genes **as expected**
+
+```{r Conduct PERMANOVA}
 scaled_test_por <-prcomp(test_por[c(1:16279)], scale=TRUE, center=TRUE)
 fviz_eig(scaled_test_por)
 
@@ -279,18 +270,11 @@ vegan_por <- scale(test_por[c(1:16279)])
 permanova_por<-adonis2(vegan_por ~ eatenvscontrol, data = test_por, method='eu')
 permanova_por
 ```
-Permutation test for adonis under reduced model
-Permutation: free
-Number of permutations: 999
-adonis2(formula = vegan_por ~ eatenvscontrol, data = test_por, method = "eu")
-Df SumOfSqs     R2      F Pr(>F)  
-Model     1    38800 0.1589 2.6448  0.064 .
-Residual 14   205385 0.8411                
-Total    15   244185 1.0000                
+           
 
 
-#Plot a PCA of samples by eatenvscontrol phenotype for all genes. 
-```{r}
+# Plot a PCA  
+```{r Plot a PCA of samples by eatenvscontrol phenotype for all genes}
 gPCAdata_por <- plotPCA(gvst_por, intgroup = c("eatenvscontrol"), returnData=TRUE)
 percentVar_por <- round(100*attr(gPCAdata_por, "percentVar")) #plot PCA of samples with all data
 
@@ -320,32 +304,32 @@ ggsave("figures/porites/pca_ellipse_por.jpeg", allgenes_ellipse_por, width=9, he
 Remove left cluster as it is clusering only based on read depth (225R, 34R, 43R, 16R)
 
 # Filter to remove low read depth samples 
-
 Remove 225R, 34R, 43R and 16R from metadata 
-```{r}
+```{r Remove 225R, 34R, 43R and 16R from metadata }
 metadata_por2 <- metadata_por[c(-1, -4, -10, -11), ]
 ```
 
 Remove 225R, 34R, 43R and 16R from gene count matrix. 
-```{r}
+```{r Remove 225R, 34R, 43R and 16R from gene count matrix} 
 #Remove 497R
 gcount_por2 <- gcount_por[,c(-1, -4, -10, -11)]
 ```
 
 Re-run code with removed samples (225R, 34R, 43R and 16R)
-```{r}
+```{r Re-run code with removed samples}
 dim(gcount_por2) 
-   #[1] 
 gcount_por2<-gcount_por2 %>%
   mutate(Total = rowSums(.[, 1:12]))%>%
   filter(!Total==0)%>%
   dplyr::select(!Total)
 dim(gcount_por2)
-  #[1] 35577    12
 ```
+Started with 35599 genes, ended with `r nrow(gcount_por2)` genes.
 
+
+# Filtering with pOver A after removing low quality samples
 pOver A 4/12=0.33 (round to 0.34 )
-```{r}
+```{r run filtering after removing samples}
 #Create filter for the counts data
 filt_por2 <- filterfun(pOverA(0.34,10))
 gfilt_por2 <- genefilter(gcount_por2, filt_por2)
@@ -358,31 +342,25 @@ gcount_filt_por2 <- as.data.frame(gcount_por2[which(rownames(gcount_por2) %in% g
 
 #How many rows do we have before and after filtering?
 nrow(gcount_por2) #Before
-    #[1] 35577
 nrow(gcount_filt_por2) #After
-    #[1] 24301
 ```
-We now have 22,214 genes remaining after filtering.  
+We had `r nrow(gcount_por2)`genes before filtering and now have `r nrow(gcount_filt_por2)` genes remaining after filtering.  
 
-```{r}
+# Edit metadata 
+```{r edit column data}
 # Function to extract 'R' followed by numbers from column names
 extract_R_numbers_por2 <- function(col_names) {
   sub("R(\\d+).*", "\\1", col_names)
 }
-
 # Apply the function to all column names
 new_col_names_por2 <- sapply(names(gcount_filt_por2), extract_R_numbers_por2)
-
-# Rename the columns - do I need to do this?
-# names(gcount_filt_por) <- paste0("R", new_col_names_por)
 # Output the modified dataframe
 names(gcount_filt_por2)
 length(names(gcount_filt_por2))
-    #[1] 12
 ```
 Column names are now correct and there are 12 as expected.
 
-```{r}
+```{r edit metadata}
 # Print the sample names in the metadata_por file. 
 metadata_por2$sample<-as.factor(metadata_por2$sample)
 metadata_por2$eatenvscontrol<-as.factor(metadata_por2$eatenvscontrol)
@@ -402,22 +380,18 @@ list_por2<-as.factor(list_por2)
 metadata_por2$sample <- tolower(trimws(metadata_por2$sample))
 colnames(gcount_filt_por2) <- tolower(trimws(colnames(gcount_filt_por2)))
 identical(metadata_por2$sample, colnames(gcount_filt_por2))
-    #[1] TRUE
 
-## Re-order the levels - havent included the second part as it was messing my code up!
+# Re-order the levels
 metadata_por2$sample<-as.factor(metadata_por2$sample)
-##metadata_por$sample <- factor(as.character(metadata_por$sample), levels=list)
 
 # Re-order the data.frame
 metadata_por2_ordered <- metadata_por2[order(metadata_por2$sample),]
 metadata_por2_ordered$sample
 
 head(metadata_por2_ordered)
-
 metadata_por2_ordered$sample
 colnames(gcount_filt_por2)
 head(gcount_filt_por2)
-
 gcount_filt_por2 <- gcount_filt_por2[, order(colnames(gcount_filt_por2))]
 
 # Remove all spaces from the 'sample' column
@@ -426,9 +400,7 @@ metadata_por2_ordered$sample <- gsub("\\s+", "", metadata_por2_ordered$sample)
 colnames(gcount_filt_por2) <- gsub("\\s+", "", colnames(gcount_filt_por2))
 #Check names are the same
 identical(metadata_por2_ordered$sample, colnames(gcount_filt_por2))
-    #[1] TRUE
-
-## Check unique sample names from metadata
+# Check unique sample names from metadata
 unique(metadata_por2_ordered$sample)
 # Check unique column names from gcount_filt_por
 unique(colnames(gcount_filt_por2))
@@ -438,12 +410,13 @@ metadata_por2_ordered$sample <- tolower(trimws(metadata_por2_ordered$sample))
 # Clean up gcount column names
 colnames(gcount_filt_por2) <- tolower(trimws(colnames(gcount_filt_por2)))
 identical(metadata_por2_ordered$sample, colnames(gcount_filt_por2))
-    #[1] TRUE
+ 
 #Make sure that the reference level for estimating effect size is control
 metadata_por2$eatenvscontrol <- relevel(metadata_por2$eatenvscontrol, ref = "control")
 ```
 
-```{r}
+#Run VST after removing low quality samples
+```{r run VST}
 gdds_por2 <- DESeqDataSetFromMatrix(countData = gcount_filt_por2,
                                colData = metadata_por2,
                                design = ~eatenvscontrol)
@@ -452,7 +425,6 @@ SF.gdds_por2 <- estimateSizeFactors(gdds_por2) #estimate size factors to determi
 print(sizeFactors(SF.gdds_por2)) #View size factors
 
 all(sizeFactors(SF.gdds_por2)) < 4
-    #[1] TRUE (but look like we have 11 and 8 when we print the factors - ask Ariana)
 
 #All size factors are less than 4, so we can use VST transformation.  
 gvst_por2 <- vst(gdds_por2, blind=FALSE) #apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
@@ -461,9 +433,8 @@ head(assay(gvst_por2), 3) #view transformed gene count data for the first three 
 dim(gvst_por2)
 ```
 
-
-#Plot a heatmap to sample distances
-```{r}
+#Plot a heatmap to sample distances after removing low quality samples
+```{r Plot a heatmap to sample distances after removing low quality samples}
 gsampleDists_por2 <- dist(t(assay(gvst_por2))) #calculate distance matix
 gsampleDistMatrix_por2 <- as.matrix(gsampleDists_por2) #distance matrix
 rownames(gsampleDistMatrix_por2) <- colnames(gvst_por2) #assign row names
@@ -486,9 +457,11 @@ pht_por2<-pheatmap(gsampleDistMatrix_por2, #plot matrix
 save_pheatmap_pdf(pht_por2, "figures/porites/sample_distances_por2.pdf")
 dev.off()
 ```
+Still a diagnol line so I have removed the samples (225R, 34R, 43R and 16R) correctly.
 
-#Conduct PERMANOVA and PCA for all genes
-```{r}
+
+#Conduct PERMANOVA for all genes after removing low quality samples
+```{r edit data for PERMANOVA after removing samples}
 #Export data for PERMANOVA test.  
 test_por2<-t(assay(gvst_por2)) #export as matrix
 test_por2<-as.data.frame(test_por2)
@@ -500,7 +473,10 @@ test_por2$eatenvscontrol<-metadata_por2$eatenvscontrol[match(test_por2$sample, m
 
 #Build PERMANOVA model for all genes in the dataset.  
 dim(test_por2)
-#remember two of the values are for the right measurement are just names so actually = 22214)
+```
+Two of these `r ncol(test_por2)` columns are metadata so real value is `r ncol(test_por2) - 2` genes **as expected**
+
+```{r run PERMANOVA after removing samples}
 scaled_test_por2 <-prcomp(test_por2[c(1:22214)], scale=TRUE, center=TRUE)
 fviz_eig(scaled_test_por2)
 
@@ -511,19 +487,10 @@ vegan_por2 <- scale(test_por2[c(1:22214)])
 permanova_por2<-adonis2(vegan_por2 ~ eatenvscontrol, data = test_por2, method='eu')
 permanova_por2
 ```
-Permutation test for adonis under reduced model
-Permutation: free
-Number of permutations: 999
-adonis2(formula = vegan_por2 ~ eatenvscontrol, data = test_por2, method = "eu")
-               Df SumOfSqs     R2     F Pr(>F)
-eatenvscontrol  1    19743 0.0808 0.879   0.57
-Residual       10   224611 0.9192             
-Total          11   244354 1.0000   
+No significant difference in total gene expression - there may be individual DEGs.
 
-No difference in total gene expression - there may be individual DEGs.
-
-#Plot a PCA of samples by eatenvscontrol phenotype for all genes. 
-```{r}
+ #Plot a PCA after removing low quality samples by eatenvscontrol phenotype for all genes. 
+```{r Plot a PCA after removing low quality samples}
 gPCAdata_por2 <- plotPCA(gvst_por2, intgroup = c("eatenvscontrol"), returnData=TRUE)
 percentVar_por2 <- round(100*attr(gPCAdata_por2, "percentVar")) #plot PCA of samples with all data
 
@@ -551,11 +518,11 @@ ggsave("figures/porites/pca_ellipse_por2.pdf", allgenes_ellipse_por2, width=9, h
 ggsave("figures/porites/pca_ellipse_por2.jpeg", allgenes_ellipse_por2, width=9, height=5)
 ```
 
-# Run DEG analysis of eatenvscontrol   
+# Run DEG analysis of eatenvscontrol after removing low quality samples  
 
 Using Wald model for comparison of two gropus. 
 
-```{r} 
+```{r run DEG analysis using Wald test after removing low quality samples} 
 #Run Wald test.  
 DEG_T_por2 <- DESeq(gdds_por2, test="Wald")
 #View results by eatenvscontrol effects. Create dataframe for each comparison and add a column for the specific contrast.  
@@ -565,34 +532,29 @@ eatenvscontrol_por2<-results(DEG_T_por2, contrast=c("eatenvscontrol","control","
 eatenvscontrol_por2 <- as.data.frame(subset(eatenvscontrol_por2, padj<0.05))
 eatenvscontrol_por2$contrast <- c("eatenvscontrol_por")
 eatenvscontrol_por2$gene <- rownames(eatenvscontrol_por2)
-
 # Check the result
 head(eatenvscontrol_por2)
-
 rownames(eatenvscontrol_por2) <- NULL
 dim(eatenvscontrol_por2)
-# [1] 18   8
+#save data of DEGS to directory
 write.csv(eatenvscontrol_por2,"data/DEG_por.csv", row.names = FALSE)
 ```
 18 DEGs between eaten and control Porites colonies.
 
 Combine this list of DEGs into one dataframe. 
-```{r}
+```{r Combine this list of DEGs into one dataframe after removing samples}
 DEG_eatenvscontrol_por2<-rbind(eatenvscontrol_por2)
 dim(DEG_eatenvscontrol_por2)
 length(unique(DEG_eatenvscontrol_por2$gene))
-
-#There are 18 total DEGs.
 #Get a VST normalized gene count matrix for these DEGs. 
 DEG_eatenvscontrol_vst_por2 <- gdds_por2[unique(DEG_eatenvscontrol_por2$gene)]
 dim(DEG_eatenvscontrol_vst_por2)
-
 # Now apply variance stabilizing transformation
 DEG_eatenvscontrol_vst_por2 <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst_por2)
 ```
 
-#Plot a heatmap for eatenvscontrol DEGs.
-```{r}
+# Plot a heatmap for eatenvscontrol DEGs after removing low quality samples
+```{r Plot a heatmap for eatenvscontrol DEGs}
 #Set themes and metadata.  
 colnames(colData(gdds_por2))
 legend_names_col_por <- colnames(assay(DEG_eatenvscontrol_vst_por2))
