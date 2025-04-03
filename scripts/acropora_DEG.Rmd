@@ -133,8 +133,8 @@ nrow(gcount_filt) #after
 ```
 We had `r nrow(gcount)` genes before filtering. After filtering we have `r nrow(gcount_filt)` genes.
 
-```{r}
-#Function to extract 'R' followed by numbers from column names
+```{r edit dataframe}
+#Function to extract 'R' followed by numbers from column names 
 extract_R_numbers <- function(col_names) {
   sub("R(\\d+).*", "\\1", col_names)
 }
@@ -148,7 +148,7 @@ length(names(gcount_filt))
 ```
 
 # Editing the metadata files
-```{r}
+```{r Editing the metadata files}
 #Print the sample names in the metadata file
 metadata$sample<-as.factor(metadata$sample)
 metadata$eatenvscontrol<-as.factor(metadata$eatenvscontrol)

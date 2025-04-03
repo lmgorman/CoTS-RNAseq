@@ -1758,8 +1758,7 @@ metadata_por_ordered$sample &lt;- tolower(trimws(metadata_por_ordered$sample))
 colnames(gcount_filt_por) &lt;- tolower(trimws(colnames(gcount_filt_por)))
 identical(metadata_por_ordered$sample, colnames(gcount_filt_por))</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>    #[1] TRUE
-#Make sure that the reference level for estimating effect size is control
+<pre class="r"><code>#Make sure that the reference level for estimating effect size is control
 metadata_por$eatenvscontrol &lt;- relevel(metadata_por$eatenvscontrol, ref = &quot;control&quot;)</code></pre>
 </div>
 <div id="estimating-the-size-factors" class="section level1">
@@ -1865,7 +1864,7 @@ permanova_por</code></pre>
 ## 
 ## adonis2(formula = vegan_por ~ eatenvscontrol, data = test_por, method = &quot;eu&quot;)
 ##          Df SumOfSqs     R2      F Pr(&gt;F)  
-## Model     1    38800 0.1589 2.6448  0.065 .
+## Model     1    38800 0.1589 2.6448   0.06 .
 ## Residual 14   205385 0.8411                
 ## Total    15   244185 1.0000                
 ## ---
@@ -2153,7 +2152,7 @@ permanova_por2</code></pre>
 ## 
 ## adonis2(formula = vegan_por2 ~ eatenvscontrol, data = test_por2, method = &quot;eu&quot;)
 ##          Df SumOfSqs     R2     F Pr(&gt;F)
-## Model     1    19743 0.0808 0.879  0.565
+## Model     1    19743 0.0808 0.879  0.597
 ## Residual 10   224611 0.9192             
 ## Total    11   244354 1.0000</code></pre>
 <p>No significant difference in total gene expression - there may be

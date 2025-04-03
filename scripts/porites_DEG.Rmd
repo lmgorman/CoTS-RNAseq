@@ -194,7 +194,6 @@ metadata_por_ordered$sample <- tolower(trimws(metadata_por_ordered$sample))
 # Clean up gcount column names
 colnames(gcount_filt_por) <- tolower(trimws(colnames(gcount_filt_por)))
 identical(metadata_por_ordered$sample, colnames(gcount_filt_por))
-    #[1] TRUE
 #Make sure that the reference level for estimating effect size is control
 metadata_por$eatenvscontrol <- relevel(metadata_por$eatenvscontrol, ref = "control")
 ```
