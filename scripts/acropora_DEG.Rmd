@@ -52,6 +52,8 @@ options(stringsAsFactors = FALSE)
 #if ("EnhancedVolcano" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("EnhancedVolcano")
 #if ("vegan" %in% rownames(installed.packages()) == 'FALSE') install.packages("vegan") 
 #if ("factoextra" %in% rownames(installed.packages()) == 'FALSE') install.packages("factoextra") 
+#if ("htmlTable" %in% rownames(installed.packages()) == 'FALSE') install.packages("htmlTable")
+
 
 library("vegan")
 library("factoextra")
@@ -84,6 +86,65 @@ library("biomaRt")
 library("Rgraphviz")
 library("EnhancedVolcano")
 ```
+
+# Sample mapping
+This table shows the total number of mapped reads of each sample of our samples to the *Acropora hyacinthus* genome from the Palumbi lab - available at: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020536085.1/ 
+```{r results-of-sample-mapping}
+
+acropora_mapping <- tribble(
+  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads,
+  "Acropora hyacinthus eaten", "497R", 3090986, 2760422,
+  "Acropora hyacinthus eaten", "568R", 74142102, 66507248,
+  "Acropora hyacinthus eaten", "410R", 80526182, 73098402, 
+  "Acropora hyacinthus eaten", "549R", 77332112, 69416060, 
+  "Acropora hyacinthus eaten", "414R", 87333162, 78162862, 
+  "Acropora hyacinthus eaten", "321RA", 101145264, 91192744, 
+  "Acropora hyacinthus eaten", "581R", 23750278, 21582796, 
+  "Acropora hyacinthus eaten", "370R", 34239394, 30624808,
+  "Acropora hyacinthus control", "419R", 106151016, 94939130, 
+  "Acropora hyacinthus control", "331RA", 99763802, 88927416,
+  "Acropora hyacinthus control", "336R", 110716976, 100464150,
+  "Acropora hyacinthus control", "512R", 134343958, 121579012, 
+  "Acropora hyacinthus control", "380R", 99627838, 89986620, 
+  "Acropora hyacinthus control", "571R", 76962776, 69663792, 
+  "Acropora hyacinthus control", "586R", 87532254, 79263634, 
+  "Acropora hyacinthus control", "468R", 100108574, 90603050
+  )
+
+#Filter based on samples <5 million mapped and/or primary reads
+acropora_mapping %>%
+  filter(total_mapped_reads < 5000000)
+acropora_mapping %>%
+  filter(total_primary_reads < 5000000)
+```
+Only sample 497R has less than 5 million total mapped and primary reads.
+```{r create-table-sample-mapping}
+#Make the table in descending order of total mapped reads
+acropora_mapping %>%
+  arrange(desc(total_mapped_reads)) %>%
+  knitr::kable(caption = "Total mapped reads  from each sample to *Acropora hyacinthus genome*. Total mapped and number of primary reads not meeting the criteria (≥ 5 million reads) are highlighted in yellow.", col.names = c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+
+#Colour the cells <5 million
+library("htmlTable")
+## indices defining where the styles go
+where <- rbind(c(1, 3), c(1, 4))
+style <- c('background-color: red; color: white;',
+           'background-color: red; color: white;'
+           )
+
+css.cell <- matrix('', nrow(acropora_mapping), ncol(acropora_mapping))
+css.cell[where] <- style
+htmlTable(acropora_mapping, css.cell = css.cell, dimnames = NULL, c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+```
+ 
+
+```{r summarise-mapping-stats}
+acropora_mapping %>%
+  filter(!(sample_id == "497R")) %>% #remove 497R
+  group_by(treatment) %>%
+  summarise(mean_total_mapped = mean(total_mapped_reads), mean_primary_mapped = mean(total_primary_reads))
+```
+Looks like the control group have on average nearly double the total mapped reads versus eaten.
 
 # Load and format data 
 

@@ -85,6 +85,67 @@ library("Rgraphviz")
 library("EnhancedVolcano")
 ```
 
+# Sample mapping
+This table shows the total number of mapped reads of each sample of our samples to the *Porites evermanni* genome from the Palumbi lab - available at: https://www.genoscope.cns.fr/corals/genomes.html 
+```{r results-of-sample-mapping}
+
+porites_mapping <- tribble(
+  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads,
+  "Porites sp. eaten", "225R", 2907570, 2534398,
+  "Porites sp. eaten", "235R", 211878608, 143543886,
+  "Porites sp. eaten", "43R", 12644158, 8762710, 
+  "Porites sp. eaten", "211R_subset", 219954702, 155192096, 
+  "Porites sp. eaten", "218R", 183856720, 126776572, 
+  "Porites sp. eaten", "34R", 1022532, 783544, 
+  "Porites sp. eaten", "227R", 171417626, 127096866, 
+  "Porites sp. eaten", "16R", 9932412, 8301790,
+  "Porites sp. control", "61R", 156888590, 112220878, 
+  "Porites sp. control", "86R", 172716586, 119000396,
+  "Porites sp. control", "236R", 212095574, 152349478,
+  "Porites sp. control", "244R", 188686986, 129969490, 
+  "Porites sp. control", "82R", 198766054, 131310576, 
+  "Porites sp. control", "71R", 190552052, 127166612, 
+  "Porites sp. control", "253R", 195777140, 141597122, 
+  "Porites sp. control", "76R", 207617046, 141609686
+  )
+
+#Filter based on samples <5 million mapped and/or primary reads
+ porites_mapping %>%
+  filter(total_mapped_reads < 5000000)
+porites_mapping %>%
+  filter(total_primary_reads < 5000000)
+```
+Samples 225R and 34R have < 5000000 reads in primary and total mapped reads
+
+```{r create-table-sample-mapping}
+#Make the table in descending order of total mapped reads
+porites_mapping %>%
+  #arrange(desc(total_mapped_reads)) %>%
+  knitr::kable(caption = "Total mapped reads  from each sample to *Porites evermanni* genome.", col.names = c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+
+#Colour the cells <5 million
+library("htmlTable")
+## indices defining where the styles go
+where_p <- rbind(c(1, 3), c(1, 4), c(6,3), c(6,4))
+style_p <- c('background-color: red; color: white;',
+           'background-color: red; color: white;',
+           'background-color: red; color: white;',
+           'background-color: red; color: white;'
+           )
+
+css.cell <- matrix('', nrow(porites_mapping), ncol(porites_mapping))
+css.cell[where_p] <- style_p
+htmlTable(porites_mapping, css.cell = css.cell, dimnames = NULL, c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+```
+
+```{r summarise-mapping-stats}
+porites_mapping %>%
+  filter(!(sample_id == c("34R", "225R"))) %>% #remove 34R and 225R
+  group_by(treatment) %>%
+  summarise(mean_total_mapped = mean(total_mapped_reads), mean_primary_mapped = mean(total_primary_reads))
+```
+Similar to *Acropora* data, samples for control nearly have double the mapped reads of the eaten samples.
+
 # Load and format data 
 
 ```{r setup, include=FALSE}

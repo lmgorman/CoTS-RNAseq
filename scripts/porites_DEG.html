@@ -1553,6 +1553,487 @@ library(&quot;biomaRt&quot;)
 library(&quot;Rgraphviz&quot;)
 library(&quot;EnhancedVolcano&quot;)</code></pre>
 </div>
+<div id="sample-mapping" class="section level1">
+<h1>Sample mapping</h1>
+<p>This table shows the total number of mapped reads of each sample of
+our samples to the <em>Porites evermanni</em> genome from the Palumbi
+lab - available at: <a href="https://www.genoscope.cns.fr/corals/genomes.html" class="uri">https://www.genoscope.cns.fr/corals/genomes.html</a></p>
+<pre class="r"><code>porites_mapping &lt;- tribble(
+  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads,
+  &quot;Porites sp. eaten&quot;, &quot;225R&quot;, 2907570, 2534398,
+  &quot;Porites sp. eaten&quot;, &quot;235R&quot;, 211878608, 143543886,
+  &quot;Porites sp. eaten&quot;, &quot;43R&quot;, 12644158, 8762710, 
+  &quot;Porites sp. eaten&quot;, &quot;211R_subset&quot;, 219954702, 155192096, 
+  &quot;Porites sp. eaten&quot;, &quot;218R&quot;, 183856720, 126776572, 
+  &quot;Porites sp. eaten&quot;, &quot;34R&quot;, 1022532, 783544, 
+  &quot;Porites sp. eaten&quot;, &quot;227R&quot;, 171417626, 127096866, 
+  &quot;Porites sp. eaten&quot;, &quot;16R&quot;, 9932412, 8301790,
+  &quot;Porites sp. control&quot;, &quot;61R&quot;, 156888590, 112220878, 
+  &quot;Porites sp. control&quot;, &quot;86R&quot;, 172716586, 119000396,
+  &quot;Porites sp. control&quot;, &quot;236R&quot;, 212095574, 152349478,
+  &quot;Porites sp. control&quot;, &quot;244R&quot;, 188686986, 129969490, 
+  &quot;Porites sp. control&quot;, &quot;82R&quot;, 198766054, 131310576, 
+  &quot;Porites sp. control&quot;, &quot;71R&quot;, 190552052, 127166612, 
+  &quot;Porites sp. control&quot;, &quot;253R&quot;, 195777140, 141597122, 
+  &quot;Porites sp. control&quot;, &quot;76R&quot;, 207617046, 141609686
+  )
+
+#Filter based on samples &lt;5 million mapped and/or primary reads
+ porites_mapping %&gt;%
+  filter(total_mapped_reads &lt; 5000000)</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##   treatment         sample_id total_mapped_reads total_primary_reads
+##   &lt;chr&gt;             &lt;chr&gt;                  &lt;dbl&gt;               &lt;dbl&gt;
+## 1 Porites sp. eaten 225R                 2907570             2534398
+## 2 Porites sp. eaten 34R                  1022532              783544</code></pre>
+<pre class="r"><code>porites_mapping %&gt;%
+  filter(total_primary_reads &lt; 5000000)</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##   treatment         sample_id total_mapped_reads total_primary_reads
+##   &lt;chr&gt;             &lt;chr&gt;                  &lt;dbl&gt;               &lt;dbl&gt;
+## 1 Porites sp. eaten 225R                 2907570             2534398
+## 2 Porites sp. eaten 34R                  1022532              783544</code></pre>
+<p>Samples 225R and 34R have &lt; 5000000 reads in primary and total
+mapped reads</p>
+<pre class="r"><code>#Make the table in descending order of total mapped reads
+porites_mapping %&gt;%
+  #arrange(desc(total_mapped_reads)) %&gt;%
+  knitr::kable(caption = &quot;Total mapped reads  from each sample to *Porites evermanni* genome.&quot;, col.names = c(&quot;Treatment&quot;, &quot;ID&quot;, &quot;Total number of mapped reads&quot;, &quot;Number of primary mapped reads&quot;))</code></pre>
+<table>
+<caption>Total mapped reads from each sample to <em>Porites
+evermanni</em> genome.</caption>
+<colgroup>
+<col width="21%" />
+<col width="13%" />
+<col width="31%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Treatment</th>
+<th align="left">ID</th>
+<th align="right">Total number of mapped reads</th>
+<th align="right">Number of primary mapped reads</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Porites sp. eaten</td>
+<td align="left">225R</td>
+<td align="right">2907570</td>
+<td align="right">2534398</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. eaten</td>
+<td align="left">235R</td>
+<td align="right">211878608</td>
+<td align="right">143543886</td>
+</tr>
+<tr class="odd">
+<td align="left">Porites sp. eaten</td>
+<td align="left">43R</td>
+<td align="right">12644158</td>
+<td align="right">8762710</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. eaten</td>
+<td align="left">211R_subset</td>
+<td align="right">219954702</td>
+<td align="right">155192096</td>
+</tr>
+<tr class="odd">
+<td align="left">Porites sp. eaten</td>
+<td align="left">218R</td>
+<td align="right">183856720</td>
+<td align="right">126776572</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. eaten</td>
+<td align="left">34R</td>
+<td align="right">1022532</td>
+<td align="right">783544</td>
+</tr>
+<tr class="odd">
+<td align="left">Porites sp. eaten</td>
+<td align="left">227R</td>
+<td align="right">171417626</td>
+<td align="right">127096866</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. eaten</td>
+<td align="left">16R</td>
+<td align="right">9932412</td>
+<td align="right">8301790</td>
+</tr>
+<tr class="odd">
+<td align="left">Porites sp. control</td>
+<td align="left">61R</td>
+<td align="right">156888590</td>
+<td align="right">112220878</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. control</td>
+<td align="left">86R</td>
+<td align="right">172716586</td>
+<td align="right">119000396</td>
+</tr>
+<tr class="odd">
+<td align="left">Porites sp. control</td>
+<td align="left">236R</td>
+<td align="right">212095574</td>
+<td align="right">152349478</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. control</td>
+<td align="left">244R</td>
+<td align="right">188686986</td>
+<td align="right">129969490</td>
+</tr>
+<tr class="odd">
+<td align="left">Porites sp. control</td>
+<td align="left">82R</td>
+<td align="right">198766054</td>
+<td align="right">131310576</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. control</td>
+<td align="left">71R</td>
+<td align="right">190552052</td>
+<td align="right">127166612</td>
+</tr>
+<tr class="odd">
+<td align="left">Porites sp. control</td>
+<td align="left">253R</td>
+<td align="right">195777140</td>
+<td align="right">141597122</td>
+</tr>
+<tr class="even">
+<td align="left">Porites sp. control</td>
+<td align="left">76R</td>
+<td align="right">207617046</td>
+<td align="right">141609686</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#Colour the cells &lt;5 million
+library(&quot;htmlTable&quot;)
+## indices defining where the styles go
+where_p &lt;- rbind(c(1, 3), c(1, 4), c(6,3), c(6,4))
+style_p &lt;- c(&#39;background-color: red; color: white;&#39;,
+           &#39;background-color: red; color: white;&#39;,
+           &#39;background-color: red; color: white;&#39;,
+           &#39;background-color: red; color: white;&#39;
+           )
+
+css.cell &lt;- matrix(&#39;&#39;, nrow(porites_mapping), ncol(porites_mapping))
+css.cell[where_p] &lt;- style_p
+htmlTable(porites_mapping, css.cell = css.cell, dimnames = NULL, c(&quot;Treatment&quot;, &quot;ID&quot;, &quot;Total number of mapped reads&quot;, &quot;Number of primary mapped reads&quot;))</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Treatment
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ID
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Total number of mapped reads
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Number of primary mapped reads
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+1
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+225R
+</td>
+<td style="background-color: red; color: white; text-align: center;">
+2907570
+</td>
+<td style="background-color: red; color: white; text-align: center;">
+2534398
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+2
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+235R
+</td>
+<td style="text-align: center;">
+211878608
+</td>
+<td style="text-align: center;">
+143543886
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+3
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+43R
+</td>
+<td style="text-align: center;">
+12644158
+</td>
+<td style="text-align: center;">
+8762710
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+4
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+211R_subset
+</td>
+<td style="text-align: center;">
+219954702
+</td>
+<td style="text-align: center;">
+155192096
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+5
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+218R
+</td>
+<td style="text-align: center;">
+183856720
+</td>
+<td style="text-align: center;">
+126776572
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+6
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+34R
+</td>
+<td style="background-color: red; color: white; text-align: center;">
+1022532
+</td>
+<td style="background-color: red; color: white; text-align: center;">
+783544
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+7
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+227R
+</td>
+<td style="text-align: center;">
+171417626
+</td>
+<td style="text-align: center;">
+127096866
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+8
+</td>
+<td style="text-align: center;">
+Porites sp. eaten
+</td>
+<td style="text-align: center;">
+16R
+</td>
+<td style="text-align: center;">
+9932412
+</td>
+<td style="text-align: center;">
+8301790
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+9
+</td>
+<td style="text-align: center;">
+Porites sp. control
+</td>
+<td style="text-align: center;">
+61R
+</td>
+<td style="text-align: center;">
+156888590
+</td>
+<td style="text-align: center;">
+112220878
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+10
+</td>
+<td style="text-align: center;">
+Porites sp. control
+</td>
+<td style="text-align: center;">
+86R
+</td>
+<td style="text-align: center;">
+172716586
+</td>
+<td style="text-align: center;">
+119000396
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+11
+</td>
+<td style="text-align: center;">
+Porites sp. control
+</td>
+<td style="text-align: center;">
+236R
+</td>
+<td style="text-align: center;">
+212095574
+</td>
+<td style="text-align: center;">
+152349478
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+12
+</td>
+<td style="text-align: center;">
+Porites sp. control
+</td>
+<td style="text-align: center;">
+244R
+</td>
+<td style="text-align: center;">
+188686986
+</td>
+<td style="text-align: center;">
+129969490
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+13
+</td>
+<td style="text-align: center;">
+Porites sp. control
+</td>
+<td style="text-align: center;">
+82R
+</td>
+<td style="text-align: center;">
+198766054
+</td>
+<td style="text-align: center;">
+131310576
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+14
+</td>
+<td style="text-align: center;">
+Porites sp. control
+</td>
+<td style="text-align: center;">
+71R
+</td>
+<td style="text-align: center;">
+190552052
+</td>
+<td style="text-align: center;">
+127166612
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+15
+</td>
+<td style="text-align: center;">
+Porites sp. control
+</td>
+<td style="text-align: center;">
+253R
+</td>
+<td style="text-align: center;">
+195777140
+</td>
+<td style="text-align: center;">
+141597122
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+16
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+Porites sp. control
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+76R
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+207617046
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+141609686
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>porites_mapping %&gt;%
+  filter(!(sample_id == c(&quot;34R&quot;, &quot;225R&quot;))) %&gt;% #remove 34R and 225R
+  group_by(treatment) %&gt;%
+  summarise(mean_total_mapped = mean(total_mapped_reads), mean_primary_mapped = mean(total_primary_reads))</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   treatment           mean_total_mapped mean_primary_mapped
+##   &lt;chr&gt;                           &lt;dbl&gt;               &lt;dbl&gt;
+## 1 Porites sp. control        190387504.          131903030.
+## 2 Porites sp. eaten          101701791            71623983.</code></pre>
+<p>Similar to <em>Acropora</em> data, samples for control nearly have
+double the mapped reads of the eaten samples.</p>
+</div>
 <div id="load-and-format-data" class="section level1">
 <h1>Load and format data</h1>
 <p>Load metadata</p>
@@ -1864,7 +2345,7 @@ permanova_por</code></pre>
 ## 
 ## adonis2(formula = vegan_por ~ eatenvscontrol, data = test_por, method = &quot;eu&quot;)
 ##          Df SumOfSqs     R2      F Pr(&gt;F)  
-## Model     1    38800 0.1589 2.6448   0.06 .
+## Model     1    38800 0.1589 2.6448  0.058 .
 ## Residual 14   205385 0.8411                
 ## Total    15   244185 1.0000                
 ## ---
@@ -2152,7 +2633,7 @@ permanova_por2</code></pre>
 ## 
 ## adonis2(formula = vegan_por2 ~ eatenvscontrol, data = test_por2, method = &quot;eu&quot;)
 ##          Df SumOfSqs     R2     F Pr(&gt;F)
-## Model     1    19743 0.0808 0.879  0.597
+## Model     1    19743 0.0808 0.879    0.6
 ## Residual 10   224611 0.9192             
 ## Total    11   244354 1.0000</code></pre>
 <p>No significant difference in total gene expression - there may be

@@ -1521,6 +1521,8 @@ border-radius: 0px;
 #if (&quot;EnhancedVolcano&quot; %in% rownames(installed.packages()) == &#39;FALSE&#39;) BiocManager::install(&quot;EnhancedVolcano&quot;)
 #if (&quot;vegan&quot; %in% rownames(installed.packages()) == &#39;FALSE&#39;) install.packages(&quot;vegan&quot;) 
 #if (&quot;factoextra&quot; %in% rownames(installed.packages()) == &#39;FALSE&#39;) install.packages(&quot;factoextra&quot;) 
+#if (&quot;htmlTable&quot; %in% rownames(installed.packages()) == &#39;FALSE&#39;) install.packages(&quot;htmlTable&quot;)
+
 
 library(&quot;vegan&quot;)
 library(&quot;factoextra&quot;)
@@ -1552,6 +1554,484 @@ library(&quot;topGO&quot;)
 library(&quot;biomaRt&quot;)
 library(&quot;Rgraphviz&quot;)
 library(&quot;EnhancedVolcano&quot;)</code></pre>
+</div>
+<div id="sample-mapping" class="section level1">
+<h1>Sample mapping</h1>
+<p>This table shows the total number of mapped reads of each sample of
+our samples to the <em>Acropora hyacinthus</em> genome from the Palumbi
+lab - available at: <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020536085.1/" class="uri">https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020536085.1/</a></p>
+<pre class="r"><code>acropora_mapping &lt;- tribble(
+  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads,
+  &quot;Acropora hyacinthus eaten&quot;, &quot;497R&quot;, 3090986, 2760422,
+  &quot;Acropora hyacinthus eaten&quot;, &quot;568R&quot;, 74142102, 66507248,
+  &quot;Acropora hyacinthus eaten&quot;, &quot;410R&quot;, 80526182, 73098402, 
+  &quot;Acropora hyacinthus eaten&quot;, &quot;549R&quot;, 77332112, 69416060, 
+  &quot;Acropora hyacinthus eaten&quot;, &quot;414R&quot;, 87333162, 78162862, 
+  &quot;Acropora hyacinthus eaten&quot;, &quot;321RA&quot;, 101145264, 91192744, 
+  &quot;Acropora hyacinthus eaten&quot;, &quot;581R&quot;, 23750278, 21582796, 
+  &quot;Acropora hyacinthus eaten&quot;, &quot;370R&quot;, 34239394, 30624808,
+  &quot;Acropora hyacinthus control&quot;, &quot;419R&quot;, 106151016, 94939130, 
+  &quot;Acropora hyacinthus control&quot;, &quot;331RA&quot;, 99763802, 88927416,
+  &quot;Acropora hyacinthus control&quot;, &quot;336R&quot;, 110716976, 100464150,
+  &quot;Acropora hyacinthus control&quot;, &quot;512R&quot;, 134343958, 121579012, 
+  &quot;Acropora hyacinthus control&quot;, &quot;380R&quot;, 99627838, 89986620, 
+  &quot;Acropora hyacinthus control&quot;, &quot;571R&quot;, 76962776, 69663792, 
+  &quot;Acropora hyacinthus control&quot;, &quot;586R&quot;, 87532254, 79263634, 
+  &quot;Acropora hyacinthus control&quot;, &quot;468R&quot;, 100108574, 90603050
+  )
+
+#Filter based on samples &lt;5 million mapped and/or primary reads
+acropora_mapping %&gt;%
+  filter(total_mapped_reads &lt; 5000000)</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   treatment                 sample_id total_mapped_reads total_primary_reads
+##   &lt;chr&gt;                     &lt;chr&gt;                  &lt;dbl&gt;               &lt;dbl&gt;
+## 1 Acropora hyacinthus eaten 497R                 3090986             2760422</code></pre>
+<pre class="r"><code>acropora_mapping %&gt;%
+  filter(total_primary_reads &lt; 5000000)</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   treatment                 sample_id total_mapped_reads total_primary_reads
+##   &lt;chr&gt;                     &lt;chr&gt;                  &lt;dbl&gt;               &lt;dbl&gt;
+## 1 Acropora hyacinthus eaten 497R                 3090986             2760422</code></pre>
+<p>Only sample 497R has less than 5 million total mapped and primary
+reads.</p>
+<pre class="r"><code>#Make the table in descending order of total mapped reads
+acropora_mapping %&gt;%
+  arrange(desc(total_mapped_reads)) %&gt;%
+  knitr::kable(caption = &quot;Total mapped reads  from each sample to *Acropora hyacinthus genome*. Total mapped and number of primary reads not meeting the criteria (≥ 5 million reads) are highlighted in yellow.&quot;, col.names = c(&quot;Treatment&quot;, &quot;ID&quot;, &quot;Total number of mapped reads&quot;, &quot;Number of primary mapped reads&quot;))</code></pre>
+<table>
+<caption>Total mapped reads from each sample to <em>Acropora hyacinthus
+genome</em>. Total mapped and number of primary reads not meeting the
+criteria (≥ 5 million reads) are highlighted in yellow.</caption>
+<colgroup>
+<col width="29%" />
+<col width="6%" />
+<col width="30%" />
+<col width="32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Treatment</th>
+<th align="left">ID</th>
+<th align="right">Total number of mapped reads</th>
+<th align="right">Number of primary mapped reads</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">512R</td>
+<td align="right">134343958</td>
+<td align="right">121579012</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">336R</td>
+<td align="right">110716976</td>
+<td align="right">100464150</td>
+</tr>
+<tr class="odd">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">419R</td>
+<td align="right">106151016</td>
+<td align="right">94939130</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">321RA</td>
+<td align="right">101145264</td>
+<td align="right">91192744</td>
+</tr>
+<tr class="odd">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">468R</td>
+<td align="right">100108574</td>
+<td align="right">90603050</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">331RA</td>
+<td align="right">99763802</td>
+<td align="right">88927416</td>
+</tr>
+<tr class="odd">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">380R</td>
+<td align="right">99627838</td>
+<td align="right">89986620</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">586R</td>
+<td align="right">87532254</td>
+<td align="right">79263634</td>
+</tr>
+<tr class="odd">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">414R</td>
+<td align="right">87333162</td>
+<td align="right">78162862</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">410R</td>
+<td align="right">80526182</td>
+<td align="right">73098402</td>
+</tr>
+<tr class="odd">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">549R</td>
+<td align="right">77332112</td>
+<td align="right">69416060</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus control</td>
+<td align="left">571R</td>
+<td align="right">76962776</td>
+<td align="right">69663792</td>
+</tr>
+<tr class="odd">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">568R</td>
+<td align="right">74142102</td>
+<td align="right">66507248</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">370R</td>
+<td align="right">34239394</td>
+<td align="right">30624808</td>
+</tr>
+<tr class="odd">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">581R</td>
+<td align="right">23750278</td>
+<td align="right">21582796</td>
+</tr>
+<tr class="even">
+<td align="left">Acropora hyacinthus eaten</td>
+<td align="left">497R</td>
+<td align="right">3090986</td>
+<td align="right">2760422</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#Colour the cells &lt;5 million
+library(&quot;htmlTable&quot;)
+## indices defining where the styles go
+where &lt;- rbind(c(1, 3), c(1, 4))
+style &lt;- c(&#39;background-color: red; color: white;&#39;,
+           &#39;background-color: red; color: white;&#39;
+           )
+
+css.cell &lt;- matrix(&#39;&#39;, nrow(acropora_mapping), ncol(acropora_mapping))
+css.cell[where] &lt;- style
+htmlTable(acropora_mapping, css.cell = css.cell, dimnames = NULL, c(&quot;Treatment&quot;, &quot;ID&quot;, &quot;Total number of mapped reads&quot;, &quot;Number of primary mapped reads&quot;))</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Treatment
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ID
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Total number of mapped reads
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Number of primary mapped reads
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+1
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+497R
+</td>
+<td style="background-color: red; color: white; text-align: center;">
+3090986
+</td>
+<td style="background-color: red; color: white; text-align: center;">
+2760422
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+2
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+568R
+</td>
+<td style="text-align: center;">
+74142102
+</td>
+<td style="text-align: center;">
+66507248
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+3
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+410R
+</td>
+<td style="text-align: center;">
+80526182
+</td>
+<td style="text-align: center;">
+73098402
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+4
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+549R
+</td>
+<td style="text-align: center;">
+77332112
+</td>
+<td style="text-align: center;">
+69416060
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+5
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+414R
+</td>
+<td style="text-align: center;">
+87333162
+</td>
+<td style="text-align: center;">
+78162862
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+6
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+321RA
+</td>
+<td style="text-align: center;">
+101145264
+</td>
+<td style="text-align: center;">
+91192744
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+7
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+581R
+</td>
+<td style="text-align: center;">
+23750278
+</td>
+<td style="text-align: center;">
+21582796
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+8
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus eaten
+</td>
+<td style="text-align: center;">
+370R
+</td>
+<td style="text-align: center;">
+34239394
+</td>
+<td style="text-align: center;">
+30624808
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+9
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="text-align: center;">
+419R
+</td>
+<td style="text-align: center;">
+106151016
+</td>
+<td style="text-align: center;">
+94939130
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+10
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="text-align: center;">
+331RA
+</td>
+<td style="text-align: center;">
+99763802
+</td>
+<td style="text-align: center;">
+88927416
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+11
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="text-align: center;">
+336R
+</td>
+<td style="text-align: center;">
+110716976
+</td>
+<td style="text-align: center;">
+100464150
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+12
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="text-align: center;">
+512R
+</td>
+<td style="text-align: center;">
+134343958
+</td>
+<td style="text-align: center;">
+121579012
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+13
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="text-align: center;">
+380R
+</td>
+<td style="text-align: center;">
+99627838
+</td>
+<td style="text-align: center;">
+89986620
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+14
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="text-align: center;">
+571R
+</td>
+<td style="text-align: center;">
+76962776
+</td>
+<td style="text-align: center;">
+69663792
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+15
+</td>
+<td style="text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="text-align: center;">
+586R
+</td>
+<td style="text-align: center;">
+87532254
+</td>
+<td style="text-align: center;">
+79263634
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+16
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+Acropora hyacinthus control
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+468R
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+100108574
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+90603050
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>acropora_mapping %&gt;%
+  filter(!(sample_id == &quot;497R&quot;)) %&gt;% #remove 497R
+  group_by(treatment) %&gt;%
+  summarise(mean_total_mapped = mean(total_mapped_reads), mean_primary_mapped = mean(total_primary_reads))</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   treatment                   mean_total_mapped mean_primary_mapped
+##   &lt;chr&gt;                                   &lt;dbl&gt;               &lt;dbl&gt;
+## 1 Acropora hyacinthus control        101900899.           91928350.
+## 2 Acropora hyacinthus eaten           68352642            61512131.</code></pre>
+<p>Looks like the control group have on average nearly double the total
+mapped reads versus eaten.</p>
 </div>
 <div id="load-and-format-data" class="section level1">
 <h1>Load and format data</h1>
@@ -1630,7 +2110,7 @@ nrow(gcount) #before</code></pre>
 <pre><code>## [1] 17634</code></pre>
 <p>We had 25287 genes before filtering. After filtering we have 17634
 genes.</p>
-<pre class="r"><code>#Function to extract &#39;R&#39; followed by numbers from column names
+<pre class="r"><code>#Function to extract &#39;R&#39; followed by numbers from column names 
 extract_R_numbers &lt;- function(col_names) {
   sub(&quot;R(\\d+).*&quot;, &quot;\\1&quot;, col_names)
 }
