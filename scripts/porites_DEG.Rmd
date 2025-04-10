@@ -90,23 +90,23 @@ This table shows the total number of mapped reads of each sample of our samples 
 ```{r results-of-sample-mapping}
 
 porites_mapping <- tribble(
-  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads,
-  "Porites sp. eaten", "225R", 2907570, 2534398,
-  "Porites sp. eaten", "235R", 211878608, 143543886,
-  "Porites sp. eaten", "43R", 12644158, 8762710, 
-  "Porites sp. eaten", "211R_subset", 219954702, 155192096, 
-  "Porites sp. eaten", "218R", 183856720, 126776572, 
-  "Porites sp. eaten", "34R", 1022532, 783544, 
-  "Porites sp. eaten", "227R", 171417626, 127096866, 
-  "Porites sp. eaten", "16R", 9932412, 8301790,
-  "Porites sp. control", "61R", 156888590, 112220878, 
-  "Porites sp. control", "86R", 172716586, 119000396,
-  "Porites sp. control", "236R", 212095574, 152349478,
-  "Porites sp. control", "244R", 188686986, 129969490, 
-  "Porites sp. control", "82R", 198766054, 131310576, 
-  "Porites sp. control", "71R", 190552052, 127166612, 
-  "Porites sp. control", "253R", 195777140, 141597122, 
-  "Porites sp. control", "76R", 207617046, 141609686
+  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads, ~total_percent_mapped, ~primary_percent_mapped,
+  "Porites sp. eaten", "225R", 2907570, 2534398, 4.43, 3.88,
+  "Porites sp. eaten", "235R", 211878608, 143543886, 97.26, 96.01,
+  "Porites sp. eaten", "43R", 12644158, 8762710, 9.78, 6.99, 
+  "Porites sp. eaten", "211R_subset", 219954702, 155192096, 89.86, 86.22,
+  "Porites sp. eaten", "218R", 183856720, 126776572, 96.73, 95.33,
+  "Porites sp. eaten", "34R", 1022532, 783544, 1.37, 1.05, 
+  "Porites sp. eaten", "227R", 171417626, 127096866, 84.19, 79.79, 
+  "Porites sp. eaten", "16R", 9932412, 8301790, 6.14, 5.18, 
+  "Porites sp. control", "61R", 156888590, 112220878, 91.65, 88.70,
+  "Porites sp. control", "86R", 172716586, 119000396, 97.33, 96.17, 
+  "Porites sp. control", "236R", 212095574, 152349478, 96.43, 95.10,
+  "Porites sp. control", "244R", 188686986, 129969490, 94.76, 92.57, 
+  "Porites sp. control", "82R", 198766054, 131310576, 98.85, 98.26, 
+  "Porites sp. control", "71R", 190552052, 127166612, 95.40, 93.26,
+  "Porites sp. control", "253R", 195777140, 141597122, 97.66, 96.80,
+  "Porites sp. control", "76R", 207617046, 141609686, 95.93, 94.14
   )
 
 #Filter based on samples <5 million mapped and/or primary reads
@@ -121,11 +121,11 @@ Samples 225R and 34R have < 5000000 reads in primary and total mapped reads
 #Make the table in descending order of total mapped reads
 porites_mapping %>%
   #arrange(desc(total_mapped_reads)) %>%
-  knitr::kable(caption = "Total mapped reads  from each sample to *Porites evermanni* genome.", col.names = c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+  knitr::kable(caption = "Total mapped reads  from each sample to *Porites evermanni* genome.", col.names = c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads", "Total % mapped", "Primary % mapped"))
 
 #Colour the cells <5 million
-library("htmlTable")
-## indices defining where the styles go
+library(htmlTable)
+#indices defining where the styles go 
 where_p <- rbind(c(1, 3), c(1, 4), c(6,3), c(6,4))
 style_p <- c('background-color: red; color: white;',
            'background-color: red; color: white;',
@@ -135,7 +135,7 @@ style_p <- c('background-color: red; color: white;',
 
 css.cell <- matrix('', nrow(porites_mapping), ncol(porites_mapping))
 css.cell[where_p] <- style_p
-htmlTable(porites_mapping, css.cell = css.cell, dimnames = NULL, c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+htmlTable(porites_mapping, css.cell = css.cell, dimnames = NULL, c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads", "Total % mapped", "Primary % mapped"))
 ```
 
 ```{r summarise-mapping-stats}
@@ -145,6 +145,18 @@ porites_mapping %>%
   summarise(mean_total_mapped = mean(total_mapped_reads), mean_primary_mapped = mean(total_primary_reads))
 ```
 Similar to *Acropora* data, samples for control nearly have double the mapped reads of the eaten samples.
+
+```{r plot relationship in mapping percent and total reads}
+porites_mapping %>%
+  ggplot(aes(total_percent_mapped, total_mapped_reads)) +
+  geom_point() +
+  facet_wrap(~treatment) +
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(title = "Total number of mapped reads and the percent of successful mapping to the *Porites evermanni* genome", x = "Percent of sample successfully mapped (%)", y = "Total number of mapped reads") +
+  theme_bw()
+```
+You can see that the *Porites* sp. control samples have a much lower variability in the total number of mapped reads and those successfully mapped whereas the  *Porites* sp. eaten treatment have a large range of both total reads and those successfully mapped. The general pattern shows that the more reads a sample has overall, the more that successfully mapped to the *Porites evermanni* genome.
+
 
 # Load and format data 
 

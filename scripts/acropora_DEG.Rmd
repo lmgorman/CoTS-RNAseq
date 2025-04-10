@@ -92,23 +92,23 @@ This table shows the total number of mapped reads of each sample of our samples 
 ```{r results-of-sample-mapping}
 
 acropora_mapping <- tribble(
-  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads,
-  "Acropora hyacinthus eaten", "497R", 3090986, 2760422,
-  "Acropora hyacinthus eaten", "568R", 74142102, 66507248,
-  "Acropora hyacinthus eaten", "410R", 80526182, 73098402, 
-  "Acropora hyacinthus eaten", "549R", 77332112, 69416060, 
-  "Acropora hyacinthus eaten", "414R", 87333162, 78162862, 
-  "Acropora hyacinthus eaten", "321RA", 101145264, 91192744, 
-  "Acropora hyacinthus eaten", "581R", 23750278, 21582796, 
-  "Acropora hyacinthus eaten", "370R", 34239394, 30624808,
-  "Acropora hyacinthus control", "419R", 106151016, 94939130, 
-  "Acropora hyacinthus control", "331RA", 99763802, 88927416,
-  "Acropora hyacinthus control", "336R", 110716976, 100464150,
-  "Acropora hyacinthus control", "512R", 134343958, 121579012, 
-  "Acropora hyacinthus control", "380R", 99627838, 89986620, 
-  "Acropora hyacinthus control", "571R", 76962776, 69663792, 
-  "Acropora hyacinthus control", "586R", 87532254, 79263634, 
-  "Acropora hyacinthus control", "468R", 100108574, 90603050
+  ~treatment, ~sample_id, ~total_mapped_reads, ~total_primary_reads,  ~total_percent_mapped, ~primary_percent_mapped,
+  "Acropora hyacinthus eaten", "497R", 3090986, 2760422, 2.22, 1.98, 
+  "Acropora hyacinthus eaten", "568R", 74142102, 66507248, 53.01, 50.29,
+  "Acropora hyacinthus eaten", "410R", 80526182, 73098402, 46.17, 43.77, 
+  "Acropora hyacinthus eaten", "549R", 77332112, 69416060, 66.06, 63.60, 
+  "Acropora hyacinthus eaten", "414R", 87333162, 78162862, 38.67, 36.07,  
+  "Acropora hyacinthus eaten", "321RA", 101145264, 91192744, 75.26, 73.29, 
+  "Acropora hyacinthus eaten", "581R", 23750278, 21582796, 19.23, 17.78,  
+  "Acropora hyacinthus eaten", "370R", 34239394, 30624808, 24.31, 22.32, 
+  "Acropora hyacinthus control", "419R", 106151016, 94939130, 68.00, 65.52, 
+  "Acropora hyacinthus control", "331RA", 99763802, 88927416, 75.29, 73.09,
+  "Acropora hyacinthus control", "336R", 110716976, 100464150, 61.04, 58.71, 
+  "Acropora hyacinthus control", "512R", 134343958, 121579012, 74.83, 72.91,
+  "Acropora hyacinthus control", "380R", 99627838, 89986620, 74.16, 72.16,
+  "Acropora hyacinthus control", "571R", 76962776, 69663792, 47.52, 45.04, 
+  "Acropora hyacinthus control", "586R", 87532254, 79263634, 68.31, 66.12,
+  "Acropora hyacinthus control", "468R", 100108574, 90603050, 67.37, 65.14
   )
 
 #Filter based on samples <5 million mapped and/or primary reads
@@ -122,7 +122,7 @@ Only sample 497R has less than 5 million total mapped and primary reads.
 #Make the table in descending order of total mapped reads
 acropora_mapping %>%
   arrange(desc(total_mapped_reads)) %>%
-  knitr::kable(caption = "Total mapped reads  from each sample to *Acropora hyacinthus genome*. Total mapped and number of primary reads not meeting the criteria (≥ 5 million reads) are highlighted in yellow.", col.names = c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+  knitr::kable(caption = "Total mapped reads  from each sample to *Acropora hyacinthus* genome.", col.names = c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads", "Total % mapped", "Primary % mapped"))
 
 #Colour the cells <5 million
 library("htmlTable")
@@ -134,7 +134,7 @@ style <- c('background-color: red; color: white;',
 
 css.cell <- matrix('', nrow(acropora_mapping), ncol(acropora_mapping))
 css.cell[where] <- style
-htmlTable(acropora_mapping, css.cell = css.cell, dimnames = NULL, c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads"))
+htmlTable(acropora_mapping, css.cell = css.cell, dimnames = NULL, c("Treatment", "ID", "Total number of mapped reads", "Number of primary mapped reads", "Total % mapped", "Primary % mapped"))
 ```
  
 
@@ -145,6 +145,18 @@ acropora_mapping %>%
   summarise(mean_total_mapped = mean(total_mapped_reads), mean_primary_mapped = mean(total_primary_reads))
 ```
 Looks like the control group have on average nearly double the total mapped reads versus eaten.
+
+```{r plot relationship in mapping percent and total reads}
+acropora_mapping %>%
+  ggplot(aes(total_percent_mapped, total_mapped_reads)) +
+  geom_point() +
+  facet_wrap(~treatment) +
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(title = "Total number of mapped reads and the percent of successful mapping to the *Acropora hyacinthus* genome", x = "Percent of sample successfully mapped (%)", y = "Total number of mapped reads") +
+  theme_bw()
+```
+Similar to *Porites*, *Acropora hyacinthus* control samples have a much lower variability in the total number of mapped reads and those successfully mapped whereas the  *Acropora hyacinthus* eaten treatment have a large range of both total reads and those successfully mapped. The general pattern shows that the more reads a sample has overall, the more that successfully mapped to the *Acropora hyacinthus* genome.
+
 
 # Load and format data 
 
