@@ -12,6 +12,8 @@ _Porites_ sp. eaten: 225R, 235R, 43R, 211R, 218R, 34R, 227R, 16R
 
 _Porites_ sp. control: 61R, 86R, 236R, 244R, 82R, 71R, 253R, 76R
 
+# Māuruuru roa
+As guests, we would like to give thanks to the land, water and resources of Polynesia, in particular Mo’orea, which allowed us to carry out this study. We would also like to thank the traditional land owners of the past, present and future - Māuruuru roa.
 
 # **Sample collection methodology**
 
