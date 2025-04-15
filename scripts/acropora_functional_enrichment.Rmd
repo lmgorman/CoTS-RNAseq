@@ -30,7 +30,7 @@ if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages
 if ("genefilter" %in% rownames(installed.packages()) == 'FALSE') install.packages('genefilter') 
 if ("DESeq2" %in% rownames(installed.packages()) == 'FALSE') install.packages('DESeq2') 
 if ("RColorBrewer" %in% rownames(installed.packages()) == 'FALSE') install.packages('RColorBrewer') 
-if ("WGCNA" %in% rownames(installed.packages()) == 'FALSE') install.packages('WGCNA') 
+#if ("WGCNA" %in% rownames(installed.packages()) == 'FALSE') install.packages('WGCNA') 
 if ("flashClust" %in% rownames(installed.packages()) == 'FALSE') install.packages('flashClust') 
 if ("gridExtra" %in% rownames(installed.packages()) == 'FALSE') install.packages('gridExtra') 
 if ("ComplexHeatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('ComplexHeatmap') 
@@ -56,7 +56,7 @@ library("tidyverse")
 library("genefilter")
 library("DESeq2")
 library("RColorBrewer")
-library("WGCNA")
+#library("WGCNA")
 library("flashClust")
 library("gridExtra")
 library("ComplexHeatmap")
@@ -80,15 +80,14 @@ library("cowplot")
 # Read in data files 
 
 1. Read in file with vst transformed counts of all genes detected and kept after filtering. 
-```{r}
+```{r Read in all genes file}
 #Need to work out which file this is from acropora_DEG script
 all_genes_acr<-read.csv("data/all_genes_acr.csv", col.names = c("gene_id","trim.321ra.gtf","trim.331ra.gtf","trim.336r.gtf","trim.370r.gtf","trim.380r.gtf","trim.410r.gtf","trim.414r.gtf","trim.419r.gtf","trim.468r.gtf","trim.512r.gtf","trim.549r.gtf","trim.568r.gtf","trim.571r.gtf","trim.581r.gtf","trim.586r.gtf"))
 ```
 
 2. Read in file of DEG's between eaten and control
-```{r}
+```{r read in file of DEGs}
 acr_eatenvscontrol_DEG_list<-read.csv("data/DEG_acr.csv")
-#acr_eatenvscontrol_DEG_counts<-read.csv("X.csv")
 acr_eatenvscontrol_DEG_list$contrast<-factor(acr_eatenvscontrol_DEG_list$contrast, levels=c("eaten", "control"))
 ```
 
@@ -103,7 +102,7 @@ Conduct functional enrichment using goseq and rrvgo. Compare against all genes d
 
 I need to use the genome annotations from google drive to compare against my geneset. Below is Ariana's script from https://github.com/AHuffmyer/EarlyLifeHistory_Energetics/blob/master/Mcap2020/Scripts/TagSeq/DESeq2_Mcap_V3.Rmd. I need to paste my relevant documents and data. Ariana clustered her data during this - do I need to do that too?
 
-```{r}
+```{r annotation files}
 Ahya_annot <- read.delim("data/Ahyacinthus_transcripts_b2g-annotated_blast-nr-results.txt",  header=TRUE, na.strings = "---NA---")
 dim(Ahya_annot)
 #Need to remove RA at the end of all the SeqNames so it matches to gene in acr_eatenvscontrol_DEG

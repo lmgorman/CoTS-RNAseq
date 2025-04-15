@@ -458,6 +458,11 @@ identical(metadata_ordered_2$sample, colnames(gcount_filt_2))
 metadata_ordered_2$eatenvscontrol <- relevel(metadata_ordered_2$eatenvscontrol, ref = "control")
 ```
 
+#Save this file for gene annotation in functional enrichment
+```{r save_filtered_file_for_functional_enrichment}
+write.csv(gcount_filt_2, "data/all_genes_acr.csv", row.names = TRUE)
+```
+
 # Estimate size factors 
 ```{r Estimate size factors without 497R}
 #Construct DESEQDataSet Object called "gdds"
