@@ -13,6 +13,9 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+
+
 # Set up 
 
 ```{r setup, include=FALSE}
@@ -45,9 +48,10 @@ if ("stats" %in% rownames(installed.packages()) == 'FALSE') install.packages("st
 if ("ggdendro" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("ggdendro")
 if ("GO.db" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("GO.db")
 if ("rrvgo" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("rrvgo")
+if ("rtracklayer" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("rtracklayer")
 
 #BiocManager::install("org.Ce.eg.db", force=TRUE) #install if needed 
-
+library("rtracklayer")
 library("tidyverse")
 library("genefilter")
 library("DESeq2")
@@ -78,15 +82,114 @@ library("cowplot")
 1. Read in file with vst transformed counts of all genes detected and kept after filtering. 
 ```{r}
 #Need to work out which file this is from acropora_DEG script
-all_genes_acr<-read.csv("output/allgenes_acr.csv")
+all_genes_acr<-read.csv("data/all_genes_acr.csv", col.names = c("gene_id","trim.321ra.gtf","trim.331ra.gtf","trim.336r.gtf","trim.370r.gtf","trim.380r.gtf","trim.410r.gtf","trim.414r.gtf","trim.419r.gtf","trim.468r.gtf","trim.512r.gtf","trim.549r.gtf","trim.568r.gtf","trim.571r.gtf","trim.581r.gtf","trim.586r.gtf"))
 ```
 
 2. Read in file of DEG's between eaten and control
 ```{r}
 acr_eatenvscontrol_DEG_list<-read.csv("data/DEG_acr.csv")
-acr_eatenvscontrol_DEG_counts<-read.csv("X.csv")
+#acr_eatenvscontrol_DEG_counts<-read.csv("X.csv")
 acr_eatenvscontrol_DEG_list$contrast<-factor(acr_eatenvscontrol_DEG_list$contrast, levels=c("eaten", "control"))
 ```
 
 # Read in annotation files 
-Genome used for RNA-seq - https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020536085.1/ = no functional enrichment annotations so will need to run this ourselves 
+Will use the genome annotations done in the google drive for *A. hyacinthus* (López-Nandam et al., 2023; https://royalsocietypublishing.org/doi/10.1098/rspb.2022.1766). This paper used MAKER2 for genome annotation. I think the annotation file is called: Ahyacinthus_transcripts_b2g-annotated_blast-nr-results.txt (check with Jill/Ariana this is correct)
+
+NB:Many scientists use funannotate package in R (https://funannotate.readthedocs.io/en/latest/index.html) to run functional enrichment of genomes.
+funannotate - Script functionally annotates the results from funannotate predict.  It pulls annotation from PFAM, InterPro, EggNog, UniProtKB, MEROPS, CAZyme, and GO ontology.
+
+
+Conduct functional enrichment using goseq and rrvgo. Compare against all genes detected in the dataset that we have annotation information for.
+
+I need to use the genome annotations from google drive to compare against my geneset. Below is Ariana's script from https://github.com/AHuffmyer/EarlyLifeHistory_Energetics/blob/master/Mcap2020/Scripts/TagSeq/DESeq2_Mcap_V3.Rmd. I need to paste my relevant documents and data. Ariana clustered her data during this - do I need to do that too?
+
+```{r}
+Ahya_annot <- read.delim("data/Ahyacinthus_transcripts_b2g-annotated_blast-nr-results.txt",  header=TRUE, na.strings = "---NA---")
+dim(Ahya_annot)
+#Need to remove RA at the end of all the SeqNames so it matches to gene in acr_eatenvscontrol_DEG
+Ahya_annot_seq_name <- Ahya_annot %>%
+  mutate(SeqName = str_remove(SeqName, "-RA")) 
+```
+This functional annotation has 27110 genes. 
+SeqNames now match the gene vairable in both files.
+```{r}
+# look at variable names
+names(Ahya_annot)
+#remove sample column name 
+probes = all_genes_acr$gene_id
+seq_name = Ahya_annot_seq_name$SeqName
+
+probes_in_annot = probes %in% seq_name
+
+seqname_in_probes_df <- as.data.frame(seq_name %in% probes, row.names = Ahya_annot_seq_name$SeqName)
+
+View(probes_in_annot) #match genes (SeqName)to genes in annotation file.
+
+# The following is the number of probes without annotation 
+sum(probes_in_annot == FALSE) #0
+sum(probes_in_annot == TRUE) #18258 = all genes found in annotation file - yayy!
+seqname_in_probes = seq_name %in% probes
+sum(seqname_in_probes == FALSE) #8852
+sum(seqname_in_probes == TRUE)#18258
+#view the genes that do not have a match in the annotation file
+seqname_in_probes_df <- as.data.frame(seq_name %in% probes, row.names = Ahya_annot_seq_name$SeqName) 
+seqname_in_probes_df$RowNames <- rownames(seqname_in_probes_df)
+
+#Create new variable saying when genes are missing from the dataframe
+seqname_in_probes_df <- seqname_in_probes_df %>%
+  mutate(missing_genes =
+         case_when(
+           seqname_in_probes_df == "FALSE" ~ "YES"
+           )
+         )
+print(seqname_in_probes_df)
+
+#Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot_seq_name) to only include our genes found in our A. hyacinthus RNASeq
+missing_gene_list <- seqname_in_probes_df %>%
+  filter(missing_genes == "YES")
+dim(missing_gene_list) #8852 as expected - great
+#Now create a filtered gene set taking away the missing_gene_list from the annotated gene list
+Ahya_annot_seq_name_filtered <- Ahya_annot_seq_name %>% 
+  filter(!(SeqName %in% missing_gene_list$RowNames))
+dim(Ahya_annot_seq_name_filtered)
+```
+
+There are 8852 of our genes that were expressed that are not present in the annotation file.  
+
+Reduced annotation file to only contain genes detected in our dataset.  
+
+Now file only contains the 18258 genes after filtering. This is 18258 out of the 27110 genes in our dataset. 
+
+Add in length to the annotation file.   
+
+Get gene length information.  
+```{r}
+#import file
+#Not sure which file to import into R? there are .gff and .gff3 files both in the /data directory.
+gff <- rtracklayer::import("data/Ahyacinthus.coding.gff3") #if this doesn't work, restart R and try again 
+
+transcripts <- subset(gff, type == "mRNA") #keep only transcripts 
+
+transcripts_gr <- makeGRangesFromDataFrame(transcripts, keep.extra.columns=TRUE) #extract length information
+
+transcript_lengths <- width(transcripts_gr) #isolate length of each gene
+
+seqnames<-transcripts_gr$ID #extract list of gene id 
+
+lengths<-cbind(seqnames, transcript_lengths)
+
+lengths<-as.data.frame(lengths) #convert to data frame
+#remove unwanted character strings from the length dataframe
+lengths <- lengths %>%
+  mutate(seqnames = str_remove(seqnames, "-RA"))
+#make seqnames lower case to make same as other data frames
+lengths <- lengths %>%
+  mutate(seqnames = tolower(seqnames))
+```
+
+Already has a lengths variable in Ahya_annot_seq_name_filtered. Now tr
+```{r}
+Ahya_annot_seq_name_filtered$length<-lengths$transcript_lengths[match(Ahya_annot_seq_name_filtered$SeqName, lengths$seqnames)]
+
+which(is.na(Ahya_annot_seq_name_filtered$length)) #all genes have lengths 
+```
