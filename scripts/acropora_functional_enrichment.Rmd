@@ -87,7 +87,7 @@ all_genes_acr<-read.csv("data/all_genes_acr.csv", col.names = c("gene_id","trim.
 
 2. Read in file of DEG's between eaten and control
 ```{r read in file of DEGs}
-acr_eatenvscontrol_DEG_list<-read.csv("data/DEG_acr.csv")
+acr_eatenvscontrol_DEG_list<-read.csv("CoTS-RNAseq/data/DEG_acr.csv")
 acr_eatenvscontrol_DEG_list$contrast<-factor(acr_eatenvscontrol_DEG_list$contrast, levels=c("eaten", "control"))
 ```
 
