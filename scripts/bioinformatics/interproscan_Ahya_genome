@@ -24,7 +24,7 @@ mkdir -p "$SCRATCHDIR"
 echo "Scratch directory: $SCRATCHDIR"
 
 # Define input and output locations
-INPUT_FILE=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.chrsV1.fasta
+INPUT_FILE=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta
 BASENAME=$(basename "$INPUT_FILE")
 FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro/output
 
