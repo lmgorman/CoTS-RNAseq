@@ -1,7 +1,3 @@
-#Script for running eggnog mapper on Ahya genome
-#taking place in scratch directory
-
-
 #!/bin/bash
 #SBATCH --job-name=annot-Ahya-eggnog
 #SBATCH --nodes=1
@@ -20,10 +16,8 @@ module purge
 module load uri/main
 module load all/eggnog-mapper/2.1.9-foss-2022a
 
-# Set up scratch directory
-SCRATCHDIR=/scratch/${USER}_${SLURM_JOB_ID}
-mkdir -p "$SCRATCHDIR"
-echo "Scratch directory created at $SCRATCHDIR"
+# Use pre-assigned scratch directory
+SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
 
 # Define input and output
 INPUT=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta
