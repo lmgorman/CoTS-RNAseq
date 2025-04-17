@@ -1,6 +1,3 @@
-#Running interpro scan on the A. hyacinthus genome for functional annotation
-
-
 #!/bin/bash
 #SBATCH --job-name=annot-Ahya-interpro
 #SBATCH --nodes=1
@@ -21,8 +18,6 @@ module load InterProScan/5.73-104.0-foss-2024a
 
 # Use pre-assigned scratch directory
 SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
-mkdir -p "$SCRATCHDIR"
-echo "Scratch directory: $SCRATCHDIR"
 
 # Define input and output locations
 INPUT_FILE=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta
@@ -57,13 +52,4 @@ echo "Cleaning up temporary files from scratch directory"
 rm -rf "$SCRATCHDIR/temp"
 
 echo "InterProScan completed at $(date)"
-
-
-
-
-
-#Run the job, type:
-sbatch interpro.sh
-
-#Currently not working on either Interpro version - contacted Kevin to troubleshoot 17.04.25
 
