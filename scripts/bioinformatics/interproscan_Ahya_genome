@@ -8,26 +8,20 @@
 #SBATCH --constraint=avx512
 #SBATCH -o annot-Ahya-interpro-%j.out
 #SBATCH -e annot-Ahya-interpro-%j.error
-#SBATCH -D /data/gorman/project/raw-files
-
 # Load modules
 echo "Loading programs" $(date)
 module purge
 module load uri/main
-module load InterProScan/5.73-104.0-foss-2024a
-
+module load InterProScan/5.60-92.0-foss-2021b
 # Use pre-assigned scratch directory
 SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
-
 # Define input and output locations
 INPUT_FILE=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta
 BASENAME=$(basename "$INPUT_FILE")
 FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro/output
-
 # Copy input file to scratch
 cp "$INPUT_FILE" "$SCRATCHDIR/"
 cd "$SCRATCHDIR"
-
 # Run InterProScan
 echo "Running InterProScan on $(hostname) at $(date)"
 interproscan.sh \
@@ -38,18 +32,13 @@ interproscan.sh \
     --cpu 10 \
     --goterms \
     --pathways
-
 # Create final output directory if needed
 mkdir -p "$FINAL_OUTPUT_DIR"
-
 # Copy results back
 echo "Copying results to $FINAL_OUTPUT_DIR"
 cp "${BASENAME}"* "$FINAL_OUTPUT_DIR/" 2>/dev/null || echo "No direct-matching output, copying all results..."
 cp "$SCRATCHDIR"/* "$FINAL_OUTPUT_DIR/"
-
 # Optional: Keep scratch clean
 echo "Cleaning up temporary files from scratch directory"
 rm -rf "$SCRATCHDIR/temp"
-
 echo "InterProScan completed at $(date)"
-
