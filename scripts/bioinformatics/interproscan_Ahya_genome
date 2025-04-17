@@ -8,6 +8,7 @@
 #SBATCH --mem=300G
 #SBATCH -p uri-cpu
 #SBATCH --time=48:00:00
+#SBATCH --constraint=avx512
 #SBATCH -o annot-Ahya-interpro-%j.out
 #SBATCH -e annot-Ahya-interpro-%j.error
 #SBATCH -D /data/gorman/project/raw-files
@@ -18,8 +19,8 @@ module purge
 module load uri/main
 module load InterProScan/5.73-104.0-foss-2024a
 
-# Define scratch directory
-SCRATCHDIR=/scratch/${USER}_${SLURM_JOB_ID}
+# Use pre-assigned scratch directory
+SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
 mkdir -p "$SCRATCHDIR"
 echo "Scratch directory: $SCRATCHDIR"
 
@@ -51,9 +52,9 @@ echo "Copying results to $FINAL_OUTPUT_DIR"
 cp "${BASENAME}"* "$FINAL_OUTPUT_DIR/" 2>/dev/null || echo "No direct-matching output, copying all results..."
 cp "$SCRATCHDIR"/* "$FINAL_OUTPUT_DIR/"
 
-# Cleanup
-echo "Cleaning up scratch"
-rm -rf "$SCRATCHDIR"
+# Optional: Keep scratch clean
+echo "Cleaning up temporary files from scratch directory"
+rm -rf "$SCRATCHDIR/temp"
 
 echo "InterProScan completed at $(date)"
 
