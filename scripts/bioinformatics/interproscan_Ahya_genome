@@ -6,8 +6,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=300G
-#SBATCH -p uri-cpu #InterProScan doesn't work on gpus 
-#SBATCH -G 0
+#SBATCH -p uri-cpu
 #SBATCH --time=48:00:00
 #SBATCH -o annot-Ahya-interpro-%j.out
 #SBATCH -e annot-Ahya-interpro-%j.error
@@ -15,30 +14,51 @@
 
 # Load modules
 echo "Loading programs" $(date)
+module purge
 module load uri/main
-module load InterProScan/5.73-104.0-foss-2024a  
+module load InterProScan/5.73-104.0-foss-2024a
 
-# Define directories
-WORKDIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro
+# Define scratch directory
+SCRATCHDIR=/scratch/${USER}_${SLURM_JOB_ID}
+mkdir -p "$SCRATCHDIR"
+echo "Scratch directory: $SCRATCHDIR"
+
+# Define input and output locations
 INPUT_FILE=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.chrsV1.fasta
-OUTPUT_DIR=${WORKDIR}/output
-TEMP_DIR=${WORKDIR}/temp
+BASENAME=$(basename "$INPUT_FILE")
+FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro/output
 
-# Create directories if they don't exist
-mkdir -p "$WORKDIR" "$OUTPUT_DIR" "$TEMP_DIR"
-cd "$WORKDIR"
+# Copy input file to scratch
+cp "$INPUT_FILE" "$SCRATCHDIR/"
+cd "$SCRATCHDIR"
 
 # Run InterProScan
-echo "Starting InterProScan" $(date)
+echo "Running InterProScan on $(hostname) at $(date)"
 interproscan.sh \
-    --input "$INPUT_FILE" \
+    --input "$BASENAME" \
     --disable-precalc \
-    --output-dir "$OUTPUT_DIR" \
-    --tempdir "$TEMP_DIR" \
+    --output-dir "$SCRATCHDIR" \
+    --tempdir "$SCRATCHDIR/temp" \
     --cpu 10 \
     --goterms \
     --pathways
-echo "Finished InterProScan" $(date)
+
+# Create final output directory if needed
+mkdir -p "$FINAL_OUTPUT_DIR"
+
+# Copy results back
+echo "Copying results to $FINAL_OUTPUT_DIR"
+cp "${BASENAME}"* "$FINAL_OUTPUT_DIR/" 2>/dev/null || echo "No direct-matching output, copying all results..."
+cp "$SCRATCHDIR"/* "$FINAL_OUTPUT_DIR/"
+
+# Cleanup
+echo "Cleaning up scratch"
+rm -rf "$SCRATCHDIR"
+
+echo "InterProScan completed at $(date)"
+
+
+
 
 
 #Run the job, type:
