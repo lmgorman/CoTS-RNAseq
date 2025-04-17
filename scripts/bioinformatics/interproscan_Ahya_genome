@@ -1,0 +1,48 @@
+#Running interpro scan on the A. hyacinthus genome for functional annotation
+
+
+
+#!/bin/bash
+#SBATCH --job-name=annot-Ahya-interpro
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=300G
+#SBATCH -p gpu
+#SBATCH -G 1
+#SBATCH --time=96:00:00
+#SBATCH -o annot-Ahya-interpro-%j.out
+#SBATCH -e annot-Ahya-interpro-%j.error
+#SBATCH -D /data/gorman/project/raw-files
+
+# Load modules
+echo "Loading programs" $(date)
+module load uri/main
+module load InterProScan/5.73-104.0-foss-2024a  # fixed double module name
+
+# Define directories
+WORKDIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro
+INPUT_FILE=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.chrsV1.fasta
+OUTPUT_DIR=${WORKDIR}/output
+TEMP_DIR=${WORKDIR}/temp
+
+# Create directories if they don't exist
+mkdir -p "$WORKDIR" "$OUTPUT_DIR" "$TEMP_DIR"
+cd "$WORKDIR"
+
+# Run InterProScan
+echo "Starting InterProScan" $(date)
+interproscan.sh \
+    --input "$INPUT_FILE" \
+    --disable-precalc \
+    --output-dir "$OUTPUT_DIR" \
+    --tempdir "$TEMP_DIR" \
+    --cpu 10 \
+    --goterms \
+    --pathways
+echo "Finished InterProScan" $(date)
+
+
+#Run the job, type:
+sbatch interpro.sh
+
+#Submitted 17.04.24 at 1:18pm UTC - Submitted batch job 32724564
