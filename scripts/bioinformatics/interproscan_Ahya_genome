@@ -7,8 +7,8 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=300G
-#SBATCH -p gpu
-#SBATCH -G 1
+#SBATCH -p uri-cpu
+#SBATCH -G 0
 #SBATCH --time=48:00:00
 #SBATCH -o annot-Ahya-interpro-%j.out
 #SBATCH -e annot-Ahya-interpro-%j.error
@@ -17,7 +17,7 @@
 # Load modules
 echo "Loading programs" $(date)
 module load uri/main
-module load InterProScan/5.73-104.0-foss-2024a  # fixed double module name
+module load InterProScan/5.60-92.0-foss-2021b  
 
 # Define directories
 WORKDIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro
