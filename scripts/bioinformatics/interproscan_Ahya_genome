@@ -1,13 +1,12 @@
 #Running interpro scan on the A. hyacinthus genome for functional annotation
 
 
-
 #!/bin/bash
 #SBATCH --job-name=annot-Ahya-interpro
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=300G
-#SBATCH -p uri-cpu
+#SBATCH -p uri-cpu #InterProScan doesn't work on gpus 
 #SBATCH -G 0
 #SBATCH --time=48:00:00
 #SBATCH -o annot-Ahya-interpro-%j.out
@@ -17,7 +16,7 @@
 # Load modules
 echo "Loading programs" $(date)
 module load uri/main
-module load InterProScan/5.60-92.0-foss-2021b  
+module load InterProScan/5.73-104.0-foss-2024a  
 
 # Define directories
 WORKDIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro
@@ -45,4 +44,5 @@ echo "Finished InterProScan" $(date)
 #Run the job, type:
 sbatch interpro.sh
 
-#Submitted 17.04.24 at 1:18pm UTC - Submitted batch job 32724564
+#Currently not working on either Interpro version - contacted Kevin to troubleshoot 17.04.25
+
