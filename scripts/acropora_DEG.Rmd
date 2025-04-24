@@ -509,6 +509,32 @@ dev.off()
 ```
 Heatmap shows a clear diagnol line emphasising that the metadata is correctly mapping to the right sample in the genecount matrix.
 
+#Looking at the dispersion/variance of samples using perm_disp
+``` {r perm_disp}
+condition <- colData(gdds_2)$eatenvscontrol
+
+# Run the PERMDISP test using the distance matrix and condition
+permdisp_result <- betadisper(gsampleDists_2, condition)
+
+# View the summary of PERMDISP result
+summary(permdisp_result)
+# Step 2: Perform an ANOVA on the betadisper result
+permdisp_anova <- anova(permdisp_result)
+
+# Step 3: Extract the p-value from the ANOVA result
+p_value <- permdisp_anova$`Pr(>F)`[1]
+
+# Step 4: Print the p-value
+print(p_value)
+
+# Plot PERMDISP result (dispersion by group)
+boxplot(permdisp_result, main = "PERMDISP: Group Dispersion")
+
+# Optionally, use a scatter plot to see dispersion
+plot(permdisp_result, main = "PERMDISP - Group Dispersions")
+```
+Lots of dispersion for the eaten samples - unsuprising. ANOVA p-value = 0.00804436 which shows there is a significant dispersion due to the treatments (eaten vs control)
+
 # Conduct a PERMANOVA and PCA for all genes
 ```{r export data for PERMANOVA without 497R}
 #Export data for PERMANOVA test.  
@@ -577,13 +603,53 @@ resultsNames(DEG_T)
 #this shows the comparisons made (shown similar to lm output in terms of interactions)
 head(DEG_T)
 eatenvscontrol<-results(DEG_T, contrast=c("eatenvscontrol","control","eaten"))
-eatenvscontrol <- as.data.frame(subset(eatenvscontrol, padj<0.05))
+gene_names <- rownames(DEG_T)
+sample_names <- colData(DEG_T) 
+eatenvscontrol <- as.data.frame(eatenvscontrol)
+eatenvscontrol <- eatenvscontrol %>%
+  mutate(gene_ID = rownames(eatenvscontrol))
+eatenvscontrol <- subset(eatenvscontrol, padj<0.05)
 eatenvscontrol$contrast <- c("eatenvscontrol")
-eatenvscontrol$gene <- rownames(eatenvscontrol)
-
-rownames(eatenvscontrol) <- NULL
 dim(eatenvscontrol)
 write.csv(eatenvscontrol,"data/DEG_acr.csv", row.names = FALSE)
+```
+
+``` {r Create gene_counts_long}
+#Create gene_counts_long
+gene_counts <- counts(DEG_T, normalized = TRUE)
+gene_counts_df <- as.data.frame(gene_counts)
+gene_counts_df$gene_id <- rownames(gene_counts_df)
+library(tidyr)
+gene_counts_long <- pivot_longer(
+  gene_counts_df,
+  cols = -gene_id,
+  names_to = "sample",
+  values_to = "count"
+)
+```
+
+``` {r Create counts_annotated}
+# Create counts_annotated
+eatenvscontrol <- results(DEG_T, contrast = c("eatenvscontrol", "control", "eaten"))
+# Turn into dataframe and add gene IDs
+de_df <- as.data.frame(eatenvscontrol)
+de_df$gene_id <- rownames(de_df)
+# View or filter DE genes
+head(de_df)
+sig_genes <- de_df[which(de_df$padj < 0.05), ]
+#Create dataframe of DEGs with sample info too
+norm_counts <- counts(DEG_T, normalized = TRUE)
+norm_counts_df <- as.data.frame(norm_counts)
+norm_counts_df$gene_id <- rownames(norm_counts_df)
+library(tidyr)
+counts_long <- pivot_longer(norm_counts_df, 
+                             cols = -gene_id,
+                             names_to = "sample",
+                             values_to = "count")
+sample_meta <- as.data.frame(colData(DEG_T))
+sample_meta$sample <- rownames(sample_meta)
+library(dplyr)
+counts_annotated <- left_join(counts_long, sample_meta, by = "sample")
 ```
 We now have `r nrow(eatenvscontrol)` DEGS between eaten and control. 
 
@@ -593,31 +659,76 @@ DEG_eatenvscontrol<-rbind(eatenvscontrol)
 DEG_eatenvscontrol
 head(DEG_eatenvscontrol)
 dim(DEG_eatenvscontrol)
-length(unique(DEG_eatenvscontrol$gene))
+length(unique(DEG_eatenvscontrol$gene_ID))
 
-#Get a VST normalized gene count matrix for these DEGs. 
-DEG_eatenvscontrol_vst <- gdds_2[unique(DEG_eatenvscontrol$gene)]
-dim(DEG_eatenvscontrol_vst)
-DEG_eatenvscontrol_vst <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst)
+#Get a VST normalized gene count matrix for these DEGs.This isn't knitting correctly so blocked out. 
+#DEG_eatenvscontrol_vst <- gdds_2[unique(DEG_eatenvscontrol$gene)]
+#dim(DEG_eatenvscontrol_vst)
+# Now apply variance stabilizing transformation
+#DEG_eatenvscontrol_vst <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst)
 ```
 
 # Plot a heatmap for eatenvscontrol DEGs.
 ```{r Plot a heatmap of DEGs}
+#Previous chunk not working so had to block out this one too since it uses object computed in previous chunk
 #Set themes and metadata.  
-colnames(colData(gdds_2))
-legend_names_col <- colnames(assay(DEG_eatenvscontrol_vst))
-df <- as.data.frame(colData(gdds_2))
-colnames(df) <- tolower(trimws(colnames(df)))
-df$eatenvscontrol <- factor(as.character(df$eatenvscontrol), levels=c("eaten", "control"))
-df$eatenvscontrol <- relevel(df$eatenvscontrol, ref = "control")
+#colnames(colData(gdds_2))
+#legend_names_col <- colnames(assay(DEG_eatenvscontrol_vst))
+#df <- as.data.frame(colData(gdds_2))
+#colnames(df) <- tolower(trimws(colnames(df)))
+#df$eatenvscontrol <- factor(as.character(df$eatenvscontrol), #levels=c("eaten", "control"))
+#df$eatenvscontrol <- relevel(df$eatenvscontrol, ref = "control")
  
-df<-df%>%
-  arrange(eatenvscontrol)%>%dplyr::select(!code)%>%dplyr::select(!sample)
+#df<-df%>%
+ # arrange(eatenvscontrol)%>%dplyr::select(!code)%>%dplyr::select(!sample)
 
-ann_colors = list(eatenvscontrol = c("control" = "gray", "eaten"= "orange"))
+#ann_colors = list(eatenvscontrol = c("control" = "gray", "eaten"= "orange"))
 
-DEG_acr_eatenvscontrol <- pheatmap(assay(DEG_eatenvscontrol_vst), cluster_rows=TRUE, show_rownames=FALSE, color=inferno(10), show_colnames=TRUE, fontsize_row=3, scale="row", cluster_cols=TRUE, annotation_col=df, annotation_colors = ann_colors, labels_col=legend_names_col)
+#DEG_acr_eatenvscontrol <- pheatmap(assay(DEG_eatenvscontrol_vst), cluster_rows=TRUE, show_rownames=FALSE, color=inferno(10), show_colnames=TRUE, fontsize_row=3, scale="row", cluster_cols=TRUE, annotation_col=df, annotation_colors = ann_colors, labels_col=legend_names_col)
 
-save_pheatmap_pdf(DEG_acr_eatenvscontrol, "figures/acropora/DEG_acr_eatenvscontrol.pdf", width=15, height=20)
-dev.off()
+#save_pheatmap_pdf(DEG_acr_eatenvscontrol, "figures/acropora/DEG_acr_eatenvscontrol.pdf", width=15, height=20)
+#dev.off()
+```
+
+# Plot PCA of DEGs
+```{r Plot a PCA of DEGs}
+#Subset genes with padj < 0.05
+sig_genes <- eatenvscontrol[which(eatenvscontrol$padj < 0.05), ]
+# Get the gene IDs of the significant genes
+sig_gene_ids <- rownames(sig_genes)
+# Subset the normalized counts to keep only significant genes
+sig_counts <- norm_counts[sig_gene_ids, ]
+# rlog transformation (can also use vst for variance-stabilizing)
+rld <- vst(DEG_T)
+
+# Get the transformed counts
+rld_mat <- assay(rld)
+
+# Subset the transformed counts to include only significant genes
+rld_sig_genes <- rld_mat[sig_gene_ids, ]
+# Run PCA (t() is important to transpose for PCA, where rows are samples)
+pca <- prcomp(t(rld_sig_genes), scale. = TRUE)
+
+# Create a dataframe with PCA results
+pca_df <- as.data.frame(pca$x)
+pca_df$sample <- rownames(pca_df)
+sample_meta <- as.data.frame(colData(DEG_T))
+sample_meta$sample <- rownames(sample_meta)
+
+# Merge PCA results with sample metadata
+pca_df <- left_join(pca_df, sample_meta, by = "sample")
+acr_pca_deg <- ggplot(pca_df, aes(x = PC1, y = PC2, colour = eatenvscontrol)) +
+  geom_point(size = 3) +
+  labs(title = "PCA of Acropora DEGs (padj < 0.05)", x = "PC1", y = "PC2") +
+  scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange")) +
+  theme_minimal()
+plot(acr_pca_deg)
+
+ggsave("figures/acropora/acr_pca_deg.pdf", acr_pca_deg, width=8, height=4)
+ggsave("figures/acropora/acr_pca_deg.jpeg", acr_pca_deg, width=8, height=4)
+
+#Add a plot with elipses.  
+acr_pca_deg_ellipse<-acr_pca_deg + stat_ellipse();acr_pca_deg_ellipse
+ggsave("figures/acropora/acr_pca_deg_ellipse.pdf", acr_pca_deg_ellipse, width=9, height=5)
+ggsave("figures/acropora/acr_pca_deg_ellipse.jpeg", acr_pca_deg_ellipse, width=9, height=5)
 ```

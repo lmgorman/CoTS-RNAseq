@@ -75,6 +75,7 @@ library("ggdendro")
 library("GO.db")
 library("rrvgo")
 library("cowplot")
+library("ape")
 ```
 
 # Read in data files 
@@ -167,7 +168,9 @@ Get gene length information.
 #Not sure which file to import into R? there are .gff and .gff3 files both in the /data directory.
 gff <- rtracklayer::import("data/Ahyacinthus.coding.gff3") #if this doesn't work, restart R and try again 
 
+
 transcripts <- subset(gff, type == "mRNA") #keep only transcripts 
+
 
 transcripts_gr <- makeGRangesFromDataFrame(transcripts, keep.extra.columns=TRUE) #extract length information
 
@@ -184,9 +187,16 @@ lengths <- lengths %>%
 #make seqnames lower case to make same as other data frames
 lengths <- lengths %>%
   mutate(seqnames = tolower(seqnames))
+
+#try with read gff function for length - looks same as code above
+#gff_2 <- read.gff("data/Ahyacinthus.coding.gff3", na.strings = c(".", "?"), GFF3 = TRUE)
+#transcripts_2 <- subset(gff_2, type == "mRNA")
+#transcripts_2 <- transcripts_2 %>%
+  #mutate(length = end - start) %>%
+  #View()
 ```
 
-Already has a lengths variable in Ahya_annot_seq_name_filtered. Now tr
+Already has a lengths variable in Ahya_annot_seq_name_filtered. 
 ```{r}
 Ahya_annot_seq_name_filtered$length<-lengths$transcript_lengths[match(Ahya_annot_seq_name_filtered$SeqName, lengths$seqnames)]
 

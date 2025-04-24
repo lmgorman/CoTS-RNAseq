@@ -315,6 +315,33 @@ pht_por<-pheatmap(gsampleDistMatrix_por, #plot matrix
 save_pheatmap_pdf(pht_por, "figures/porites/sample_distances_por.pdf")
 dev.off()
 ```
+#Looking at the dispersion/variance of samples using perm_disp prior to sample removal
+``` {r perm_disp prior to sample removal}
+condition_por <- colData(gdds_por)$eatenvscontrol
+
+# Run the PERMDISP test using the distance matrix and condition
+permdisp_result_por <- betadisper(gsampleDists_por, condition_por)
+
+# View the summary of PERMDISP result
+summary(permdisp_result_por)
+# Step 2: Perform an ANOVA on the betadisper result
+permdisp_anova_por <- anova(permdisp_result_por)
+
+# Step 3: Extract the p-value from the ANOVA result
+p_value_por <- permdisp_anova_por$`Pr(>F)`[1]
+
+# Step 4: Print the p-value
+print(p_value_por)
+# 0.003650602 = significant difference
+
+# Plot PERMDISP result (dispersion by group)
+boxplot(permdisp_result_por, main = "PERMDISP: Group Dispersion")
+
+# Optionally, use a scatter plot to see dispersion
+plot(permdisp_result_por, main = "PERMDISP - Group Dispersions")
+```
+
+
 
 # Conduct PERMANOVA for all genes
 ```{r edit data for PERMANOVA}
@@ -531,6 +558,32 @@ dev.off()
 ```
 Still a diagnol line so I have removed the samples (225R, 34R, 43R and 16R) correctly.
 
+#Looking at the dispersion/variance of samples using perm_disp
+``` {r perm_disp}
+condition_por2 <- colData(gdds_por2)$eatenvscontrol
+
+# Run the PERMDISP test using the distance matrix and condition
+permdisp_result_por2 <- betadisper(gsampleDists_por2, condition_por2)
+
+# View the summary of PERMDISP result
+summary(permdisp_result_por2)
+# Step 2: Perform an ANOVA on the betadisper result
+permdisp_anova_por2 <- anova(permdisp_result_por2)
+
+# Step 3: Extract the p-value from the ANOVA result
+p_value_por2 <- permdisp_anova_por2$`Pr(>F)`[1]
+
+# Step 4: Print the p-value
+print(p_value_por2)
+# 0.2726992 = no significant difference
+
+# Plot PERMDISP result (dispersion by group)
+boxplot(permdisp_result_por2, main = "PERMDISP: Group Dispersion")
+
+# Optionally, use a scatter plot to see dispersion
+plot(permdisp_result_por2, main = "PERMDISP - Group Dispersions")
+```
+Since removing samples that looked like outliers, the p-value of the variance between samples has changed from signficant at the beginning (all samples included) to non-signficant (removing 225R, 34R, 43R and 16R). Chat to Ariana about whether this changes anything.
 
 #Conduct PERMANOVA for all genes after removing low quality samples
 ```{r edit data for PERMANOVA after removing samples}
@@ -625,6 +678,44 @@ dim(DEG_eatenvscontrol_vst_por2)
 DEG_eatenvscontrol_vst_por2 <- varianceStabilizingTransformation(DEG_eatenvscontrol_vst_por2)
 ```
 
+
+``` {r Create gene_counts_long_por}
+#Create gene_counts_long
+gene_counts_por2 <- counts(DEG_T_por2, normalized = TRUE)
+gene_counts_df_por2 <- as.data.frame(gene_counts_por2)
+gene_counts_df_por2$gene_id <- rownames(gene_counts_df_por2)
+library(tidyr)
+gene_counts_long_por2 <- pivot_longer(
+  gene_counts_df_por2,
+  cols = -gene_id,
+  names_to = "sample",
+  values_to = "count"
+)
+```
+
+``` {r Create counts_annotated_por}
+# Turn into dataframe and add gene IDs
+de_df_por2 <- as.data.frame(eatenvscontrol_por2)
+de_df_por2$gene_id <- rownames(de_df_por2)
+# View or filter DE genes
+head(de_df_por2)
+sig_genes_por2 <- de_df_por2[which(de_df_por2$padj < 0.05), ]
+#Create dataframe of DEGs with sample info too
+norm_counts_por2 <- counts(DEG_T_por2, normalized = TRUE)
+norm_counts_df_por2 <- as.data.frame(norm_counts_por2)
+norm_counts_df_por2$gene_id <- rownames(norm_counts_df_por2)
+library(tidyr)
+counts_long_por2 <- pivot_longer(norm_counts_df_por2, 
+                             cols = -gene_id,
+                             names_to = "sample",
+                             values_to = "count")
+sample_meta_por2 <- as.data.frame(colData(DEG_T_por2))
+sample_meta_por2$sample <- rownames(sample_meta_por2)
+library(dplyr)
+counts_annotated_por2 <- left_join(counts_long_por2, sample_meta_por2, by = "sample")
+```
+
+
 # Plot a heatmap for eatenvscontrol DEGs after removing low quality samples
 ```{r Plot a heatmap for eatenvscontrol DEGs}
 #Set themes and metadata.  
@@ -638,9 +729,10 @@ df_por2$eatenvscontrol <- relevel(df_por2$eatenvscontrol, ref = "control")
 df_por2<-df_por2%>%
   arrange(eatenvscontrol)%>%dplyr::select(!c(code, sample))
 
+
 ann_colors_por = list(eatenvscontrol = c("control" = "gray", "eaten"= "orange"))
 
-DEG_por2_eatenvscontrol_heatmap <- pheatmap(assay(DEG_eatenvscontrol_vst_por2), cluster_rows=TRUE, show_rownames=FALSE, color=inferno(10), show_colnames=TRUE, fontsize_row=3, scale="row", cluster_cols=TRUE, annotation_col=df_por2, annotation_colors = ann_colors_por, labels_col=legend_names_col_por)
+DEG_por2_eatenvscontrol_heatmap <- pheatmap(assay(DEG_eatenvscontrol_vst_por2), cluster_rows=TRUE, show_rownames=TRUE, color=inferno(10), show_colnames=TRUE, fontsize_row=6, scale="row", cluster_cols=TRUE, annotation_col=df_por2, annotation_colors = ann_colors_por, labels_col=legend_names_col_por)
 
 save_pheatmap_pdf(DEG_por2_eatenvscontrol_heatmap, "figures/porites/DEG_por2_eatenvscontrol_heatmap.pdf", width=15, height=20)
 dev.off()
