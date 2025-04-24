@@ -1,0 +1,38 @@
+#!/bin/bash
+#SBATCH --job-name=annot-Ahya-eggnog
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=300G
+#SBATCH -p cpu
+#SBATCH --time=48:00:00
+#SBATCH --constraint=avx512
+#SBATCH -o annot-Ahya-eggnog-%j.out
+#SBATCH -e annot-Ahya-eggnog-%j.error
+# Load modules
+echo "Loading modules" $(date)
+module purge
+module load uri/main
+module load all/eggnog-mapper/2.1.9-foss-2022a
+# Use pre-assigned scratch directory
+SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
+# Define input and output
+INPUT=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta
+OUTPUT_BASENAME=ahya_eggnog
+FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/eggnog
+# Copy input file to scratch
+cp "$INPUT" "$SCRATCHDIR/"
+cd "$SCRATCHDIR"
+# Run eggnog-mapper
+echo "Running eggnog-mapper on $(hostname) at $(date)"
+emapper.py \
+  -i $(basename "$INPUT") \
+  -o "$OUTPUT_BASENAME" \
+  --cpu 10
+# Copy results back
+echo "Copying results back to $FINAL_OUTPUT_DIR"
+mkdir -p "$FINAL_OUTPUT_DIR"
+cp "${OUTPUT_BASENAME}"* "$FINAL_OUTPUT_DIR/"
+# Optional: Keep scratch clean
+echo "Cleaning up scratch"
+rm -rf "$SCRATCHDIR"
+echo "Job complete at $(date)"
