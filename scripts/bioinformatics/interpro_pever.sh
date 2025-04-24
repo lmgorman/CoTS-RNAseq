@@ -1,8 +1,14 @@
 #Navigate to Porites spp. genome folder
 cd /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por
-#Download the P. evermanni protein Fasta file
+#Download the P. evermanni protein fasta file
 wget https://www.genoscope.cns.fr/corals/data/Porites_evermanni_v1.annot.pep.fa 
+#Create output directory for interpro
+mkdir /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro
+mkdir /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output
 cd /home/lucy_gorman_uri_edu/scripts
+#Create following shell script in /home/lucy_gorman_uri_edu/scripts called interpro_pever.sh
+
+
 
 #!/bin/bash
 #SBATCH --job-name=annot-Pever-interpro
