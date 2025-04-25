@@ -2,6 +2,8 @@
 cd /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por
 #Download the P. evermanni protein fasta file
 wget https://www.genoscope.cns.fr/corals/data/Porites_evermanni_v1.annot.pep.fa 
+#Had to remove asterix from the downloaded file for interpro to work
+see remove_asterix.sh script - https://github.com/lmgorman/CoTS-RNAseq/blob/main/scripts/bioinformatics/remove_asterix.sh
 #Create output directory for interpro
 mkdir /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro
 mkdir /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output
@@ -28,7 +30,7 @@ module load InterProScan/5.73-104.0-foss-2024a
 # Use pre-assigned scratch directory
 SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
 # Define input and output locations
-INPUT_FILE=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/Porites_evermanni_v1.annot.pep.fa
+INPUT_FILE=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/Porites_evermanni_v1_clean.annot.pep.fa
 BASENAME=$(basename "$INPUT_FILE")
 FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output
 # Copy input file to scratch
