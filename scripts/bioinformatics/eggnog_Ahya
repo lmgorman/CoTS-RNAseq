@@ -12,7 +12,7 @@
 echo "Loading modules" $(date)
 module purge
 module load uri/main
-module load all/eggnog-mapper/2.1.9-foss-2022a
+module load all/eggnog-mapper/2.1.12-foss-2023a
 # Use pre-assigned scratch directory
 SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
 # Define input and output
