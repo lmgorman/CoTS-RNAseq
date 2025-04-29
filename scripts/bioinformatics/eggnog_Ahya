@@ -26,6 +26,8 @@ cd "$SCRATCHDIR"
 echo "Running eggnog-mapper on $(hostname) at $(date)"
 emapper.py \
   -i $(basename "$INPUT") \
+ --itype proteins \
+  -m diamond \
   -o "$OUTPUT_BASENAME" \
   --cpu 10
 # Copy results back
