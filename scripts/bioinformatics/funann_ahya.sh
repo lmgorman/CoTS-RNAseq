@@ -10,14 +10,22 @@
 
 # Load Funannotate module or activate conda environment
 module purge
-module load all/funannotate/1.8.15-foss-2023a
+modue load uri/main
+module load all/funannotate/1.8.17
 # or, if using conda: source activate funannotate-env
 
+#funannotate import \
+  --gff /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3 \
+  --fasta /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta \
+  --genbank ahya.gb \
+  --species "Acropora hyacinthus" \
+  --cpus 10
+ 
 # Run annotation
 funannotate annotate \
-  --genbank /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.chrsV1.gb \
+  --genbank /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/ahya.gb
   -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahyacinthus_funannotate \
   --iprscan /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro/output/Ahyacinthus.proteins.fasta_1.xml \
-  --eggnog /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/eggnog/X.emapper.annotations \
+  --eggnog /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/eggnog/ahya_eggnog.emapper.annotations \
   --busco_db metazoa \
   --cpus 10
