@@ -11,6 +11,11 @@
 
 set -e  # Exit on error
 
+# Load Python module
+module purge
+module load uri/main
+module load python/3.12.3
+
 # Define directories
 SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
 WORKDIR=/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1
@@ -20,12 +25,15 @@ DEST_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann
 cd $SCRATCHDIR
 echo "[$(date)] Job started in $SCRATCHDIR"
 
-# Load Python module
-module purge
-module load uri/main
-module load python/3.12.3
-python3.12 -m pip install --user biopython bcbio-gff
-python3.12 -c "from BCBio import GFF; from Bio import SeqIO; print('All good!')"
+# Create Conda environment (if not already created)
+conda create --name gff2genbank_env python=3.12 biopython bcbio-gff -y
+
+# Activate the Conda environment
+source activate gff2genbank_env
+
+# Verify that Python is available and working
+python -m pip install --upgrade pip
+python -c "from BCBio import GFF; from Bio import SeqIO; print('All good!')"
 
 # Copy input files
 cp $WORKDIR/Ahyacinthus.coding.gff3 .
@@ -35,7 +43,7 @@ ls -lh
 
 # Run Biopython script
 echo "[$(date)] Running Biopython GFF to GenBank conversion..."
-python3.12 <<EOF
+python <<EOF
 from BCBio import GFF
 from Bio import SeqIO
 
@@ -65,4 +73,3 @@ echo "[$(date)] File copied to $DEST_DIR" || \
 # Final listing
 echo "[$(date)] Files in destination:"
 ls -lh $DEST_DIR
-
