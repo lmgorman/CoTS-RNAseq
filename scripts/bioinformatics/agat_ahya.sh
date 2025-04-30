@@ -9,7 +9,7 @@
 #SBATCH -o agat-ahya-%j.out
 #SBATCH -e agat-ahya-%j.error
 
-set -e  # Stop on first error
+set -e  # Exit on first error
 
 # Define scratch directory
 SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
@@ -22,72 +22,43 @@ module purge
 module load uri/main
 module load conda/latest
 
-# Copy files to scratch directory, checking if they exist first
-SOURCE_GFF="/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3"
-SOURCE_FASTA="/work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta"
+# Copy input files to scratch
+cp /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3 $SCRATCHDIR
+cp /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.transcripts.fasta $SCRATCHDIR
+echo "[$(date)] Input files copied to scratch directory"
+echo "[$(date)] Files in scratch directory:"
+ls $SCRATCHDIR
 
-if [[ -f "$SOURCE_GFF" && -f "$SOURCE_FASTA" ]]; then
-    cp $SOURCE_GFF $SCRATCHDIR
-    cp $SOURCE_FASTA $SCRATCHDIR
-    echo "[$(date)] Input files copied to scratch directory"
-else
-    echo "[$(date)] Error: One or both input files do not exist. Exiting."
-    exit 1
-fi
-
-echo "[$(date)] Files in scratch directory: $(ls $SCRATCHDIR)"
-
-# Initialize conda
-source $(conda info --base)/etc/profile.d/conda.sh
-
-# Create environment if it doesn't exist (check for AGAT availability first)
+# Set conda environment path
 CONDA_ENV_PATH="$SCRATCHDIR/conda-envs/agat-env"
-if ! conda list | grep -q agat; then
-    echo "[$(date)] Creating AGAT conda environment..."
-    conda create -y -p "$CONDA_ENV_PATH" -c bioconda -c conda-forge agat
-else
-    echo "[$(date)] AGAT environment already exists."
-fi
 
-# Activate it properly
-conda activate $SCRATCHDIR/conda-envs/agat-env
-echo "[$(date)] AGAT environment activated."
+# Combine GFF3 with FASTA (include the ##FASTA tag)
+cp Ahyacinthus.coding.gff3 tmp_ahya.gff3
+echo "##FASTA" >> tmp_ahya.gff3
+cat Ahyacinthus.transcripts.fasta >> tmp_ahya.gff3
+mv tmp_ahya.gff3 combined_ahya.gff3
+echo "[$(date)] Combined GFF3 with transcript FASTA into combined_ahya.gff3"
 
-# List installed packages to check if AGAT is installed
-echo "[$(date)] Listing installed packages in the environment:"
-conda list
+# Run bp_seqconvert with correct options
+echo "[$(date)] Running bp_seqconvert conversion..."
+conda run -p "$CONDA_ENV_PATH" \
+bp_seqconvert --from gff3 --to genbank < combined_ahya.gff3 > ahya.gb
+echo "[$(date)] GenBank file created."
 
-# Check if AGAT tool exists in the environment
-echo "[$(date)] AGAT location: $(which agat_convert_sp_gff2gbk.pl)"
-
-if which agat_convert_sp_gff2gbk.pl; then
-    echo "[$(date)] Running AGAT conversion..."
-    $SCRATCHDIR/conda-envs/agat-env/bin/agat_convert_sp_gff2gbk.pl \
-      --gff Ahyacinthus.coding.gff3 \
-      --fasta Ahyacinthus.proteins.fasta \
-      --output ahya.gb
-    echo "[$(date)] GenBank file successfully created"
-else
-    echo "[$(date)] Error: AGAT tool not found. Exiting."
-    exit 1
-fi
-
-# Check if the GenBank file was created
+# Validate output
 if [ -f ahya.gb ]; then
-    echo "[$(date)] GenBank file created successfully."
+    echo "[$(date)] Output file ahya.gb exists."
 else
-    echo "[$(date)] Error: GenBank file not created."
+    echo "[$(date)] Error: Output file ahya.gb not created."
     exit 1
 fi
 
-# Copy output GenBank file back to working directory
+# Copy result back to working directory
 DEST_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann
-if cp ahya.gb $DEST_DIR; then
-    echo "[$(date)] Output file copied to $DEST_DIR"
-else
-    echo "[$(date)] Error: Could not copy GenBank file to $DEST_DIR"
-    exit 1
-fi
+cp ahya.gb "$DEST_DIR" && \
+echo "[$(date)] Output file copied to $DEST_DIR" || \
+{ echo "[$(date)] Error copying output file."; exit 1; }
 
-# Final directory listing for confirmation
-echo "[$(date)] Files in destination directory: $(ls $DEST_DIR)"
+# Final listing
+echo "[$(date)] Files in destination:"
+ls "$DEST_DIR"
