@@ -1,3 +1,8 @@
+#Downloaded busco metazoan database
+apptainer run "/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif" funannotate setup 
+-b metazoa -d /scratch/workspace/lucy_gorman_uri_edu-lucyscratch/funannotate_databases
+
+#########
 #!/bin/bash
 #SBATCH --job-name=funannotate-ahya
 #SBATCH --nodes=1
@@ -17,9 +22,11 @@ cd $SCRATCHDIR
 
 echo "[$(date)] Job started in $SCRATCHDIR"
 
-
 # Define the Apptainer container path
 FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif"
+
+# Define the FUNANNOTATE_DB path to the newly downloaded database
+export FUNANNOTATE_DB="/scratch/workspace/lucy_gorman_uri_edu-lucyscratch/funannotate_databases"
 
 echo "[$(date)] Loading funannotate module..."
 
@@ -27,22 +34,21 @@ echo "[$(date)] Loading funannotate module..."
 module purge
 module load uri/main
 module load funannotate/1.8.17
-# or, if using conda: source activate funannotate-env
 
 # Check if the module was successfully loaded
 echo "[$(date)] Loaded modules: $(module list)"
 
-#turn genome into softmasked repeat genome
+# Turn genome into softmasked repeat genome
 apptainer run "$FUNANNOTATE_SIF" funannotate mask \
              -i Ahyacinthus.chrsV1.fasta \
              -o Ahyacinthus_sm.chrsV1.fasta 
 
-#download busco database
+# Download BUSCO database if it does not exist
 # Check if the BUSCO database is already downloaded
-if [ ! -d "$HOME/.busco/metazoa_odb10" ]; then
-    apptainer run "$FUNANNOTATE_SIF" funannotate setup -b metazoa
+if [ ! -d "$FUNANNOTATE_DB/metazoa" ]; then
+    apptainer run "$FUNANNOTATE_SIF" funannotate setup -b metazoa -d "$FUNANNOTATE_DB"
 else
-    echo "[$(date)] metazoa_odb10 BUSCO database already exists."
+    echo "[$(date)] metazoa BUSCO database already exists."
 fi
 
 # Run annotation
@@ -52,7 +58,8 @@ apptainer run "$FUNANNOTATE_SIF" funannotate predict \
             -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann \
             --protein_evidence Ahyacinthus.proteins.fasta \
             --transcript_evidence Ahyacinthus.coding.gff3 \
-            --busco_db metazoa \
+            --busco_db "$FUNANNOTATE_DB/metazoa" \
             --cpus 8
 
 echo "[$(date)] Prediction complete. Job finished successfully."
+
