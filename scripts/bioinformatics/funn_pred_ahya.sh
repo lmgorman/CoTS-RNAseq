@@ -32,13 +32,27 @@ module load funannotate/1.8.17
 # Check if the module was successfully loaded
 echo "[$(date)] Loaded modules: $(module list)"
 
+#turn genome into softmasked repeat genome
+apptainer run "$FUNANNOTATE_SIF" funannotate mask \
+             -i Ahyacinthus.chrsV1.fasta \
+             -o Ahyacinthus_sm.chrsV1.fasta 
+
+#download busco database
+# Check if the BUSCO database is already downloaded
+if [ ! -d "$HOME/.busco/metazoa_odb10" ]; then
+    apptainer run "$FUNANNOTATE_SIF" funannotate setup -b metazoa
+else
+    echo "[$(date)] metazoa_odb10 BUSCO database already exists."
+fi
+
 # Run annotation
 apptainer run "$FUNANNOTATE_SIF" funannotate predict \
-            --genome Ahyacinthus.chrsV1.fasta 
-            --species "Acropora hyacinthus" 
-            --protein_evidence Ahyacinthus.proteins.fasta 
-            --transcript_evidence Ahyacinthus.coding.gff3
-            --busco_db
-            --cpus 4
+            -i Ahyacinthus_sm.chrsV1.fasta  \
+            --species "Acropora hyacinthus" \
+            -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann \
+            --protein_evidence Ahyacinthus.proteins.fasta \
+            --transcript_evidence Ahyacinthus.coding.gff3 \
+            --busco_db metazoa \
+            --cpus 8
 
 echo "[$(date)] Prediction complete. Job finished successfully."
