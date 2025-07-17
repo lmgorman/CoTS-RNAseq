@@ -11,6 +11,11 @@
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
+# Define scratch directory
+SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
+cd $SCRATCHDIR
+echo "[$(date)] Job started in $SCRATCHDIR"
+
 # Define the Apptainer container path
 FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif"
 
