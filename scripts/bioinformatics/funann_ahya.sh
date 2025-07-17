@@ -27,8 +27,8 @@ echo "[$(date)] Loaded modules: $(module list)"
 
 # Run annotation
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
-  --genbank /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/ahya.gbk \
-  -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann \
+  -i /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann/ \
+  -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahyaannotate_results \
   --iprscan /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro/output/Ahyacinthus.proteins.fasta_1.xml \
   --eggnog /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/eggnog/ahya_eggnog.emapper.annotations \
   --busco_db metazoa \
