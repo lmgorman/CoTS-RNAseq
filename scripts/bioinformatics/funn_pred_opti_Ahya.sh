@@ -30,12 +30,7 @@ module load funannotate/1.8.17
 
 # Check if the module was successfully loaded
 echo "[$(date)] Loaded modules: $(module list)"
-
-# Turn genome into softmasked repeat genome
-apptainer run "$FUNANNOTATE_SIF" funannotate mask \
-             -i /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.chrsV1.fasta \
-             -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann/Ahyacinthus_sm.chrsV1.fasta 
-             
+          
 # Download BUSCO database if it does not exist
 
 # Check if the BUSCO database is already downloaded
@@ -49,7 +44,7 @@ fi
 apptainer run "$FUNANNOTATE_SIF" funannotate predict \
             -i /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann/Ahyacinthus_sm.chrsV1.fasta  \
             --species "Acropora hyacinthus" \
-            -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann/ \
+            -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_pred_opti \
             --protein_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta \
             --transcript_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3 \
             --busco_db "$FUNANNOTATE_DB/metazoa" \
