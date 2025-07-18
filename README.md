@@ -41,5 +41,8 @@ Raw sequences can be found at NCBI under the BioProject accession: PRJNA1230057.
 # Bioinformatics Analysis happening:
 See here - https://github.com/AHuffmyer/ASH_Putnam_Lab_Notebook/blob/master/_posts/2025-02-22-COTS-Project-Bioinformatics-Analysis.md 
 
+
+See here - https://github.com/lmgorman/CoTS-RNAseq/blob/bee3172fc9aed27c553984132a5a2e36353e6cb4/LMG_Lab_Notebook.md
+
 # References
 1. MGX-Montpellier GenomiX, Univ. Montpellier, CNRS, INSERM, Montpellier, France
