@@ -1,3 +1,36 @@
+## 22.04.25 - Ran InterPro Scan on Acropora hyacinthus genome
+Made script - [interpro2.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/275c71ed56a750e267e850c7af951438dafb736a/scripts/bioinformatics/interpro2.sh) = uses new InterPro scan version
+```
+Job ID: 32969186
+```
+
+## 25.04.25 - Ran InterPro Scan on Porites evermanni genome
+Made script - [interpro_pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/537510c9e60907224b9f36664a9a88307ce7f927/scripts/bioinformatics/interpro_pever.sh) Started running on 25.04.25
+```
+Job ID:33156317
+squeue -j 33156317
+```
+
+Had to clean up protein fasta as it contained “*” - made script called [remove_asterix.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/537510c9e60907224b9f36664a9a88307ce7f927/scripts/bioinformatics/remove_asterix.sh) to do this
+
+Cleaned fasta file now found: 
+```
+/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/Porites_evermanni_v1_clean.annot.pep.fa
+```
+Done - checked on 26.04.25
+
+
+## 26.04.25 - Ran eggnog mapper on Acropora hyacinthus & Porites evermanni genomes
+Scripts can be found here: 
+
+[scripts/bioinformatics/eggnog_Ahya.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/537510c9e60907224b9f36664a9a88307ce7f927/scripts/bioinformatics/eggnog_Ahya)
+
+[scripts/bioinformatics/eggnog_Pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/537510c9e60907224b9f36664a9a88307ce7f927/scripts/bioinformatics/eggnog_Pever.sh)
+```
+eggnog_Ahya.sh JOB ID: 33386208
+eggnog_Pever.sh JOB ID: 33399582
+```
+
 ## 16.07.25 - Run funannotate predict on Acropora hyacinthus genome
 Added —force to script as it was terminating after bad contigs
 
