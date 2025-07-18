@@ -26,7 +26,7 @@ FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funann
 
 # Copy input data to scratch
 echo "[$(date)] Copying input data to scratch..."
-cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann $SCRATCHDIR/input
+cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann//predict_results $SCRATCHDIR/input
 
 # Copy interpro and eggnog files to scratch (optional but recommended for full scratch use)
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/interpro/output/Ahyacinthus.proteins.fasta_1.xml $SCRATCHDIR/iprscan.xml
