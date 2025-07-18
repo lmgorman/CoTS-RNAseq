@@ -2,7 +2,11 @@
 Added —force to script as it was terminating after bad contigs
 
 
-Reran- squeue -j 40032166
+Reran
+```
+JOB ID:40032166
+squeue -j 40032166
+```
 Started at 15:15pm
 
 
