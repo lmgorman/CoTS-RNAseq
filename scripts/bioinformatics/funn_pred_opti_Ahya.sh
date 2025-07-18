@@ -51,6 +51,5 @@ apptainer run "$FUNANNOTATE_SIF" funannotate predict \
     --force \
     --cpus 8 \
     --optimize_augustus \
-    --verbose 
             
 echo "[$(date)] Prediction complete. Job finished successfully."
