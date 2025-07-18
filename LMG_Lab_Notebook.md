@@ -1,4 +1,4 @@
-## 16.07.25
+## 16.07.25 - Run funannotate predict on Acropora hyacinthus genome
 Added —force to script as it was terminating after bad contigs
 
 
@@ -8,6 +8,8 @@ Started at 15:15pm
 
 Script can be found here:
 [scripts/bioinformatics/funn_pred_ahya.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/04aabf2b71618d285860fcc2b134ea8d8f964345/scripts/bioinformatics/funn_pred_ahya.sh) 
+
+Error file says 20 bad contigs - I just force passed the contigs (not reccommended) probably because I didn’t clean the genome using funannotate clean
 
 ## 17.07.25
 ```
@@ -20,22 +22,15 @@ JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
 
 The time constraint on the job is 48 hours… change number of days to 5 to shell scripts
 
-Results should be saved in:
-```
-/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann
-```
-
-Error file says 20 bad contigs - I just force passed the contigs (not reccommended) probably because I didn’t clean the genome using funannotate clean
+**DONE**
 
 To determine quality:
-  Look at number of genes annotated in total
-  How many GO terms and general terms assigned to each gene 
-  What % in total annotated genes
-  >50% annotation = good
-  Acropora is well annotated so higher percentage for Acropora vs Porites 
-  Can re run with optimised augustus and compare % of overall genes annotated
-
-**DONE**
+  - Look at number of genes annotated in total
+  - How many GO terms and general terms assigned to each gene 
+  - What % in total annotated genes
+  - more than 50% annotation = good
+  - Acropora is well annotated so higher percentage for Acropora vs Porites 
+  - Can re run with optimised augustus and compare % of overall genes annotated
 
 
 Error file said:
@@ -52,8 +47,10 @@ CDS_complete: 37,751
 total_exons: 226,958 exons
 ```
 
-## 18.07.25
-Running optimised prediction (funn_pred_opti_Ahya.sh) using --optimise Augustus parameter and will compare that to the non-optimised I did yesterday
+## 18.07.25 - Run funannotate predict on Acropora hyacinthus genome with optimised Augustus
+Running optimised prediction (funn_pred_opti_Ahya.sh) using ``--optimise Augustus`` parameter and will compare that to the non-optimised I did yesterday
+
+
 Script found here:
 
 [scripts/bioinformatics/funn_pred_opti_Ahya.sh ](https://github.com/lmgorman/CoTS-RNAseq/blob/09e8f1ef8ca2a538dfca4293b2b3bbdb6acf3dc7/scripts/bioinformatics/funn_pred_opti_Ahya.sh)
