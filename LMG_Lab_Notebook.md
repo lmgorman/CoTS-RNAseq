@@ -12,11 +12,11 @@ Script can be found here:
 ## 17.07.25
 ```
 sacct -j 40032166 --format=JobID,State,ExitCode
-```
+
 
 JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
          40032166   uri-cpu funannot lucy_gor  R   21:30:50      1 uri-cpu009
-
+```
 
 The time constraint on the job is 48 hours… change number of days to 5 to shell scripts
 
@@ -35,18 +35,22 @@ To determine quality:
   Acropora is well annotated so higher percentage for Acropora vs Porites 
   Can re run with optimised augustus and compare % of overall genes annotated
 
-DONE
-Error file said
-Funannotate predict is finished, output files are in the /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann//predict_results folder
+**DONE**
 
+
+Error file said:
+```
+"Funannotate predict is finished, output files are in the /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann//predict_results folder"
+```
 Outfile:
+```
 2742 completed 0 remaining 
 You have 43,700 genes predicted overall.
 "mRNA": 38285
 "tRNA": 5415
 CDS_complete: 37,751
 total_exons: 226,958 exons
-
+```
 
 ## 18.07.25
 Running optimised prediction (funn_pred_opti_Ahya.sh) using --optimise Augustus parameter and will compare that to the non-optimised I did yesterday
