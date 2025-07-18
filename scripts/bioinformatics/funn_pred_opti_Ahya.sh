@@ -48,9 +48,9 @@ apptainer run "$FUNANNOTATE_SIF" funannotate predict \
             --protein_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta \
             --transcript_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3 \
             --busco_db "$FUNANNOTATE_DB/metazoa" \
-            --optimize_augustus
-            --force            
-            --cpus 8
-            --verbose
+            --optimize_augustus \
+            --force \            
+            --cpus 8 \ 
+            --verbose 
             
 echo "[$(date)] Prediction complete. Job finished successfully."
