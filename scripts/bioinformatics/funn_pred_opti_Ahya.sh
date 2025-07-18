@@ -50,6 +50,6 @@ apptainer run "$FUNANNOTATE_SIF" funannotate predict \
     --busco_db "$FUNANNOTATE_DB/metazoa" \
     --force \
     --cpus 8 \
-    --optimize_augustus \
+    --optimize_augustus
             
 echo "[$(date)] Prediction complete. Job finished successfully."
