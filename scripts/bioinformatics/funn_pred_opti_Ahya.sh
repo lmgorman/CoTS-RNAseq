@@ -42,15 +42,15 @@ fi
 
 # Run annotation
 apptainer run "$FUNANNOTATE_SIF" funannotate predict \
-            -i /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann/Ahyacinthus_sm.chrsV1.fasta  \
-            --species "Acropora hyacinthus" \
-            -o /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/Aha_pred_opti \
-            --protein_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta \
-            --transcript_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3 \
-            --busco_db "$FUNANNOTATE_DB/metazoa" \
-            --optimize_augustus \
-            --force \            
-            --cpus 8 \ 
-            --verbose 
+    -i /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann/Ahyacinthus_sm.chrsV1.fasta \
+    --species "Acropora hyacinthus" \
+    -o /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/Aha_pred_opti \
+    --protein_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.proteins.fasta \
+    --transcript_evidence /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3 \
+    --busco_db "$FUNANNOTATE_DB/metazoa" \
+    --force \
+    --cpus 8 \
+    --optimize_augustus \
+    --verbose 
             
 echo "[$(date)] Prediction complete. Job finished successfully."
