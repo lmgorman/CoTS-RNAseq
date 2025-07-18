@@ -60,6 +60,8 @@ Script found here:
 
 Started funn_pred_opti_Ahya.sh 18.07.25 12:51pm
 squeue -j 40082840
+
+
 Saving the data to my scratch directory so I don't take up more space in the /work/pi_hputnam_uri_edu
 
 
