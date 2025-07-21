@@ -1,0 +1,4 @@
+ --gff                Genome GFF3 annotation file
+  --fasta              Genome in multi-fasta format
+  -s, --species        Species name, use quotes for binomial, e.g. "Aspergillus fumigatus"
+  -o, --out            Output folder for results
