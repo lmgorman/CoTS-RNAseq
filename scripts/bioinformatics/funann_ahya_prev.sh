@@ -42,6 +42,7 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
   --eggnog $SCRATCHDIR/eggnog.annotations \
+  --force \
   --busco_db metazoa \
   --cpus 10
 
