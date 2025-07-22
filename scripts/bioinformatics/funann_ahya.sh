@@ -36,7 +36,7 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/eggnog/ahya_eggnog.e
 echo "[$(date)] Starting funannotate..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   -i $SCRATCHDIR/input \
-  -o $SCRATCHDIR/output \
+  -o $SCRATCHDIR/output_funn_pred_struct \
   --iprscan $SCRATCHDIR/iprscan.xml \
   --eggnog $SCRATCHDIR/eggnog.annotations \
   --busco_db metazoa \
@@ -44,6 +44,6 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
 
 # Copy results back to work
 echo "[$(date)] Copying results back to /work..."
-cp -r $SCRATCHDIR/output /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahyaannotate_results
+cp -r $SCRATCHDIR/output_funn_pred_struct /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahyaannotate_results
 
 echo "[$(date)] Annotation complete. Job finished successfully."
