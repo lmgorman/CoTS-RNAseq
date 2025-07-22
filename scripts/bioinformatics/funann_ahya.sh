@@ -31,7 +31,7 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/eggnog/ahya_eggnog.e
 # Run funannotate inside Apptainer from scratch
 echo "[$(date)] Starting funannotate..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
-  -i $SCRATCHDIR/input \
+  -i /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/Aha_pred_opti \
   -o $SCRATCHDIR/output_funn_pred_struct \
   --iprscan $SCRATCHDIR/iprscan.xml \
   --eggnog $SCRATCHDIR/eggnog.annotations \
