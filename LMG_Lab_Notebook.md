@@ -132,8 +132,9 @@ More updated genome with better BUSCO scores - see https://gigabytejournal.com/a
 Files available here - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/964/291/705/GCA_964291705.1_jaAcrHyac4.1/
 
 Uploaded the gbff and fasta to:
+```
 /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1/
-
+```
 
 Might need to re-map all RNASeq data using STAR
 First need to convert to gbff to gff3 format
