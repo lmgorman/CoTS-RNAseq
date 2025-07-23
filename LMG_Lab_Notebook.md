@@ -124,5 +124,7 @@ Based on this
 |BUSCO|780|(possibly number of BUSCO genes found)|
 |Secretion|0| Didn't run secretion software|
 
+Downloaded this file from unity to local PC using instructions on:
+https://docs.unity.uri.edu/documentation/managing-files/filezilla/#set-up-default-remote-directory-in-filezilla 
 
 
