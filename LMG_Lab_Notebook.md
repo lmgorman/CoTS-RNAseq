@@ -127,4 +127,21 @@ Based on this
 Downloaded this file from unity to local PC using instructions on:
 https://docs.unity.uri.edu/documentation/managing-files/filezilla/#set-up-default-remote-directory-in-filezilla 
 
+## Downloaded new Acropora hyacinthus genome
+More updated genome with better BUSCO scores - see https://gigabytejournal.com/articles/153 
+Files available here - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/964/291/705/GCA_964291705.1_jaAcrHyac4.1/
+
+Uploaded the gbff and fasta to:
+/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1/
+
+
+Might need to re-map all RNASeq data using STAR
+First need to convert to gbff to gff3 format
+
+
+Asked HPC mass to download genome tools to do this
+git clone https://github.com/genometools/genometools.git
+cd genometools
+make
+sudo cp bin/gt /usr/local/bin/
 
