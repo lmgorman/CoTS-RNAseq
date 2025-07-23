@@ -105,5 +105,24 @@ Next:
 - Repeat for P. evermanni
 - Will need to clean the P. evermanni genome also with funnannotate clean
 
+## 23.07.25
+My structural annotations do not fit the functional annotation as well as Lopez-Nandam - my structural had 0 GO terms and 0 Eggnog terms
+
+
+Therefore using Lopez Nandam structural annotations and the functional annotation based on this can be found at:
+/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/functional_annotate_results
+
+Based on this
+| Tool/DB |Hits| % of total transcripts (n = 27,110) |
+|---------|----|-------------------------------------|
+|GO Terms|13,557|~50%|
+|InterProScan|18,149|~67%|
+|eggNOG|20,372|~75%|
+|Pfam|12,804|~47%|
+|CAZyme|216|<1% (expected: low)|
+|MEROPS|782|~2.9%|
+|BUSCO|780|(possibly number of BUSCO genes found)|
+|Secretion|0| Didn't run secretion software|
+
 
 
