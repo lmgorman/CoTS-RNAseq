@@ -8,20 +8,24 @@
 #SBATCH --constraint=avx512
 #SBATCH -o annot-AhyaNEW-interpro-%j.out
 #SBATCH -e annot-AhyaNEW-interpro-%j.error
+
 # Load modules
 echo "Loading programs" $(date)
 module purge
 module load uri/main
 module load InterProScan/5.73-104.0-foss-2024a
-# Use pre-assigned scratch directory
+
+# Scratch and paths
 SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
-# Define input and output locations
+# Need protein file to input
 INPUT_FILE=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1/GCA_964291705.1_jaAcrHyac4.1_genomic.fna
 BASENAME=$(basename "$INPUT_FILE")
 FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1/interpro
-# Copy input file to scratch
+
+# Copy input to scratch
 cp "$INPUT_FILE" "$SCRATCHDIR/"
 cd "$SCRATCHDIR"
+
 # Run InterProScan
 echo "Running InterProScan on $(hostname) at $(date)"
 interproscan.sh \
@@ -34,13 +38,16 @@ interproscan.sh \
     --formats tsv \
     --goterms \
     --pathways
-# Create final output directory if needed
+
+# Create output dir if needed
 mkdir -p "$FINAL_OUTPUT_DIR"
-# Copy results back
+
+# Copy result files (safe and filtered)
 echo "Copying results to $FINAL_OUTPUT_DIR"
-cp "${BASENAME}"* "$FINAL_OUTPUT_DIR/" 2>/dev/null || echo "No direct-matching output, copying all results..."
-cp "$SCRATCHDIR"/* "$FINAL_OUTPUT_DIR/"
-# Optional: Keep scratch clean
+cp "$SCRATCHDIR"/*.tsv "$FINAL_OUTPUT_DIR/" 2>/dev/null || echo "No TSV output found."
+
+# Clean up
 echo "Cleaning up temporary files from scratch directory"
 rm -rf "$SCRATCHDIR/temp"
+
 echo "InterProScan completed at $(date)"
