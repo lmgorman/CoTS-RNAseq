@@ -140,9 +140,19 @@ Might need to re-map all RNASeq data using STAR
 First need to convert to gbff to gff3 format
 
 
-Asked HPC mass to download genome tools to do this
+Asked HPC mass to download:
+- genome tools to do this
 git clone https://github.com/genometools/genometools.git
 cd genometools
 make
 sudo cp bin/gt /usr/local/bin/
 
+
+and also download 
+- genbank_to command in python
+https://pypi.org/project/genbank-to/
+
+
+I also need to convert the genome fasta to protein sequences for InterProScan and eggnog mapper (the genome doesn't have this data)
+looks like biopython is a commonly used tool to do this
+`from Bio import SeqIO`
