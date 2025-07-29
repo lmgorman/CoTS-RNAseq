@@ -160,4 +160,5 @@ looks like biopython is a commonly used tool to do this
 
 Current scripts that need updating based on the protein sequences and the gff3 read format:
 - [build_star_index_jaAcrHyac4.1.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/3d98e29810ee6c4c8b61581b6480c12db3780f26/scripts/bioinformatics/build_star_index_jaAcrHyac4.1.sh)
+- [map_549R_newAhyagen.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/6ab62eeacc69884b5b311b4182287f228bc7f8f2/scripts/bioinformatics/map_549R_newAhyagen.sh)
 - 
