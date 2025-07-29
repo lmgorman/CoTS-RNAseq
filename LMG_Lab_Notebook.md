@@ -112,7 +112,9 @@ My structural annotations do not fit the functional annotation as well as Lopez-
 Therefore using Lopez Nandam structural annotations and the functional annotation based on this can be found at:
 /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/functional_annotate_results
 
-Based on this
+Based on this:
+
+**Table 1.** Functional annotation results of *Acropora hyacinthus* genome using funannotate (version 1.8.17).
 | Tool/DB |Hits| % of total transcripts (n = 27,110) |
 |---------|----|-------------------------------------|
 |GO Terms|13,557|~50%|
@@ -130,6 +132,7 @@ https://docs.unity.uri.edu/documentation/managing-files/filezilla/#set-up-defaul
 ## Downloaded new Acropora hyacinthus genome
 More updated genome with better BUSCO scores - see https://gigabytejournal.com/articles/153 
 
+**Table 2.** Comparison of genome quality (BUSCO scores) between *Acropora hyacinthus* genomes from Lopez-Nandam and Aquatic symbiosis project.
 | Database/Study | BUSCO complete | BUSCO fragmented | missing |
 |----------------|----------------|------------------|---------|
 |Lopez-Nandam| 71.3%| 13.6%| 15.15%|
