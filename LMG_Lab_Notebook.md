@@ -129,6 +129,12 @@ https://docs.unity.uri.edu/documentation/managing-files/filezilla/#set-up-defaul
 
 ## Downloaded new Acropora hyacinthus genome
 More updated genome with better BUSCO scores - see https://gigabytejournal.com/articles/153 
+
+| Database/Study | BUSCO complete | BUSCO fragmented | missing |
+|----------------|----------------|------------------|---------|
+|Lopez-Nandam| 71.3%| 13.6%| 15.15%|
+|Aquatic symbiosis| 96.7% (single copy 95.5%; dual copy 1.2%)| 1.2% |2.2%|
+
 Files available here - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/964/291/705/GCA_964291705.1_jaAcrHyac4.1/
 
 Uploaded the gbff and fasta to:
