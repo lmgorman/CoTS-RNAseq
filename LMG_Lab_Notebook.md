@@ -156,3 +156,6 @@ https://pypi.org/project/genbank-to/
 I also need to convert the genome fasta to protein sequences for InterProScan and eggnog mapper (the genome doesn't have this data)
 looks like biopython is a commonly used tool to do this
 `from Bio import SeqIO`
+
+
+Current scripts that need updating based on the protein sequences and the gff3 read format:
