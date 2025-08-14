@@ -2,7 +2,7 @@
 Bioinformatics analysis of RNA-seq data collected from corals (_Acropora hyacinthus/A. turbinata_ and _Porites_ sp.) being eaten by CoTS in Moorea, French Polynesia during the 2023/24 CoTS outbreak.
 
 
-New study showing A. hyacinthus in French Polynesia and Mo'orea is likely Acropora turbinata - https://www.publish.csiro.au/is/pdf/IS24049 
+New study showing A. hyacinthus in French Polynesia and Mo'orea is likely Acropora turbinata<sup>1</sup> 
 
 
 Four treatments:
@@ -33,7 +33,7 @@ Fed and unfed upon _Porites_ sp. and _A. hyacinthus/A. turbinata_ colonies were 
 
 
 # RNA extraction
-Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortexed due to the tissue still remaining on the coral skeleton. Contrastingly, in _Acropora hyacinthus/A. turbinata_ samples, the tissue had successfully dissociated from the skeleton, so these samples were not cut. 300-1500 µL of sample was then transferred to a new tube and RNA was extracted using the Zymo RNA/ DNA quick prep mini kit. QC of RNA was conducted on both a nanodrop and a bioanalyser. Samples with a 260/280 ratio between 1.8-2.2 and containing two RNA peaks (18S and 28S) on the bioanalyser were sent to MGX-Montpellier GenomiX<sup>1</sup>  for sequencing. Altogether, eight biological replicates for each treatment (_n_ = 4) were sent for sequencing.
+Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortexed due to the tissue still remaining on the coral skeleton. Contrastingly, in _Acropora hyacinthus/A. turbinata_ samples, the tissue had successfully dissociated from the skeleton, so these samples were not cut. 300-1500 µL of sample was then transferred to a new tube and RNA was extracted using the Zymo RNA/ DNA quick prep mini kit. QC of RNA was conducted on both a nanodrop and a bioanalyser. Samples with a 260/280 ratio between 1.8-2.2 and containing two RNA peaks (18S and 28S) on the bioanalyser were sent to MGX-Montpellier GenomiX<sup>2</sup>  for sequencing. Altogether, eight biological replicates for each treatment (_n_ = 4) were sent for sequencing.
 
 
 # Pure venom extraction 
@@ -48,4 +48,5 @@ See here - https://github.com/AHuffmyer/ASH_Putnam_Lab_Notebook/blob/master/_pos
 See here - https://github.com/lmgorman/CoTS-RNAseq/blob/bee3172fc9aed27c553984132a5a2e36353e6cb4/LMG_Lab_Notebook.md
 
 # References
-1. MGX-Montpellier GenomiX, Univ. Montpellier, CNRS, INSERM, Montpellier, France
+1. Rassmussen Sage H., Cowman Peter F., Baird Andrew H., Crosbie Augustine J., Quattrini Andrea M., Bonito Victor, Sinniger Frederic, Harii Saki, Cabaitan Patrick C., Fadli Nur, Tan Chun-Hong, Hung Julia Yun-Hsuan, Rongo Teina, Huang Danwei, Halafihi Tuikolongahau, Bridge Tom C. L. (2025) The tables have turned: taxonomy, systematics and biogeography of the Acropora hyacinthus (Scleractinia: Acroporidae) complex. Invertebrate Systematics 39, IS24049. https://doi.org/10.1071/IS24049
+2. MGX-Montpellier GenomiX, Univ. Montpellier, CNRS, INSERM, Montpellier, France
