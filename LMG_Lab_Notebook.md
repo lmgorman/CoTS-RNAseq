@@ -189,3 +189,43 @@ Ok now I need to convert the GFF3 to GTF to run in STAR index so:
 [build_star_index_jaAcrHyac4.1.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/3d98e29810ee6c4c8b61581b6480c12db3780f26/scripts/bioinformatics/build_star_index_jaAcrHyac4.1.sh)
 
 squeue -j 41062013
+
+Error file in /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1/build_star_index_jaAcrHyac4.1-41062013.error:
+```
+Loading uri version main
+NOTE: The modules under this branch will not run on the login node. Use
+--constraint=avx512 for sbatch or srun sessions.
+Loading gffread version 0.12.7
+!!!!! WARNING: Could not move Log.out file from ./Log.out into /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/star_index_jaAcrHyac4.1/Log.out. Will keep ./Log.out
+
+
+Fatal INPUT FILE error, no exon lines in the GTF file: GCA_964291705.1_jaAcrHyac4.1_genomic.gtf
+Solution: check the formatting of the GTF file, it must contain some lines with exon in the 3rd column.
+          Make sure the GTF file is unzipped.
+          If exons are marked with a different word, use --sjdbGTFfeatureExon .
+
+Aug 14 14:00:46 ...... FATAL ERROR, exiting
+cp: cannot stat '/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/star_index_jaAcrHyac4.1/*': No such file or directory
+build_star_index_jaAcrHyac4.1-41062013.error (END)Loading uri version main
+NOTE: The modules under this branch will not run on the login node. Use
+--constraint=avx512 for sbatch or srun sessions.
+Loading gffread version 0.12.7
+!!!!! WARNING: Could not move Log.out file from ./Log.out into /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/star_index_jaAcrHyac4.1/Log.out. Will keep ./Log.out
+
+
+Fatal INPUT FILE error, no exon lines in the GTF file: GCA_964291705.1_jaAcrHyac4.1_genomic.gtf
+Solution: check the formatting of the GTF file, it must contain some lines with exon in the 3rd column.
+          Make sure the GTF file is unzipped.
+          If exons are marked with a different word, use --sjdbGTFfeatureExon .
+
+Aug 14 14:00:46 ...... FATAL ERROR, exiting
+cp: cannot stat '/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/star_index_jaAcrHyac4.1/*': No such file or directory
+```
+
+GTF file issue:
+
+The file GCA_964291705.1_jaAcrHyac4.1_genomic.gtf does not contain any lines where the 3rd column is exon.
+
+STAR requires exon features in the GTF file to build the splice junction database
+
+Chat to Ariana tomorrow about editing the file to change this
