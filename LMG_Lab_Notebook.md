@@ -185,3 +185,7 @@ Ran the following script in /home/lucy_gorman_uri_edu/scripts:
 squeue -j 41061834
 GFF3 saved to /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/GCA_964291705.1_jaAcrHyac4.1_genomic.gbff.gff
 ```
+Ok now I need to convert the GFF3 to GTF to run in STAR index so:
+[build_star_index_jaAcrHyac4.1.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/3d98e29810ee6c4c8b61581b6480c12db3780f26/scripts/bioinformatics/build_star_index_jaAcrHyac4.1.sh)
+
+squeue -j 41061927
