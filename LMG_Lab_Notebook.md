@@ -173,4 +173,4 @@ Current scripts that need updating based on the protein sequences and the gff3 r
 - [ahya_NEW_interpro.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/152c4204f68dbb233f5f97e463eb64d76fbe195c/scripts/bioinformatics/ahya_NEW_interpro.sh) = InterProscan data for new A. hyacinthus - waiting on using program to convert DNA to proteins to input into script
 
 ## 14.08.25 - Made script to convert genbank to gff3 using biopearl
-
+[genbank_to_gff3.sh]https://github.com/lmgorman/CoTS-RNAseq/blob/d78867a608c706ae76f53f76d0b8f50987e57499/scripts/bioinformatics/genbank_to_gff3.sh
