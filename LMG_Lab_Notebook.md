@@ -179,4 +179,9 @@ Current scripts that need updating based on the protein sequences and the gff3 r
  git clone https://github.com/bioperl/bioperl-live.git
 ```
 
+Ran the following script in /home/lucy_gorman_uri_edu/scripts:
 [genbank_to_gff3.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/d78867a608c706ae76f53f76d0b8f50987e57499/scripts/bioinformatics/genbank_to_gff3.sh)
+```
+squeue -j 41061834
+GFF3 saved to /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/GCA_964291705.1_jaAcrHyac4.1_genomic.gbff.gff
+```
