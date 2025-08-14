@@ -171,3 +171,6 @@ Current scripts that need updating based on the protein sequences and the gff3 r
 - [build_star_index_jaAcrHyac4.1.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/3d98e29810ee6c4c8b61581b6480c12db3780f26/scripts/bioinformatics/build_star_index_jaAcrHyac4.1.sh) = trying to index the new genome and then it can be used for mapping - waiting on converting genbank to gff3
 - [map_549R_newAhyagen.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/6ab62eeacc69884b5b311b4182287f228bc7f8f2/scripts/bioinformatics/map_549R_newAhyagen.sh) = testing out mapping my RNASeq 549R data to new A. hyacinthus genome - waiting on script above being successful
 - [ahya_NEW_interpro.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/152c4204f68dbb233f5f97e463eb64d76fbe195c/scripts/bioinformatics/ahya_NEW_interpro.sh) = InterProscan data for new A. hyacinthus - waiting on using program to convert DNA to proteins to input into script
+
+## 14.08.25 - Made script to convert genbank to gff3 using biopearl
+
