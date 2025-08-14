@@ -1,53 +1,45 @@
 #!/bin/bash
-#SBATCH --job-name=annot-AhyaNEW-interpro
+#SBATCH --job-name=STAR_genome_index_Ahya
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=10
-#SBATCH --mem=300G
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=250G
 #SBATCH -p uri-cpu
-#SBATCH --time=96:00:00
-#SBATCH --constraint=avx512
-#SBATCH -o annot-AhyaNEW-interpro-%j.out
-#SBATCH -e annot-AhyaNEW-interpro-%j.error
+#SBATCH --time=24:00:00
+#SBATCH -o slurm-%j.out
+#SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1
 
 # Load modules
-echo "Loading programs" $(date)
-module purge
 module load uri/main
-module load InterProScan/5.73-104.0-foss-2024a
+module load STAR/2.7.11b-GCC-12.3.0
+module load gffread/0.12.7
 
-# Scratch and paths
-SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
-# Need protein file to input
-INPUT_FILE=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1/GCA_964291705.1_jaAcrHyac4.1_genomic.fna
-BASENAME=$(basename "$INPUT_FILE")
-FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1/interpro
+# Set custom scratch directory
+SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/star_index_jaAcrHyac4.1_$SLURM_JOB_ID
+mkdir -p "$SCRATCHDIR"
 
-# Copy input to scratch
-cp "$INPUT_FILE" "$SCRATCHDIR/"
-cd "$SCRATCHDIR"
+echo "[$(date)] Converting GFF3 to GTF"
+gffread /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/GCA_964291705.1_jaAcrHyac4.1_genomic.gbff.gff \
+  -T -o GCA_964291705.1_jaAcrHyac4.1_genomic.gtf
 
-# Run InterProScan
-echo "Running InterProScan on $(hostname) at $(date)"
-interproscan.sh \
-    --input "$BASENAME" \
-    --type n \
-    --disable-precalc \
-    --output-dir "$SCRATCHDIR" \
-    --tempdir "$SCRATCHDIR/temp" \
-    --cpu 10 \
-    --formats tsv \
-    --goterms \
-    --pathways
+echo "[$(date)] Starting STAR genome index build in scratch: $SCRATCHDIR"
 
-# Create output dir if needed
+# Variables
+GENOME_FA="GCA_964291705.1_jaAcrHyac4.1_genomic.fna"
+GTF_FILE="GCA_964291705.1_jaAcrHyac4.1_genomic.gtf"
+INDEX_DIR="$SCRATCHDIR"
+
+# Run STAR genomeGenerate
+STAR --runThreadN 8 \
+    --runMode genomeGenerate \
+    --genomeDir "$INDEX_DIR" \
+    --genomeFastaFiles "$GENOME_FA" \
+    --sjdbGTFfile "$GTF_FILE" \
+    --genomeSAindexNbases 13 \
+    --sjdbOverhang 99
+
+# Copy STAR index back to permanent storage
+FINAL_OUTPUT_DIR="/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/star_index_jaAcrHyac4.1"
 mkdir -p "$FINAL_OUTPUT_DIR"
+cp -r "$INDEX_DIR"/* "$FINAL_OUTPUT_DIR"
 
-# Copy result files (safe and filtered)
-echo "Copying results to $FINAL_OUTPUT_DIR"
-cp "$SCRATCHDIR"/*.tsv "$FINAL_OUTPUT_DIR/" 2>/dev/null || echo "No TSV output found."
-
-# Clean up
-echo "Cleaning up temporary files from scratch directory"
-rm -rf "$SCRATCHDIR/temp"
-
-echo "InterProScan completed at $(date)"
+echo "[$(date)] Genome index build completed and copied to $FINAL_OUTPUT_DIR"
