@@ -5,7 +5,8 @@
 #SBATCH --mem=250G
 #SBATCH -p uri-cpu
 #SBATCH --time=24:00:00
-#SBATCH -o slurm-%j.out
+#SBATCH -o build_star_index_jaAcrHyac4.1-%j.out
+#SBATCH -e build_star_index_jaAcrHyac4.1-%j.error
 #SBATCH -D /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/acr_hya_jaAcrHyac4.1
 
 # Load modules
@@ -14,8 +15,7 @@ module load STAR/2.7.11b-GCC-12.3.0
 module load gffread/0.12.7
 
 # Set custom scratch directory
-SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/star_index_jaAcrHyac4.1_$SLURM_JOB_ID
-mkdir -p "$SCRATCHDIR"
+SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/star_index_jaAcrHyac4.1
 
 echo "[$(date)] Converting GFF3 to GTF"
 gffread /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/GCA_964291705.1_jaAcrHyac4.1_genomic.gbff.gff \
