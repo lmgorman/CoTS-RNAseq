@@ -229,3 +229,6 @@ The file GCA_964291705.1_jaAcrHyac4.1_genomic.gtf does not contain any lines whe
 STAR requires exon features in the GTF file to build the splice junction database
 
 Chat to Ariana tomorrow about editing the file to change this
+
+15.08.25
+squeue -j 41077715
