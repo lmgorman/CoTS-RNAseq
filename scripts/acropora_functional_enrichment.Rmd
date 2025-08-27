@@ -93,7 +93,7 @@ acr_eatenvscontrol_DEG_list$contrast<-factor(acr_eatenvscontrol_DEG_list$contras
 ```
 
 # Read in annotation files 
-Will use the genome annotations done in the google drive for *A. hyacinthus* (López-Nandam et al., 2023; https://royalsocietypublishing.org/doi/10.1098/rspb.2022.1766). This paper used MAKER2 for genome annotation. I think the annotation file is called: Ahyacinthus_transcripts_b2g-annotated_blast-nr-results.txt (check with Jill/Ariana this is correct)
+Will use the structural genome annotations done in the google drive for *A. hyacinthus* (López-Nandam et al., 2023; https://royalsocietypublishing.org/doi/10.1098/rspb.2022.1766). This paper used MAKER2 for genome annotation. I think the annotation file is called: Ahyacinthus_transcripts_b2g-annotated_blast-nr-results.txt - it is but it contains many missing GO terms
 
 NB:Many scientists use funannotate package in R (https://funannotate.readthedocs.io/en/latest/index.html) to run functional enrichment of genomes.
 funannotate - Script functionally annotates the results from funannotate predict.  It pulls annotation from PFAM, InterPro, EggNog, UniProtKB, MEROPS, CAZyme, and GO ontology.
@@ -103,14 +103,17 @@ Conduct functional enrichment using goseq and rrvgo. Compare against all genes d
 
 I need to use the genome annotations from google drive to compare against my geneset. Below is Ariana's script from https://github.com/AHuffmyer/EarlyLifeHistory_Energetics/blob/master/Mcap2020/Scripts/TagSeq/DESeq2_Mcap_V3.Rmd. I need to paste my relevant documents and data. Ariana clustered her data during this - do I need to do that too?
 
-```{r annotation files}
+```{r functional annotation files from Lopez Nandam}
 Ahya_annot <- read.delim("data/Ahyacinthus_transcripts_b2g-annotated_blast-nr-results.txt",  header=TRUE, na.strings = "---NA---")
 dim(Ahya_annot)
-#Need to remove RA at the end of all the SeqNames so it matches to gene in acr_eatenvscontrol_DEG
+#[1] 27110    15
+```
+
+```{r, Need to remove RA at the end of all the SeqNames so it matches to gene in acr_eatenvscontrol_DEG}
 Ahya_annot_seq_name <- Ahya_annot %>%
   mutate(SeqName = str_remove(SeqName, "-RA")) 
 ```
-This functional annotation has 27110 genes. 
+LopezNandam functional annotation has 27110 genes. 
 SeqNames now match the gene vairable in both files.
 ```{r}
 # look at variable names
@@ -201,4 +204,109 @@ Already has a lengths variable in Ahya_annot_seq_name_filtered.
 Ahya_annot_seq_name_filtered$length<-lengths$transcript_lengths[match(Ahya_annot_seq_name_filtered$SeqName, lengths$seqnames)]
 
 which(is.na(Ahya_annot_seq_name_filtered$length)) #all genes have lengths 
+```
+
+```{r, Lucys functional annotation}
+Ahya_annot_lucy <- read.delim("data/Acropora_hyacinthus.annotations.txt",  header=TRUE, na.strings = "---NA---")
+dim(Ahya_annot_lucy)
+```
+[1] 27110    26
+
+SeqNames now match the gene vairable in both files.
+```{r}
+# look at variable names
+names(Ahya_annot_lucy)
+#remove sample column name 
+probes = all_genes_acr$gene_id
+seq_name_lucy = Ahya_annot_lucy$GeneID
+
+probes_in_annot_lucy = probes %in% seq_name_lucy
+
+seqname_in_probes_df_lucy <- as.data.frame(seq_name_lucy %in% probes, row.names = Ahya_annot_lucy$GeneID)
+
+View(probes_in_annot_lucy) #match genes (SeqName)to genes in annotation file.
+
+# The following is the number of probes without annotation 
+sum(probes_in_annot_lucy == FALSE) #0
+sum(probes_in_annot_lucy == TRUE) #18258 = all genes found in annotation file - yayy!
+seqname_in_probes_lucy = seq_name_lucy %in% probes
+sum(seqname_in_probes_lucy == FALSE) #8852
+sum(seqname_in_probes_lucy == TRUE)#18258
+#view the genes that do not have a match in the annotation file
+seqname_in_probes_df_lucy <- as.data.frame(seq_name_lucy %in% probes, row.names = Ahya_annot_lucy$GeneID) 
+seqname_in_probes_df_lucy$RowNames <- rownames(seqname_in_probes_df_lucy)
+
+#Create new variable saying when genes are missing from the dataframe
+seqname_in_probes_df_lucy <- seqname_in_probes_df_lucy %>%
+  mutate(missing_genes =
+         case_when(
+           seqname_in_probes_df_lucy == "FALSE" ~ "YES"
+           )
+         )
+print(seqname_in_probes_df_lucy)
+
+#Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot_lucy) to only include our genes found in our A. hyacinthus RNASeq
+missing_gene_list_lucy <- seqname_in_probes_df_lucy %>%
+  filter(missing_genes == "YES")
+dim(missing_gene_list_lucy) #8852 as expected - great
+#Now create a filtered gene set taking away the missing_gene_list_lucy from the annotated gene list
+Ahya_annot_lucy_filtered <- Ahya_annot_lucy %>% 
+  filter(!(GeneID %in% missing_gene_list_lucy$RowNames))
+dim(Ahya_annot_lucy_filtered)
+```
+
+There are 8852 of our genes that were expressed that are not present in the annotation file.  
+
+Reduced annotation file to only contain genes detected in our dataset.  
+
+Now file only contains the 18258 genes after filtering. This is 18258 out of the 27110 genes in our dataset. File called `Ahya_annot_lucy-filtered`
+
+```{r}
+write.csv(Ahya_annot_lucy_filtered,file='D:/CoTS-RNAseq/data/Ahya_annot_lucy_filtered.csv') 
+```
+
+
+# TopGO 
+
+In topGO we need: 
+
+- Ontology: character string specifying the ontology of interest (BP, MF or CC).
+- allGenes: named vector of type numeric or factor. The names attribute contains the genes identifiers. The genes listed in this object define the gene universe.
+- nodeSize: an integer larger or equal to 1. This parameter is used to prune the GO hierarchy from the terms which have less than nodeSize annotated genes (after the true path rule is applied).
+- annotationFun: function which maps genes identifiers to GO terms. There are a couple of annotation function included in the package trying to address the user’s needs. The annotation functions take three arguments. One of those arguments is specifying where the mappings can be found, and needs to be provided by the user. annFUN.gene2GO this function is used when the annotations are provided as a gene-to-GOs mapping.
+
+Background/GO information (14,811 genes): 
+```{r}
+geneID2GO<-Ahya_annot_lucy_filtered 
+geneID2GO_df <- as.data.frame(geneID2GO)
+background<-geneID2GO_df%>%pull(GeneID)
+
+#remove genes with NA in go term and separate rows based on GO terms 
+geneID2GO_df<-geneID2GO_df%>%
+  filter(!(GO.Terms == ""))%>%
+  separate_rows(GO.Terms, sep = ";")
+#creates list with each GO term appended to the geneID
+geneID2GO_df <- split(as.character(geneID2GO_df$GO.Terms), geneID2GO_df$GeneID)
+```
+
+Annotation setting: annFUN.gene2GO 
+
+nodeSize = 5; this setting prunes GO terms that have <5 annotated genes associated with this GO term. "It is often the case that many GO terms which have few annotated genes are detected to be significantly enriched due to artifacts in the statistical test. These small sized GO terms are of less importance for the analysis and in many cases they can be omitted. By using the nodeSize argument the user can control the size of the GO terms used in the analysis. Once the genes are annotated to the each GO term and the true path rule is applied the nodes with less than nodeSize annotated genes are removed from the GO hierarchy. We found that values between 5 and 10 for the nodeSize parameter yield more stable results. The default value for the nodeSize parameter is 1, meaning that no pruning is performed." - TopGO documentation 
+
+Run TopGO
+
+```{r}
+GOdata <- new("topGOdata",
+              description = "acr_DEGs",
+              ontology = "BP",
+              allGenes = acr_eatenvscontrol_DEG_list,
+              nodeSize = 5,
+              gene2GO = geneID2GO, annot = annFUN.gene2GO) 
+
+GOdata
+numSigGenes(GOdata)
+sum(feasible(GOdata))
+
+#254 sig genes
+#8237 genes used in analysis as background
 ```
