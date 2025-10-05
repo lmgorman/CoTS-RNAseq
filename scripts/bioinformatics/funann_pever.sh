@@ -26,7 +26,7 @@ FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funann
 
 # Copy input data to scratch
 echo "[$(date)] Copying input data to scratch..."
-cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_clean.annot.pep.fa $SCRATCHDIR
+cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa $SCRATCHDIR
 
 # Copy interpro and eggnog files to scratch (optional but recommended for full scratch use)
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
@@ -36,7 +36,7 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapp
 echo "[$(date)] Starting funannotate..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --gff $SCRATCHDIR/fixed_with_phase.gff \
-  --fasta $SCRATCHDIR/Porites_evermanni_v1_clean.annot.pep.fa \
+  --fasta $SCRATCHDIR/Porites_evermanni_v1.fa \
   -s "Porites evermanni" \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
