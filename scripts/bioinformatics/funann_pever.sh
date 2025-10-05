@@ -46,8 +46,8 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --busco_db metazoa \
   --cpus 10
 
-  # Copy results back to work
+# Copy results back to work
 echo "[$(date)] Copying results back to /work..."
-cp -r $SCRATCHDIR/output_funn_pred_struct /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/funannotate
+rsync -av "$SCRATCHDIR/output/" "/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/funannotate/"
 
 echo "[$(date)] Annotation complete. Job finished successfully."
