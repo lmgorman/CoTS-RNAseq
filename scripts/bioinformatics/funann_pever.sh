@@ -37,7 +37,7 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapp
 echo "[$(date)] Starting funannotate..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --gff $SCRATCHDIR/fixed.gff \
-  --fasta $SCRATCHDIR/Porites_evermanni_v1.annot.pep.fa \
+  --fasta $SCRATCHDIR/Porites_evermanni_v1_clean.annot.pep.fa \
   -s "Porites evermanni" \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
