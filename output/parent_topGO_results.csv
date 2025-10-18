@@ -1,0 +1,19 @@
+"","GO.ID","Term","Annotated","Significant","Expected","Rank in classicFisher","classicFisher","weightFisher","bh_adjust","bh_adjust_weight","ParentTerm","N_in_Parent"
+"1","GO:0042554","superoxide anion generation",8,5,0.64,13,0.00015,0.00015,0.0391038461538461,0.50835,"superoxide anion generation",1
+"2","GO:0060070","canonical Wnt signaling pathway",49,11,3.95,25,0.00146,0.00069,0.184105135135135,1,"canonical Wnt signaling pathway",3
+"3","GO:0030574","collagen catabolic process",7,4,0.56,21,0.0012,0.0012,0.181237826086957,1,"collagen catabolic process",3
+"4","GO:0051642","centrosome localization",4,3,0.32,30,0.00196,0.00196,0.184105135135135,1,"centrosome localization",1
+"5","GO:0006952","defense response",35,9,2.82,24,0.00141,0.00452,0.184105135135135,1,"defense response",1
+"6","GO:0031623","receptor internalization",5,3,0.4,50,0.0046,0.0046,0.305674509803922,1,"receptor internalization",1
+"7","GO:0033674","positive regulation of kinase activity",60,12,4.83,41,0.00258,0.00489,0.208181428571429,1,"positive regulation of kinase activity",1
+"8","GO:0006094","gluconeogenesis",10,4,0.81,57,0.00591,0.00591,0.322951764705882,1,"gluconeogenesis",2
+"9","GO:0035567","non-canonical Wnt signaling pathway",10,4,0.81,58,0.00591,0.00591,0.322951764705882,1,"canonical Wnt signaling pathway",3
+"10","GO:0033993","response to lipid",10,5,0.81,18,6e-04,0.00643,0.112966666666667,1,"response to lipid",2
+"11","GO:0007269","neurotransmitter secretion",20,4,1.61,204,0.0718,0.00647,1,1,"canonical Wnt signaling pathway",3
+"12","GO:1902475","L-alpha-amino acid transmembrane transpo...",10,3,0.81,154,0.04068,0.00647,0.867072452830189,1,"L-alpha-amino acid transmembrane transport",1
+"13","GO:0019543","propionate catabolic process",2,2,0.16,60,0.00648,0.00648,0.322951764705882,1,"collagen catabolic process",3
+"14","GO:0046327","glycerol biosynthetic process from pyruv...",2,2,0.16,61,0.00648,0.00648,0.322951764705882,1,"gluconeogenesis",2
+"15","GO:0071333","cellular response to glucose stimulus",2,2,0.16,62,0.00648,0.00648,0.322951764705882,1,"response to lipid",2
+"16","GO:0009395","phospholipid catabolic process",23,6,1.85,70,0.00821,0.00858,0.373218987341772,1,"collagen catabolic process",3
+"17","GO:0060395","SMAD protein signal transduction",6,3,0.48,72,0.00865,0.00865,0.373218987341772,1,"SMAD protein signal transduction",1
+"18","GO:0030154","cell differentiation",259,27,20.86,250,0.09836,0.00994,1,1,"cell differentiation",1

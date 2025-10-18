@@ -76,6 +76,7 @@ library("GO.db")
 library("rrvgo")
 library("cowplot")
 library("ape")
+library("topGO")
 ```
 
 # Read in data files 
@@ -84,11 +85,17 @@ library("ape")
 ```{r Read in all genes file}
 #Need to work out which file this is from acropora_DEG script
 all_genes_acr<-read.csv("data/all_genes_acr.csv", col.names = c("gene_id","trim.321ra.gtf","trim.331ra.gtf","trim.336r.gtf","trim.370r.gtf","trim.380r.gtf","trim.410r.gtf","trim.414r.gtf","trim.419r.gtf","trim.468r.gtf","trim.512r.gtf","trim.549r.gtf","trim.568r.gtf","trim.571r.gtf","trim.581r.gtf","trim.586r.gtf"))
+transposed_all_genes_acr <- t(all_genes_acr)
+print(transposed_all_genes_acr)
+transposed_all_genes_acr <- as.data.frame(t(all_genes_acr))
+# Set proper column names using row names (which were originally column headers)
+colnames(transposed_all_genes_acr) <- transposed_all_genes_acr[1, ]  # First row as column names
+transposed_all_genes_acr <- transposed_all_genes_acr[-1, ] 
 ```
 
 2. Read in file of DEG's between eaten and control
 ```{r read in file of DEGs}
-acr_eatenvscontrol_DEG_list<-read.csv("CoTS-RNAseq/data/DEG_acr.csv")
+acr_eatenvscontrol_DEG_list<-read.csv("data/DEG_acr.csv")
 acr_eatenvscontrol_DEG_list$contrast<-factor(acr_eatenvscontrol_DEG_list$contrast, levels=c("eaten", "control"))
 ```
 
@@ -110,7 +117,7 @@ dim(Ahya_annot)
 ```
 
 ```{r, Need to remove RA at the end of all the SeqNames so it matches to gene in acr_eatenvscontrol_DEG}
-Ahya_annot_seq_name <- Ahya_annot %>%
+Ahya_annot <- Ahya_annot %>%
   mutate(SeqName = str_remove(SeqName, "-RA")) 
 ```
 LopezNandam functional annotation has 27110 genes. 
@@ -118,25 +125,22 @@ SeqNames now match the gene vairable in both files.
 ```{r}
 # look at variable names
 names(Ahya_annot)
-#remove sample column name 
-probes = all_genes_acr$gene_id
-seq_name = Ahya_annot_seq_name$SeqName
-
+probes = colnames(transposed_all_genes_acr)
+seq_name = Ahya_annot$SeqName
+#match genes in all_genes_acr to genes in annotation file (Ahya_annot)
 probes_in_annot = probes %in% seq_name
+seqname_in_probes_df <- data.frame(
+  InProbes = seq_name %in% probes,
+  row.names = seq_name
+)
 
-seqname_in_probes_df <- as.data.frame(seq_name %in% probes, row.names = Ahya_annot_seq_name$SeqName)
-
-View(probes_in_annot) #match genes (SeqName)to genes in annotation file.
+View(seqname_in_probes_df) #match genes (SeqName)to genes in annotation file.
 
 # The following is the number of probes without annotation 
 sum(probes_in_annot == FALSE) #0
 sum(probes_in_annot == TRUE) #18258 = all genes found in annotation file - yayy!
-seqname_in_probes = seq_name %in% probes
-sum(seqname_in_probes == FALSE) #8852
-sum(seqname_in_probes == TRUE)#18258
-#view the genes that do not have a match in the annotation file
-seqname_in_probes_df <- as.data.frame(seq_name %in% probes, row.names = Ahya_annot_seq_name$SeqName) 
-seqname_in_probes_df$RowNames <- rownames(seqname_in_probes_df)
+sum(seqname_in_probes_df == FALSE) #8852
+sum(seqname_in_probes_df == TRUE)#18258
 
 #Create new variable saying when genes are missing from the dataframe
 seqname_in_probes_df <- seqname_in_probes_df %>%
@@ -147,17 +151,15 @@ seqname_in_probes_df <- seqname_in_probes_df %>%
          )
 print(seqname_in_probes_df)
 
-#Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot_seq_name) to only include our genes found in our A. hyacinthus RNASeq
+#Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot) to only include our genes found in our A. hyacinthus RNASeq
 missing_gene_list <- seqname_in_probes_df %>%
   filter(missing_genes == "YES")
 dim(missing_gene_list) #8852 as expected - great
 #Now create a filtered gene set taking away the missing_gene_list from the annotated gene list
-Ahya_annot_seq_name_filtered <- Ahya_annot_seq_name %>% 
-  filter(!(SeqName %in% missing_gene_list$RowNames))
-dim(Ahya_annot_seq_name_filtered)
+Ahya_annot_seq_name_filtered <- Ahya_annot %>% 
+  filter(!(SeqName %in% rownames(missing_gene_list)))
+dim(Ahya_annot_seq_name_filtered) #18258 - as expected
 ```
-
-There are 8852 of our genes that were expressed that are not present in the annotation file.  
 
 Reduced annotation file to only contain genes detected in our dataset.  
 
@@ -217,24 +219,22 @@ SeqNames now match the gene vairable in both files.
 # look at variable names
 names(Ahya_annot_lucy)
 #remove sample column name 
-probes = all_genes_acr$gene_id
 seq_name_lucy = Ahya_annot_lucy$GeneID
 
 probes_in_annot_lucy = probes %in% seq_name_lucy
 
-seqname_in_probes_df_lucy <- as.data.frame(seq_name_lucy %in% probes, row.names = Ahya_annot_lucy$GeneID)
+seqname_in_probes_df_lucy <- data.frame(
+  InProbes = seq_name_lucy %in% probes,
+  row.names = seq_name_lucy
+)
 
-View(probes_in_annot_lucy) #match genes (SeqName)to genes in annotation file.
+View(seqname_in_probes_df_lucy)
 
 # The following is the number of probes without annotation 
 sum(probes_in_annot_lucy == FALSE) #0
 sum(probes_in_annot_lucy == TRUE) #18258 = all genes found in annotation file - yayy!
-seqname_in_probes_lucy = seq_name_lucy %in% probes
-sum(seqname_in_probes_lucy == FALSE) #8852
-sum(seqname_in_probes_lucy == TRUE)#18258
-#view the genes that do not have a match in the annotation file
-seqname_in_probes_df_lucy <- as.data.frame(seq_name_lucy %in% probes, row.names = Ahya_annot_lucy$GeneID) 
-seqname_in_probes_df_lucy$RowNames <- rownames(seqname_in_probes_df_lucy)
+sum(seqname_in_probes_df_lucy == FALSE) #8852
+sum(seqname_in_probes_df_lucy == TRUE)#18258
 
 #Create new variable saying when genes are missing from the dataframe
 seqname_in_probes_df_lucy <- seqname_in_probes_df_lucy %>%
@@ -245,24 +245,22 @@ seqname_in_probes_df_lucy <- seqname_in_probes_df_lucy %>%
          )
 print(seqname_in_probes_df_lucy)
 
-#Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot_lucy) to only include our genes found in our A. hyacinthus RNASeq
+########
+#Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot) to only include our genes found in our A. hyacinthus RNASeq
 missing_gene_list_lucy <- seqname_in_probes_df_lucy %>%
   filter(missing_genes == "YES")
 dim(missing_gene_list_lucy) #8852 as expected - great
-#Now create a filtered gene set taking away the missing_gene_list_lucy from the annotated gene list
-Ahya_annot_lucy_filtered <- Ahya_annot_lucy %>% 
-  filter(!(GeneID %in% missing_gene_list_lucy$RowNames))
-dim(Ahya_annot_lucy_filtered)
+#Now create a filtered gene set taking away the missing_gene_list from the annotated gene list
+Ahya_annot_seq_name_filtered_lucy <- Ahya_annot_lucy %>% 
+  filter(!(GeneID %in% rownames(missing_gene_list_lucy)))
+dim(Ahya_annot_seq_name_filtered_lucy)
 ```
-
-There are 8852 of our genes that were expressed that are not present in the annotation file.  
-
 Reduced annotation file to only contain genes detected in our dataset.  
 
-Now file only contains the 18258 genes after filtering. This is 18258 out of the 27110 genes in our dataset. File called `Ahya_annot_lucy-filtered`
+Now file only contains the 18258 genes after filtering. This is 18258 out of the 27110 genes in our dataset. File called `Ahya_annot_seq_name_filtered_lucy`
 
 ```{r}
-write.csv(Ahya_annot_lucy_filtered,file='D:/CoTS-RNAseq/data/Ahya_annot_lucy_filtered.csv') 
+write.csv(Ahya_annot_seq_name_filtered_lucy,file='D:/CoTS-RNAseq/data/Ahya_annot_lucy_filtered.csv') 
 ```
 
 
@@ -275,11 +273,11 @@ In topGO we need:
 - nodeSize: an integer larger or equal to 1. This parameter is used to prune the GO hierarchy from the terms which have less than nodeSize annotated genes (after the true path rule is applied).
 - annotationFun: function which maps genes identifiers to GO terms. There are a couple of annotation function included in the package trying to address the user’s needs. The annotation functions take three arguments. One of those arguments is specifying where the mappings can be found, and needs to be provided by the user. annFUN.gene2GO this function is used when the annotations are provided as a gene-to-GOs mapping.
 
-Background/GO information (14,811 genes): 
+Background/GO information: 
 ```{r}
-geneID2GO<-Ahya_annot_lucy_filtered 
+geneID2GO<-Ahya_annot_seq_name_filtered_lucy 
 geneID2GO_df <- as.data.frame(geneID2GO)
-background<-geneID2GO_df%>%pull(GeneID)
+background<-geneID2GO_df%>%pull("GeneID")
 
 #remove genes with NA in go term and separate rows based on GO terms 
 geneID2GO_df<-geneID2GO_df%>%
@@ -296,17 +294,146 @@ nodeSize = 5; this setting prunes GO terms that have <5 annotated genes associat
 Run TopGO
 
 ```{r}
+# 1. Make sure background is a character vector
+background <- as.character(background)
+# 2. Make sure acr_test_set is character too
+acr_test_set <- as.character(acr_test_set)
+# 3. Build geneList as a named factor
+geneList <- factor(background %in% acr_test_set, levels = c(FALSE, TRUE))
+names(geneList) <- background
+# 4. Check structure
+str(geneList)
+#Make sure the geneList is an integer NOT a logical
+geneList <- factor(as.integer(background %in% acr_test_set))
+names(geneList) <- background
+table(geneList) 
+#should look like:
+# geneList
+#    0     1 
+# 16853  1405 
+
+str(geneID2GO_df, max.level = 1)
+head(geneID2GO_df, 3)
+sum(names(geneList) %in% names(geneID2GO_df))
+
+# Extract GO IDs from the strings
+extractGO <- function(go_strings) {
+  # Extract patterns like "GO:0000001"
+  unique(unlist(regmatches(go_strings, gregexpr("GO:\\d{7}", go_strings))))
+}
+
+# Apply to your list
+gene2GO <- lapply(geneID2GO_df, extractGO)
+str(gene2GO, max.level = 1)
+
+
 GOdata <- new("topGOdata",
               description = "acr_DEGs",
               ontology = "BP",
-              allGenes = acr_eatenvscontrol_DEG_list,
-              nodeSize = 5,
-              gene2GO = geneID2GO, annot = annFUN.gene2GO) 
+              allGenes = geneList,
+              nodeSize = 2,
+              gene2GO = gene2GO, annot = annFUN.gene2GO) #Gene
 
 GOdata
-numSigGenes(GOdata)
-sum(feasible(GOdata))
+numSigGenes(GOdata) #652 sig genes
+sum(feasible(GOdata)) #8095 genes used in analysis as background
+```
 
-#254 sig genes
-#8237 genes used in analysis as background
+Run fisher test. 
+```{r}
+resultFisher <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+resultFisher
+hist(score(resultFisher), 50, xlab = "p-values")
+
+#82 terms with p<0.01
+
+resultWeight <- runTest(GOdata, algorithm = "weight01", statistic = "fisher")
+resultWeight
+hist(score(resultWeight), 50, xlab = "p-values")
+#20 terms with p<0.01
+```
+
+Which test should be used? 
+
+```{r}
+allRes <- GenTable(GOdata, classicFisher = resultFisher, weightFisher = resultWeight, orderBy = "weightFisher", ranksOf = "classicFisher", topNodes = length(score(resultFisher)))
+
+# Convert character columns to numeric
+allRes$classicFisher <- as.numeric(allRes$classicFisher)
+allRes$weightFisher <- as.numeric(allRes$weightFisher)
+
+#adjust p-values 
+allRes$bh_adjust <- p.adjust(allRes$classicFisher, method="BH") #add adjusted p-values
+
+#adjust p-values 
+allRes$bh_adjust_weight <- p.adjust(allRes$weightFisher, method="BH") #add adjusted p-values
+```
+
+```{r}
+showSigOfNodes(GOdata, score(resultFisher), firstSigNodes = 5, useInfo = 'def')
+dev.off()
+
+showSigOfNodes(GOdata, score(resultWeight), firstSigNodes = 5, useInfo = 'def')
+dev.off()
+```
+
+The subgraph induced by the top 5 GO terms identified by the classic algorithm for scoring GO terms for enrichment. Boxes indicate the 5 most significant terms. Box color represents the relative significance, ranging from dark red (most significant) to light yellow (least significant). Black arrows indicate is-a relationships and red arrows part-of relationships.
+
+Proceed using weighted fisher test results.  
+```{r}
+p05_res <- allRes %>% dplyr::filter(weightFisher < 0.01)
+  
+#Reduce/collapse GO term set with the rrvgo package 
+simMatrix <- calculateSimMatrix(p05_res$GO.ID,
+                                orgdb="org.Ce.eg.db", #c. elegans database
+                                ont="BP",
+                                method="Rel")
+```
+
+```{r}
+ #calculate similarity 
+scores <- setNames(-log(as.numeric(p05_res$weightFisher)), p05_res$GO.ID)
+reducedTerms <- reduceSimMatrix(simMatrix,
+                                scores,
+                                threshold=0.7,
+                                orgdb="org.Ce.eg.db")
+dim(reducedTerms)# 18 10
+```
+
+```{r}
+#keep only the goterms from the reduced list
+p05_res_reduced <- p05_res %>%
+  filter(GO.ID %in% reducedTerms$go)
+
+#add in parent terms to list of go terms 
+p05_res_reduced$ParentTerm <- reducedTerms$parentTerm[match(p05_res_reduced$GO.ID, reducedTerms$go)]
+
+length(unique(p05_res_reduced$ParentTerm))#12
+
+p05_res_reduced <- p05_res_reduced %>% group_by(ParentTerm) %>% mutate("N_in_Parent" = dplyr::n()) %>% ungroup()
+length(unique(p05_res_reduced$ParentTerm)) #12
+```
+
+```{r}
+write.csv(p05_res_reduced, "output/parent_topGO_results.csv")
+```
+
+```{r}
+parent_enrich_plot1 <- ggplot(p05_res_reduced, aes(x=weightFisher,y=reorder(Term,weightFisher)))+
+  facet_grid(ParentTerm ~ ., scales="free", labeller = label_wrap_gen(width = 10, multi_line = TRUE))+
+  geom_point(size=2, color="black")+
+  geom_segment(aes(x=0, xend=weightFisher, y=Term, yend=Term)) +
+  #geom_hline(yintercept = 0, linetype="solid", color = 'black', linewidth=0.5, show.legend = TRUE)+
+  #scale_y_continuous(limits=c(0,40))+
+   #scale_x_discrete(labels = label_wrap(30)) +
+  #scale_fill_gradientn(colours=c("white","#fddbc7","#f4a582","#d6604d","#b2182b"), na.value = "grey98",limits = c(0, 100)) +
+  #labs(title = "Enriched Biological Process Parent GO Terms, Brown Module", x="Parent Term", y="Number of Significant (p < 0.01) GO Terms in Module", colour="p-value") +
+  theme_classic() + 
+  theme(axis.text.y = element_text(size = 8), 
+              axis.title = element_text(size = 8), 
+              plot.title = element_text(hjust = 0.5, size = 8));parent_enrich_plot1
+
+ggsave("figures/acropora/parent_enrich_plot1.pdf", plot = parent_enrich_plot1, width = 8, height = 6, units = "in")
+dev.off()  # close and save
+
 ```
