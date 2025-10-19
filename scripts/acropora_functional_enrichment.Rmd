@@ -294,17 +294,17 @@ nodeSize = 5; this setting prunes GO terms that have <5 annotated genes associat
 Run TopGO
 
 ```{r}
+acr_test_set<-acr_eatenvscontrol_DEG_list%>%pull(gene_ID)
 # 1. Make sure background is a character vector
 background <- as.character(background)
 # 2. Make sure acr_test_set is character too
 acr_test_set <- as.character(acr_test_set)
 # 3. Build geneList as a named factor
 geneList <- factor(background %in% acr_test_set, levels = c(FALSE, TRUE))
-names(geneList) <- background
 # 4. Check structure
 str(geneList)
 #Make sure the geneList is an integer NOT a logical
-geneList <- factor(as.integer(background %in% acr_test_set))
+geneList <- as.integer(background %in% acr_test_set)
 names(geneList) <- background
 table(geneList) 
 #should look like:
@@ -331,7 +331,8 @@ GOdata <- new("topGOdata",
               description = "acr_DEGs",
               ontology = "BP",
               allGenes = geneList,
-              nodeSize = 2,
+              geneSelectionFun = function(x) x == 1,
+              nodeSize = 5,
               gene2GO = gene2GO, annot = annFUN.gene2GO) #Gene
 
 GOdata
@@ -351,9 +352,39 @@ resultWeight <- runTest(GOdata, algorithm = "weight01", statistic = "fisher")
 resultWeight
 hist(score(resultWeight), 50, xlab = "p-values")
 #20 terms with p<0.01
+
+# p < 0.05 for weighted fisher
+#Generate GO term table from resultWeight
+allGO <- GenTable(GOdata,
+                  weight01Fisher = resultWeight,
+                  orderBy = "weight01Fisher",
+                  topNodes = 1000)  # get many to filter later
+
+# Convert p-values to numeric
+allGO$weight01Fisher <- as.numeric(allGO$weight01Fisher)
+
+# Filter for p < 0.05
+signifGO <- subset(allGO, weight01Fisher < 0.05)
+
+# See how many significant terms
+nrow(signifGO) #40 GO terms
+head(signifGO)
+
+#p<0.05 for classic fisher
+classicGO <- GenTable(GOdata,
+                      classicFisher = resultFisher,
+                      orderBy = "classicFisher",
+                      topNodes = 1000)
+
+classicGO$classicFisher <- as.numeric(classicGO$classicFisher)
+signifClassic <- subset(classicGO, classicFisher < 0.05)
+
+nrow(signifClassic)#126 GO terms
+head(signifClassic)
 ```
 
 Which test should be used? 
+#Need to work this out from new p values, chat to Ariana
 
 ```{r}
 allRes <- GenTable(GOdata, classicFisher = resultFisher, weightFisher = resultWeight, orderBy = "weightFisher", ranksOf = "classicFisher", topNodes = length(score(resultFisher)))
@@ -381,7 +412,7 @@ The subgraph induced by the top 5 GO terms identified by the classic algorithm f
 
 Proceed using weighted fisher test results.  
 ```{r}
-p05_res <- allRes %>% dplyr::filter(weightFisher < 0.01)
+p05_res <- allRes %>% dplyr::filter(weightFisher < 0.05)
   
 #Reduce/collapse GO term set with the rrvgo package 
 simMatrix <- calculateSimMatrix(p05_res$GO.ID,
@@ -397,7 +428,7 @@ reducedTerms <- reduceSimMatrix(simMatrix,
                                 scores,
                                 threshold=0.7,
                                 orgdb="org.Ce.eg.db")
-dim(reducedTerms)# 18 10
+dim(reducedTerms)# 38 10
 ```
 
 ```{r}
@@ -411,7 +442,7 @@ p05_res_reduced$ParentTerm <- reducedTerms$parentTerm[match(p05_res_reduced$GO.I
 length(unique(p05_res_reduced$ParentTerm))#12
 
 p05_res_reduced <- p05_res_reduced %>% group_by(ParentTerm) %>% mutate("N_in_Parent" = dplyr::n()) %>% ungroup()
-length(unique(p05_res_reduced$ParentTerm)) #12
+length(unique(p05_res_reduced$ParentTerm)) #18
 ```
 
 ```{r}

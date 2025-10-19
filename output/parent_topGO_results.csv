@@ -1,19 +1,39 @@
 "","GO.ID","Term","Annotated","Significant","Expected","Rank in classicFisher","classicFisher","weightFisher","bh_adjust","bh_adjust_weight","ParentTerm","N_in_Parent"
-"1","GO:0042554","superoxide anion generation",8,5,0.64,13,0.00015,0.00015,0.0391038461538461,0.50835,"superoxide anion generation",1
-"2","GO:0060070","canonical Wnt signaling pathway",49,11,3.95,25,0.00146,0.00069,0.184105135135135,1,"canonical Wnt signaling pathway",3
-"3","GO:0030574","collagen catabolic process",7,4,0.56,21,0.0012,0.0012,0.181237826086957,1,"collagen catabolic process",3
-"4","GO:0051642","centrosome localization",4,3,0.32,30,0.00196,0.00196,0.184105135135135,1,"centrosome localization",1
-"5","GO:0006952","defense response",35,9,2.82,24,0.00141,0.00452,0.184105135135135,1,"defense response",1
-"6","GO:0031623","receptor internalization",5,3,0.4,50,0.0046,0.0046,0.305674509803922,1,"receptor internalization",1
-"7","GO:0033674","positive regulation of kinase activity",60,12,4.83,41,0.00258,0.00489,0.208181428571429,1,"positive regulation of kinase activity",1
-"8","GO:0006094","gluconeogenesis",10,4,0.81,57,0.00591,0.00591,0.322951764705882,1,"gluconeogenesis",2
-"9","GO:0035567","non-canonical Wnt signaling pathway",10,4,0.81,58,0.00591,0.00591,0.322951764705882,1,"canonical Wnt signaling pathway",3
-"10","GO:0033993","response to lipid",10,5,0.81,18,6e-04,0.00643,0.112966666666667,1,"response to lipid",2
-"11","GO:0007269","neurotransmitter secretion",20,4,1.61,204,0.0718,0.00647,1,1,"canonical Wnt signaling pathway",3
-"12","GO:1902475","L-alpha-amino acid transmembrane transpo...",10,3,0.81,154,0.04068,0.00647,0.867072452830189,1,"L-alpha-amino acid transmembrane transport",1
-"13","GO:0019543","propionate catabolic process",2,2,0.16,60,0.00648,0.00648,0.322951764705882,1,"collagen catabolic process",3
-"14","GO:0046327","glycerol biosynthetic process from pyruv...",2,2,0.16,61,0.00648,0.00648,0.322951764705882,1,"gluconeogenesis",2
-"15","GO:0071333","cellular response to glucose stimulus",2,2,0.16,62,0.00648,0.00648,0.322951764705882,1,"response to lipid",2
-"16","GO:0009395","phospholipid catabolic process",23,6,1.85,70,0.00821,0.00858,0.373218987341772,1,"collagen catabolic process",3
-"17","GO:0060395","SMAD protein signal transduction",6,3,0.48,72,0.00865,0.00865,0.373218987341772,1,"SMAD protein signal transduction",1
-"18","GO:0030154","cell differentiation",259,27,20.86,250,0.09836,0.00994,1,1,"cell differentiation",1
+"1","GO:0042554","superoxide anion generation",8,5,0.64,13,0.00015,0.00015,0.0245192307692308,0.31875,"superoxide anion generation",1
+"2","GO:0060070","canonical Wnt signaling pathway",49,11,3.95,25,0.00146,0.00069,0.1241,0.733125,"canonical Wnt signaling pathway",4
+"3","GO:0030574","collagen catabolic process",7,4,0.56,21,0.0012,0.0012,0.113641304347826,0.85,"collagen catabolic process",1
+"4","GO:0006979","response to oxidative stress",46,10,3.71,38,0.00305,0.00175,0.164298780487805,0.9296875,"response to oxidative stress",3
+"5","GO:0009416","response to light stimulus",8,4,0.64,31,0.00224,0.00224,0.14875,0.952,"response to light stimulus",1
+"6","GO:0006952","defense response",35,9,2.82,24,0.00141,0.00452,0.1241,0.982053571428571,"response to oxidative stress",3
+"7","GO:0031623","receptor internalization",5,3,0.4,43,0.0046,0.0046,0.222159090909091,0.982053571428571,"receptor internalization",1
+"8","GO:0033674","positive regulation of kinase activity",60,12,4.83,34,0.00258,0.00489,0.156642857142857,0.982053571428571,"positive regulation of kinase activity",2
+"9","GO:0006094","gluconeogenesis",10,4,0.81,50,0.00591,0.00591,0.241514423076923,0.982053571428571,"gluconeogenesis",4
+"10","GO:0035567","non-canonical Wnt signaling pathway",10,4,0.81,51,0.00591,0.00591,0.241514423076923,0.982053571428571,"canonical Wnt signaling pathway",4
+"11","GO:0033993","response to lipid",10,5,0.81,18,6e-04,0.00643,0.0708333333333333,0.982053571428571,"response to lipid",1
+"12","GO:0007269","neurotransmitter secretion",20,4,1.61,165,0.0718,0.00647,0.8975,0.982053571428571,"neurotransmitter secretion",2
+"13","GO:1902475","L-alpha-amino acid transmembrane transpo...",10,3,0.81,115,0.04068,0.00647,0.720375,0.982053571428571,"L-alpha-amino acid transmembrane transport",1
+"14","GO:0009395","phospholipid catabolic process",23,6,1.85,54,0.00821,0.00858,0.293452380952381,1,"phospholipid catabolic process",3
+"15","GO:0050667","homocysteine metabolic process",6,3,0.48,56,0.00865,0.00865,0.293452380952381,1,"gluconeogenesis",4
+"16","GO:0060395","SMAD protein signal transduction",6,3,0.48,57,0.00865,0.00865,0.293452380952381,1,"canonical Wnt signaling pathway",4
+"17","GO:0030154","cell differentiation",259,27,20.86,211,0.09836,0.00994,0.954778138528139,1,"cell differentiation",2
+"18","GO:0009605","response to external stimulus",105,16,8.46,64,0.00947,0.01392,0.31443359375,1,"response to oxidative stress",3
+"19","GO:0042593","glucose homeostasis",7,3,0.56,71,0.01423,0.01423,0.38578869047619,1,"glucose homeostasis",3
+"20","GO:0043328","protein transport to vacuole involved in...",7,3,0.56,72,0.01423,0.01423,0.38578869047619,1,"protein transport to vacuole involved in ubiquitin-dependent protein catabolic process via the multivesicular body sorting pathway",2
+"21","GO:0007266","Rho protein signal transduction",28,8,2.26,23,0.00123,0.01479,0.113641304347826,1,"Rho protein signal transduction",4
+"22","GO:0055082","intracellular chemical homeostasis",118,9,9.5,906,0.61785,0.01852,1,1,"glucose homeostasis",3
+"23","GO:0008202","steroid metabolic process",50,9,4.03,87,0.01701,0.02119,0.415474137931034,1,"phospholipid catabolic process",3
+"24","GO:0006636","unsaturated fatty acid biosynthetic proc...",8,3,0.64,90,0.02142,0.02142,0.471186224489796,1,"gluconeogenesis",4
+"25","GO:0051092","positive regulation of NF-kappaB transcr...",8,3,0.64,91,0.02142,0.02142,0.471186224489796,1,"positive regulation of kinase activity",2
+"26","GO:0006508","proteolysis",685,63,55.17,273,0.14158,0.02296,1,1,"protein transport to vacuole involved in ubiquitin-dependent protein catabolic process via the multivesicular body sorting pathway",2
+"27","GO:0007169","transmembrane receptor protein tyrosine ...",86,13,6.93,89,0.01947,0.02545,0.464873595505618,1,"canonical Wnt signaling pathway",4
+"28","GO:0008104","protein localization",373,22,30.04,1324,0.95693,0.0294,1,1,"neurotransmitter secretion",2
+"29","GO:0035023","regulation of Rho protein signal transdu...",9,3,0.72,102,0.03024,0.03024,0.63,1,"Rho protein signal transduction",4
+"30","GO:0030182","neuron differentiation",111,10,8.94,598,0.40418,0.03039,1,1,"cell differentiation",2
+"31","GO:0009966","regulation of signal transduction",249,38,20.06,11,8.5e-05,0.03138,0.0164204545454545,1,"Rho protein signal transduction",4
+"32","GO:0035556","intracellular signal transduction",406,56,32.7,8,3.9e-05,0.0337,0.010359375,1,"Rho protein signal transduction",4
+"33","GO:0006740","NADPH regeneration",10,3,0.81,116,0.04068,0.03478,0.720375,1,"NADPH regeneration",2
+"34","GO:0055074","calcium ion homeostasis",63,5,5.07,832,0.58097,0.03501,1,1,"glucose homeostasis",3
+"35","GO:0006090","pyruvate metabolic process",21,6,1.69,45,0.00507,0.04034,0.232393617021277,1,"gluconeogenesis",4
+"36","GO:0006120","mitochondrial electron transport, NADH t...",10,3,0.81,117,0.04068,0.04068,0.720375,1,"NADPH regeneration",2
+"37","GO:0006646","phosphatidylethanolamine biosynthetic pr...",10,3,0.81,118,0.04068,0.04068,0.720375,1,"phospholipid catabolic process",3
+"38","GO:0006807","nitrogen compound metabolic process",3957,268,318.71,1431,0.99999,0.04578,1,1,"nitrogen compound metabolic process",1
