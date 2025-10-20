@@ -260,7 +260,7 @@ Reduced annotation file to only contain genes detected in our dataset.
 Now file only contains the 18258 genes after filtering. This is 18258 out of the 27110 genes in our dataset. File called `Ahya_annot_seq_name_filtered_lucy`
 
 ```{r}
-write.csv(Ahya_annot_seq_name_filtered_lucy,file='D:/CoTS-RNAseq/data/Ahya_annot_lucy_filtered.csv') 
+write.csv(Ahya_annot_seq_name_filtered_lucy,file='data/Ahya_annot_lucy_filtered.csv') 
 ```
 
 
@@ -384,6 +384,7 @@ head(signifClassic)
 ```
 
 Which test should be used? 
+
 #Need to work this out from new p values, chat to Ariana
 
 ```{r}
@@ -468,3 +469,5 @@ ggsave("figures/acropora/parent_enrich_plot1.pdf", plot = parent_enrich_plot1, w
 dev.off()  # close and save
 
 ```
+
+
