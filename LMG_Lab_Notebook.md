@@ -230,5 +230,10 @@ STAR requires exon features in the GTF file to build the splice junction databas
 
 Chat to Ariana tomorrow about editing the file to change this
 
-15.08.25
-squeue -j 41077715
+# 22.10.25
+Sent myself the P. evermanni genbank file combined with genome file made in Geneious Prime as a `.gff` file
+
+Upload this to unity and retry the funannotate command on Unity for this genome
+
+The new A. hyacinthus genome doesn't have any annotated mRNA or exon features and you need transcriptomics data to do this - so I cannot index it using STAR
+Talk to Hollie and see what to do about this? Can i use older transcriptomic data to do this? Or does it need to be the same species and samples?
