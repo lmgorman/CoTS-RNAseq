@@ -120,93 +120,7 @@ dim(Ahya_annot)
 Ahya_annot <- Ahya_annot %>%
   mutate(SeqName = str_remove(SeqName, "-RA")) 
 ```
-LopezNandam functional annotation has 27110 genes. 
-SeqNames now match the gene vairable in both files.
-```{r}
-# look at variable names
-names(Ahya_annot)
-probes = colnames(transposed_all_genes_acr)
-seq_name = Ahya_annot$SeqName
-#match genes in all_genes_acr to genes in annotation file (Ahya_annot)
-probes_in_annot = probes %in% seq_name
-seqname_in_probes_df <- data.frame(
-  InProbes = seq_name %in% probes,
-  row.names = seq_name
-)
 
-View(seqname_in_probes_df) #match genes (SeqName)to genes in annotation file.
-
-# The following is the number of probes without annotation 
-sum(probes_in_annot == FALSE) #0
-sum(probes_in_annot == TRUE) #18258 = all genes found in annotation file - yayy!
-sum(seqname_in_probes_df == FALSE) #8852
-sum(seqname_in_probes_df == TRUE)#18258
-
-#Create new variable saying when genes are missing from the dataframe
-seqname_in_probes_df <- seqname_in_probes_df %>%
-  mutate(missing_genes =
-         case_when(
-           seqname_in_probes_df == "FALSE" ~ "YES"
-           )
-         )
-print(seqname_in_probes_df)
-
-#Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot) to only include our genes found in our A. hyacinthus RNASeq
-missing_gene_list <- seqname_in_probes_df %>%
-  filter(missing_genes == "YES")
-dim(missing_gene_list) #8852 as expected - great
-#Now create a filtered gene set taking away the missing_gene_list from the annotated gene list
-Ahya_annot_seq_name_filtered <- Ahya_annot %>% 
-  filter(!(SeqName %in% rownames(missing_gene_list)))
-dim(Ahya_annot_seq_name_filtered) #18258 - as expected
-```
-
-Reduced annotation file to only contain genes detected in our dataset.  
-
-Now file only contains the 18258 genes after filtering. This is 18258 out of the 27110 genes in our dataset. 
-
-Add in length to the annotation file.   
-
-Get gene length information.  
-```{r}
-#import file
-#Not sure which file to import into R? there are .gff and .gff3 files both in the /data directory.
-gff <- rtracklayer::import("data/Ahyacinthus.coding.gff3") #if this doesn't work, restart R and try again 
-
-
-transcripts <- subset(gff, type == "mRNA") #keep only transcripts 
-
-
-transcripts_gr <- makeGRangesFromDataFrame(transcripts, keep.extra.columns=TRUE) #extract length information
-
-transcript_lengths <- width(transcripts_gr) #isolate length of each gene
-
-seqnames<-transcripts_gr$ID #extract list of gene id 
-
-lengths<-cbind(seqnames, transcript_lengths)
-
-lengths<-as.data.frame(lengths) #convert to data frame
-#remove unwanted character strings from the length dataframe
-lengths <- lengths %>%
-  mutate(seqnames = str_remove(seqnames, "-RA"))
-#make seqnames lower case to make same as other data frames
-lengths <- lengths %>%
-  mutate(seqnames = tolower(seqnames))
-
-#try with read gff function for length - looks same as code above
-#gff_2 <- read.gff("data/Ahyacinthus.coding.gff3", na.strings = c(".", "?"), GFF3 = TRUE)
-#transcripts_2 <- subset(gff_2, type == "mRNA")
-#transcripts_2 <- transcripts_2 %>%
-  #mutate(length = end - start) %>%
-  #View()
-```
-
-Already has a lengths variable in Ahya_annot_seq_name_filtered. 
-```{r}
-Ahya_annot_seq_name_filtered$length<-lengths$transcript_lengths[match(Ahya_annot_seq_name_filtered$SeqName, lengths$seqnames)]
-
-which(is.na(Ahya_annot_seq_name_filtered$length)) #all genes have lengths 
-```
 
 ```{r, Lucys functional annotation}
 Ahya_annot_lucy <- read.delim("data/Acropora_hyacinthus.annotations.txt",  header=TRUE, na.strings = "---NA---")
@@ -218,38 +132,23 @@ SeqNames now match the gene vairable in both files.
 ```{r}
 # look at variable names
 names(Ahya_annot_lucy)
-#remove sample column name 
-seq_name_lucy = Ahya_annot_lucy$GeneID
 
-probes_in_annot_lucy = probes %in% seq_name_lucy
+probes <- all_genes_acr$gene_id
+filtered_genes <- Ahya_annot_lucy[Ahya_annot_lucy$GeneID %in% probes,]
 
-seqname_in_probes_df_lucy <- data.frame(
-  InProbes = seq_name_lucy %in% probes,
-  row.names = seq_name_lucy
-)
-
-View(seqname_in_probes_df_lucy)
-
-# The following is the number of probes without annotation 
-sum(probes_in_annot_lucy == FALSE) #0
-sum(probes_in_annot_lucy == TRUE) #18258 = all genes found in annotation file - yayy!
-sum(seqname_in_probes_df_lucy == FALSE) #8852
-sum(seqname_in_probes_df_lucy == TRUE)#18258
 
 #Create new variable saying when genes are missing from the dataframe
-seqname_in_probes_df_lucy <- seqname_in_probes_df_lucy %>%
-  mutate(missing_genes =
-         case_when(
-           seqname_in_probes_df_lucy == "FALSE" ~ "YES"
-           )
-         )
-print(seqname_in_probes_df_lucy)
+#seqname_in_probes_df_lucy <- seqname_in_probes_df_lucy %>%
+#  mutate(missing_genes =
+#         case_when(
+#           seqname_in_probes_df_lucy == "FALSE" ~ "YES"
+#           )
+#         )
+#print(seqname_in_probes_df_lucy)
 
 ########
 #Now use this column and row names to filter the larger data frame of gene annotations (Ahya_annot) to only include our genes found in our A. hyacinthus RNASeq
-missing_gene_list_lucy <- seqname_in_probes_df_lucy %>%
-  filter(missing_genes == "YES")
-dim(missing_gene_list_lucy) #8852 as expected - great
+
 #Now create a filtered gene set taking away the missing_gene_list from the annotated gene list
 Ahya_annot_seq_name_filtered_lucy <- Ahya_annot_lucy %>% 
   filter(!(GeneID %in% rownames(missing_gene_list_lucy)))
@@ -275,7 +174,8 @@ In topGO we need:
 
 Background/GO information: 
 ```{r}
-geneID2GO<-Ahya_annot_seq_name_filtered_lucy 
+geneID2GO<-filtered_genes%>%dplyr::select(GeneID, GO.Terms)
+#geneID2GO<-Ahya_annot_seq_name_filtered_lucy 
 geneID2GO_df <- as.data.frame(geneID2GO)
 background<-geneID2GO_df%>%pull("GeneID")
 
@@ -337,7 +237,7 @@ GOdata <- new("topGOdata",
 
 GOdata
 numSigGenes(GOdata) #652 sig genes
-sum(feasible(GOdata)) #8095 genes used in analysis as background
+sum(feasible(GOdata)) #8095
 ```
 
 Run fisher test. 
@@ -440,7 +340,7 @@ p05_res_reduced <- p05_res %>%
 #add in parent terms to list of go terms 
 p05_res_reduced$ParentTerm <- reducedTerms$parentTerm[match(p05_res_reduced$GO.ID, reducedTerms$go)]
 
-length(unique(p05_res_reduced$ParentTerm))#12
+length(unique(p05_res_reduced$ParentTerm))#18
 
 p05_res_reduced <- p05_res_reduced %>% group_by(ParentTerm) %>% mutate("N_in_Parent" = dplyr::n()) %>% ungroup()
 length(unique(p05_res_reduced$ParentTerm)) #18
@@ -465,9 +365,42 @@ parent_enrich_plot1 <- ggplot(p05_res_reduced, aes(x=weightFisher,y=reorder(Term
               axis.title = element_text(size = 8), 
               plot.title = element_text(hjust = 0.5, size = 8));parent_enrich_plot1
 
-ggsave("figures/acropora/parent_enrich_plot1.pdf", plot = parent_enrich_plot1, width = 8, height = 6, units = "in")
+ggsave("figures/acropora/parent_enrich_plot1.pdf", plot = parent_enrich_plot1, width = 8, height = 15, units = "in")
 dev.off()  # close and save
 
 ```
 
+```{r}
+p05_res_reduced$GeneRatio <- p05_res_reduced$Significant / p05_res_reduced$Annotated
+parent_enrich_plot3 <- ggplot(p05_res_reduced,
+       aes(x = GeneRatio,
+           y = reorder(Term, GeneRatio),
+           color = -log10(weightFisher))) +
+  geom_point(size=1) +
+  geom_segment(aes(x=0, xend=GeneRatio, y=Term, yend=Term), color="grey70") +
+  scale_color_gradient(low="lightblue", high="darkblue", name="-log10(weightFisher)") +
+  theme_classic(base_size=10) +
+  labs(x="Gene Ratio", y="GO Term") +
+  theme(axis.text.y = element_text(size=8),
+        axis.title = element_text(size=9),
+        plot.title = element_text(hjust=0.5, size=10));parent_enrich_plot3
+ggsave(parent_enrich_plot3, filename="figures/acropora/parent_enrichment_individual_terms.png", width=10, height=11)
 
+#summarize by parent term
+parent_summary <- p05_res_reduced %>%
+  group_by(ParentTerm) %>%
+  summarise(
+    maxLogP = max(-log10(weightFisher)),
+    meanGeneRatio = mean(Significant/Annotated),
+    nTerms = length(maxLogP)
+  ) %>%
+  arrange(desc(maxLogP))
+
+parent_enrich_plot4<-ggplot(parent_summary, aes(x = meanGeneRatio, y = reorder(ParentTerm, meanGeneRatio), color = maxLogP, size = nTerms)) +
+  geom_point(size=2) +
+  scale_color_gradient(low = "lightblue", high = "darkblue", name="Max -log10(weightFisher)") +
+  scale_size_continuous(name="Number of Terms") +
+  theme_classic(base_size=10) +
+  labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4
+ggsave(parent_enrich_plot4, filename="figures/acropora/parent_enrichment_parent_terms.png", width=10, height=7)
+```
