@@ -258,4 +258,5 @@ Submitted job - squeue -j 48107324
 Worked woo!
 
 Now running funannotate on P. evermanni genome:
+script: [funnann_pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/9ecbe3c1fee78f156e807449cc1203366653a6b6/scripts/bioinformatics/funann_pever.sh)
 squeue -j 48107358
