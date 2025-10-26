@@ -244,7 +244,7 @@ Downloaded the gff file from Geneious of Porites evermanni gff
 
 
 I FileZilla transferred it to:
-/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/
+/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/
 
 Now will do this and retry funannotate script - funann_pever.sh
 
@@ -253,4 +253,4 @@ file called: Porites_evermanni_v1_CORRECT.gff
 
 
 Submitted job 
-squeue -j 48105686
+squeue -j 48105712
