@@ -255,3 +255,7 @@ Still not great so using agat in bioconda
 script = agat_fix_Pever_gff.sh
 
 Submitted job - squeue -j 48107324
+Worked woo!
+
+Now running funannotate on P. evermanni genome:
+squeue -j 48107358
