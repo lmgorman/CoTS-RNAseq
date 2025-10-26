@@ -58,4 +58,4 @@ echo "[$(date)] Finished AGAT run. Output in $OUTPUT_DIR"
 # -------------------------
 # Optional: move results back to permanent storage
 # -------------------------
-# cp -r "$OUTPUT_DIR" /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/
+# cp /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/AGAT_fixed_output/Porites_evermanni_v1_FIXED.gff /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/
