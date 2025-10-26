@@ -236,4 +236,17 @@ Sent myself the P. evermanni genbank file combined with genome file made in Gene
 Upload this to unity and retry the funannotate command on Unity for this genome
 
 The new A. hyacinthus genome doesn't have any annotated mRNA or exon features and you need transcriptomics data to do this - so I cannot index it using STAR
-Talk to Hollie and see what to do about this? Can i use older transcriptomic data to do this? Or does it need to be the same species and samples?
+
+ Ariana said I can try this without structural annotations and just compare % mapped reads to my RNA data 
+
+# 26.10.25
+Downloaded the gff file from Geneious of Porites evermanni gff
+
+
+I FileZilla transferred it to:
+/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/
+
+Now will do this and retry funannotate script - funann_pever.sh
+
+
+file called: Porites_evermanni_v1_CORRECT.gff
