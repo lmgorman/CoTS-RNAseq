@@ -250,3 +250,7 @@ Now will do this and retry funannotate script - funann_pever.sh
 
 
 file called: Porites_evermanni_v1_CORRECT.gff
+
+
+Submitted job 
+squeue -j 48105686
