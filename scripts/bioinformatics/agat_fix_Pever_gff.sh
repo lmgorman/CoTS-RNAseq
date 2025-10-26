@@ -24,9 +24,15 @@ module load uri/main
 module load conda/latest
 
 
-# Ensure conda functions are available
+# Load conda functions
 source $(conda info --base)/etc/profile.d/conda.sh
+
+# Activate environment
 conda activate /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/conda-envs/agat-env
+
+# Ensure AGAT scripts are in PATH
+export PATH=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/conda-envs/agat-env/bin:$PATH
+
 
 
 # -------------------------
@@ -43,10 +49,9 @@ ls $SCRATCHDIR
 OUTPUT_DIR="$SCRATCHDIR/AGAT_fixed_output"
 mkdir -p "$OUTPUT_DIR"
 
-agat_convert_sp_gff2gff.pl \
+agat_convert_sp_gxf2gxf.pl \
   --gff Porites_evermanni_v1_CORRECT.gff \
   -o "$OUTPUT_DIR/Porites_evermanni_v1_FIXED.gff" \
-  --log "$OUTPUT_DIR/agat_fix.log"
 
 echo "[$(date)] Finished AGAT run. Output in $OUTPUT_DIR"
 
