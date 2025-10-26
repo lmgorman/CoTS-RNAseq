@@ -251,6 +251,6 @@ Now will do this and retry funannotate script - funann_pever.sh
 
 file called: Porites_evermanni_v1_CORRECT.gff
 
-
+Still not great so using agat in bioconda
 Submitted job 
-squeue -j 48105712
+squeue -j 48107324
