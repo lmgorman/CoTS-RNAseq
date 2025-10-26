@@ -252,7 +252,7 @@ Now will do this and retry funannotate script - funann_pever.sh
 file called: Porites_evermanni_v1_CORRECT.gff
 
 Still not great so using agat in bioconda
-script = agat_fix_Pever_gff.sh
+script = [agat_fix_Pever_gff.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/73908b0ecb13bf3d030bda7ca31a761eefa2d716/scripts/bioinformatics/agat_fix_Pever_gff.sh)
 
 Submitted job - squeue -j 48107324
 Worked woo!
