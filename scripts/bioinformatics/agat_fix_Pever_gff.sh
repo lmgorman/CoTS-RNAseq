@@ -23,25 +23,19 @@ module purge
 module load uri/main
 module load conda/latest
 
-# -------------------------
-# Copy input files to scratch
-# -------------------------
-cp /work/pi_hputnam_uri_edu/refs/Porites_evermani/Porites_evermanni_v1_CORRECT.gff $SCRATCHDIR
-echo "[$(date)] Input files copied to scratch directory"
-echo "[$(date)] Files in scratch directory:"
-ls $SCRATCHDIR
-
-# -------------------------
-# Set and activate conda environment
-# -------------------------
-CONDA_ENV_PATH="$SCRATCHDIR/conda-envs/agat-env"
 
 # Ensure conda functions are available
 source $(conda info --base)/etc/profile.d/conda.sh
+conda activate /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/conda-envs/agat-env
 
-# Activate your environment
-conda activate "$CONDA_ENV_PATH"
-echo "[$(date)] Activated conda environment at $CONDA_ENV_PATH"
+
+# -------------------------
+# Copy input files to scratch
+# -------------------------
+cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/Porites_evermanni_v1_CORRECT.gff $SCRATCHDIR
+echo "[$(date)] Input files copied to scratch directory"
+echo "[$(date)] Files in scratch directory:"
+ls $SCRATCHDIR
 
 # -------------------------
 # Run AGAT
@@ -59,4 +53,4 @@ echo "[$(date)] Finished AGAT run. Output in $OUTPUT_DIR"
 # -------------------------
 # Optional: move results back to permanent storage
 # -------------------------
-# cp -r "$OUTPUT_DIR" /work/pi_hputnam_uri_edu/projects/Porites_evermani/
+# cp -r "$OUTPUT_DIR" /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/
