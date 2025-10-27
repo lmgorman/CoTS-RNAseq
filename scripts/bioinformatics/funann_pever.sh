@@ -43,12 +43,17 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --busco_db metazoa \
   --cpus 10
 
-#  FIX: Patch LOCUS lines in .gbk so Biopython can parse it
+# FIX: Patch LOCUS lines in .gbk so Biopython can parse it
 echo "[$(date)] Patching LOCUS lines in GenBank file..."
 sed -i 's/ bp   DNA/ 1000 bp   DNA/' $SCRATCHDIR/output/*.gbk
 
 echo "[$(date)] Shortening scaffold headers to <=16 characters..."
 sed -i -E 's/(LOCUS       .{16}).*/\1/' $SCRATCHDIR/output/*.gbk
+
+# NEW: shorten headers in FASTA too
+echo "[$(date)] Shortening FASTA headers to <=16 characters..."
+awk '/^>/ {printf(">scaf%07d\n", ++i); next} {print}' $SCRATCHDIR/output/*.fa > $SCRATCHDIR/output/short_headers.fa
+mv $SCRATCHDIR/output/short_headers.fa $SCRATCHDIR/output/$(basename $(ls $SCRATCHDIR/output/*.fa))
 
 # Re-run only to regenerate Basename.annotations.txt (cached data, runs fast)
 echo "[$(date)] Re-running funannotate annotate to regenerate annotations.txt..."
