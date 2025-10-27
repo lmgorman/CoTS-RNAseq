@@ -32,7 +32,7 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapp
 # Run Funannotate annotate
 echo "[$(date)] Starting Funannotate annotation..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
-  --gff $SCRATCHDIR/Porites_evermanni_v1_FIXED.short.gff \
+  --gff $SCRATCHDIR/Porites_evermanni_v1.short.fixphase.gff \
   --fasta $SCRATCHDIR/Porites_evermanni_v1.short.fa \
   -s "Porites evermanni" \
   -o $SCRATCHDIR/output \
