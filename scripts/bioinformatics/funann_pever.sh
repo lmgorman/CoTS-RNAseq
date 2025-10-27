@@ -28,8 +28,6 @@ FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funann
 echo "[$(date)] Copying input data to scratch..."
 cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa $SCRATCHDIR
 cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/Porites_evermanni_v1_FIXED.gff $SCRATCHDIR
-
-# Copy interpro and eggnog files to scratch (optional but recommended for full scratch use)
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
 
@@ -42,8 +40,18 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
   --eggnog $SCRATCHDIR/eggnog.annotations \
-  --force \
   --busco_db metazoa \
+  --cpus 10
+
+#  FIX: Patch LOCUS lines in .gbk so Biopython can parse it
+echo "[$(date)] Patching LOCUS lines in GenBank file..."
+sed -i 's/ bp   DNA/ 1000 bp   DNA/' $SCRATCHDIR/output/*.gbk
+
+# Re-run only to regenerate Basename.annotations.txt (cached data, runs fast)
+echo "[$(date)] Re-running funannotate annotate to regenerate annotations.txt..."
+apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
+  --input $SCRATCHDIR/output \
+  --force \
   --cpus 10
 
 # Copy results back to work
