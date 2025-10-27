@@ -263,3 +263,9 @@ squeue -j 48107358
 
 Locus of genbank file crashed funannotate
 running new job squeue -j 48153862
+
+
+Running
+awk 'BEGIN{OFS="\t"} $3=="CDS" && $8=="."{$8=0}1' Porites_evermanni_v1_FIXED.short.gff > Porites_evermanni_v1.short.fixphase.gff 
+
+to remove "." in CDS phase
