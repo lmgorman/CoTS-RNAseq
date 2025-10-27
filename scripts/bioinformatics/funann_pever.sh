@@ -47,6 +47,9 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
 echo "[$(date)] Patching LOCUS lines in GenBank file..."
 sed -i 's/ bp   DNA/ 1000 bp   DNA/' $SCRATCHDIR/output/*.gbk
 
+echo "[$(date)] Shortening scaffold headers to <=16 characters..."
+sed -i -E 's/(LOCUS       .{16}).*/\1/' $SCRATCHDIR/output/*.gbk
+
 # Re-run only to regenerate Basename.annotations.txt (cached data, runs fast)
 echo "[$(date)] Re-running funannotate annotate to regenerate annotations.txt..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
