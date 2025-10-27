@@ -262,4 +262,4 @@ script: [funnann_pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/9ecbe3c1
 squeue -j 48107358
 
 Locus of genbank file crashed funannotate
-running new job squeue -j 48151253
+running new job squeue -j 48151321
