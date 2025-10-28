@@ -15,7 +15,8 @@ set -e  # Exit immediately if any command fails
 SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
 
 # Clean scratch completely and create it
-mkdir -p $SCRATCHDIR/output
+mkdir -p $SCRATCHDIR
+rm -rf $SCRATCHDIR/output
 cd $SCRATCHDIR
 echo "[$(date)] Job started in $SCRATCHDIR"
 
@@ -34,15 +35,10 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/Porites_evermanni_v1
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
 
-apptainer run "$FUNANNOTATE_SIF" bash -c "funannotate util gff2gbk \
-  -g $SCRATCHDIR/Porites_evermanni_v1_FIXED.gff \
-  -f $SCRATCHDIR/Porites_evermanni_v1.fa \
-  -o $SCRATCHDIR/Porites_evermanni_v1.gbk \
-  -s 'Porites evermanni'"
-
 echo "[$(date)] Starting Funannotate annotation..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
-  --genbank $SCRATCHDIR/Porites_evermanni_v1.gbk \
+  --gff $SCRATCHDIR/Porites_evermanni_v1_FIXED.gff \
+  --fasta $SCRATCHDIR/Porites_evermanni_v1.fa \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
   --eggnog $SCRATCHDIR/eggnog.annotations \
