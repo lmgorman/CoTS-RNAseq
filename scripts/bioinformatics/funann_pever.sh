@@ -15,7 +15,6 @@ set -e  # Exit immediately if any command fails
 SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
 
 # Clean scratch completely and create it
-rm -rf $SCRATCHDIR
 mkdir -p $SCRATCHDIR/output
 cd $SCRATCHDIR
 echo "[$(date)] Job started in $SCRATCHDIR"
