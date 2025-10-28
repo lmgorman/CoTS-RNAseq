@@ -271,3 +271,10 @@ dos2unix yourscript.sh
 chmod +x yourscript.sh
 
 squeue -j 48227970
+
+
+
+
+#Downloaded busco metazoan database
+apptainer run "/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif" funannotate setup 
+-b metazoa -d /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch-lucyscratch/funannotate_databases
