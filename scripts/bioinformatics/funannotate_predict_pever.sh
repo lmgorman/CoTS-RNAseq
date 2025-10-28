@@ -34,8 +34,8 @@ echo "[$(date)] Loaded modules: $(module list)"
 
 # Turn genome into softmasked repeat genome
 apptainer run "$FUNANNOTATE_SIF" funannotate mask \
-             -i /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.chrsV1.fasta \
-             -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/Ahya_ann/Ahya_funann/Ahyacinthus_sm.chrsV1.fasta 
+             -i /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa \
+             -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_sm.fa
              
 # Download BUSCO database if it does not exist
 
@@ -52,7 +52,7 @@ FUNANNOTATE_DB=/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/database
 
 # Copy genome and optional RNA evidence to scratch
 echo "[$(date)] Copying input data to scratch..."
-cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa $SCRATCHDIR
+cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_sm.fa $SCRATCHDIR
 
 # Create output directory
 OUTDIR=$SCRATCHDIR/predict_output
@@ -62,7 +62,7 @@ mkdir -p $OUTDIR
 # Run Funannotate predict
 echo "[$(date)] Starting Funannotate predict..."
 apptainer run "$FUNANNOTATE_SIF" funannotate predict \
-  -i $SCRATCHDIR/Porites_evermanni_v1.fa \
+  -i $SCRATCHDIR/Porites_evermanni_v1_sm.fa \
   -o $OUTDIR \
   -s "Porites evermanni" \
   --busco_db metazoa \
