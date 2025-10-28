@@ -272,6 +272,5 @@ to remove "." in CDS phase
 squeue -j 48201829
 
 
-Running rename script
-rename_ids.py
-squeue -j 48211786
+
+squeue -j 48219575
