@@ -45,7 +45,8 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --busco_db metazoa \
   --header_length 50 \
   --force \
-  --cpus 10
+  --cpus 10 \
+  --no-ncbi-check
 
 # Copy results back to work
 echo "[$(date)] Copying results back to /work..."
