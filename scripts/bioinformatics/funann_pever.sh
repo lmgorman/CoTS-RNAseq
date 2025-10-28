@@ -36,6 +36,7 @@ echo "[$(date)] Starting Funannotate annotation..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --gff $SCRATCHDIR/Porites_evermanni_v1_FIXED.gff \
   --fasta $SCRATCHDIR/Porites_evermanni_v1.fa \
+  -s "Porites evermanni" \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
   --eggnog $SCRATCHDIR/eggnog.annotations \
