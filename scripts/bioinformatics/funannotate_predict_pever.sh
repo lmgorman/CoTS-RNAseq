@@ -32,13 +32,17 @@ echo "[$(date)] Using database path: $FUNANNOTATE_DB"
 #----------------------------------------------------------
 # 2. Mask repeats in genome
 #----------------------------------------------------------
+# Copy genome to scratch first
 GENOME_ORIG="/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa"
+cp "$GENOME_ORIG" "$SCRATCHDIR/"
+GENOME_IN="$SCRATCHDIR/Porites_evermanni_v1.fa"
 GENOME_MASKED="$SCRATCHDIR/Porites_evermanni_v1_sm.fa"
 
 echo "[$(date)] Running funannotate mask..."
 apptainer run "$FUNANNOTATE_SIF" funannotate mask \
-  -i "$GENOME_ORIG" \
-  -o "$GENOME_MASKED"
+  -i "$GENOME_IN" \
+  -o "$GENOME_MASKED" \
+  --cpus 16
 
 #----------------------------------------------------------
 # 3. Ensure BUSCO DB exists
