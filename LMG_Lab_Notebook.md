@@ -270,3 +270,8 @@ awk 'BEGIN{OFS="\t"} $3=="CDS" && $8=="."{$8=0}1' Porites_evermanni_v1_FIXED.sho
 
 to remove "." in CDS phase
 squeue -j 48201829
+
+
+Running rename script
+rename_ids.py
+squeue -j 48209238
