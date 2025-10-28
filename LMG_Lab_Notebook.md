@@ -280,5 +280,5 @@ Submitted batch job squeue -j 48235692
 
 WORKED woohoo
 
-Now re running funannotate script with --no-ncbi check
- squeue -j 48240851
+Now re running funannotate script with --no-ncbi check and --no-submission
+ squeue -j  48246560
