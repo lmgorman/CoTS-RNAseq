@@ -44,18 +44,6 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --force \
   --cpus 10
 
-echo "[$(date)] Renaming long scaffold IDs in annotation outputs..."
-for f in $SCRATCHDIR/output/*.gff3 $SCRATCHDIR/output/*.faa $SCRATCHDIR/output/*.fna $SCRATCHDIR/output/*.annotation.txt; do
-    python /path/to/rename_ids_generic.py "$f" "${f%.txt}_shortIDs.txt"
-done
-echo "[$(date)] Scaffold renaming complete."
-
-# Patch LOCUS lines in GenBank files immediately after Funannotate finishes
-echo "[$(date)] Patching LOCUS lines in GenBank files..."
-for gbk in $SCRATCHDIR/output/*.gbk; do
-    sed -i 's/ bp   DNA/ 1000 bp   DNA/' "$gbk"
-done
-
 # Copy results back to work
 echo "[$(date)] Copying results back to /work..."
 rsync -av "$SCRATCHDIR/output/" "/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/funannotate/"
