@@ -263,14 +263,11 @@ squeue -j 48107358
 
 Locus of genbank file crashed funannotate
 running new job squeue -j 48153862
-
+Made sure scratch and output directory were clean (Funannotate gets confused if mutliple files are named .gff)
 
 Running
-awk 'BEGIN{OFS="\t"} $3=="CDS" && $8=="."{$8=0}1' Porites_evermanni_v1_FIXED.short.gff > Porites_evermanni_v1.short.fixphase.gff 
+Run these to convert windows scripts to Unix format:
+dos2unix yourscript.sh
+chmod +x yourscript.sh
 
-to remove "." in CDS phase
-squeue -j 48201829
-
-
-
-squeue -j 48222783
+squeue -j 48223591
