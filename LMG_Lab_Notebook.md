@@ -269,4 +269,4 @@ Running
 awk 'BEGIN{OFS="\t"} $3=="CDS" && $8=="."{$8=0}1' Porites_evermanni_v1_FIXED.short.gff > Porites_evermanni_v1.short.fixphase.gff 
 
 to remove "." in CDS phase
-squeue -j 48190327
+squeue -j 48201829
