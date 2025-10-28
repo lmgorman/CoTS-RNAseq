@@ -273,20 +273,12 @@ chmod +x yourscript.sh
 squeue -j 48227970
 
 
-
-
-#Downloaded busco metazoan database
-apptainer run "/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif" funannotate setup 
--b metazoa -d /scratch3/workspace/lucy_gorman_uri_edu-lucyscratch-lucyscratch/funannotate_databases
-
-
-## Trying somethign different
-Putting it in funannotate predict so i have different inputs to funannotate annotate
-script = funannotate_predict_pever.sh
-Submitted batch job squeue -j 48234573
-
-
 ## Also trying genbank convert
 Converting to genbank format using agat
 agat_pever_gbk.sh
 Submitted batch job squeue -j 48235692
+
+WORKED woohoo
+
+Now re running funannotate script iwth pever.gbk file 
+ squeue -j 48236890
