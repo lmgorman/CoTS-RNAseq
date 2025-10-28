@@ -13,8 +13,11 @@ set -e  # Exit immediately if any command fails
 
 # Define scratch directory
 SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
-mkdir -p $SCRATCHDIR    # <- create the directory if it doesn't exist
-cd $SCRATCHDIR          # <- now safely move into it
+
+# Clean scratch completely and create it
+rm -rf $SCRATCHDIR
+mkdir -p $SCRATCHDIR/output
+cd $SCRATCHDIR
 echo "[$(date)] Job started in $SCRATCHDIR"
 
 # Load modules
@@ -31,9 +34,6 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_everman
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/Porites_evermanni_v1_FIXED.gff $SCRATCHDIR
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
-
-# Make sure output directory is clean
-rm -rf $SCRATCHDIR/output
 
 # Run Funannotate annotate
 echo "[$(date)] Starting Funannotate annotation..."
