@@ -34,12 +34,11 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/Porites_evermanni_v1
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
 
-echo "[$(date)] Converting GFF to GenBank..."
-apptainer run "$FUNANNOTATE_SIF" funannotate util gff2gbk \
+apptainer run "$FUNANNOTATE_SIF" bash -c "funannotate util gff2gbk \
   -g $SCRATCHDIR/Porites_evermanni_v1_FIXED.gff \
   -f $SCRATCHDIR/Porites_evermanni_v1.fa \
   -o $SCRATCHDIR/Porites_evermanni_v1.gbk \
-  -s "Porites evermanni"
+  -s 'Porites evermanni'"
 
 echo "[$(date)] Starting Funannotate annotation..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
