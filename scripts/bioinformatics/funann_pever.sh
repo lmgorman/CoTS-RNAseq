@@ -26,7 +26,7 @@ FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funann
 
 # Copy input data to scratch
 echo "[$(date)] Copying input data to scratch..."
-cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/ $SCRATCHDIR
+cp -r cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa $SCRATCHDIR
 cp -r /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/Porites_evermanni_v1_FIXED.gff $SCRATCHDIR
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
@@ -35,7 +35,7 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapp
 echo "[$(date)] Starting Funannotate annotation..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --gff $SCRATCHDIR/Porites_evermanni_v1_FIXED.gff \
-  --fasta $SCRATCHDIR/Porites_evermanni_v1.short.fa \
+  --fasta $SCRATCHDIR/Porites_evermanni_v1.fa \
   -s "Porites evermanni" \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
@@ -44,18 +44,17 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --force \
   --cpus 10
 
+echo "[$(date)] Renaming long scaffold IDs in annotation outputs..."
+for f in $SCRATCHDIR/output/*.gff3 $SCRATCHDIR/output/*.faa $SCRATCHDIR/output/*.fna $SCRATCHDIR/output/*.annotation.txt; do
+    python /path/to/rename_ids_generic.py "$f" "${f%.txt}_shortIDs.txt"
+done
+echo "[$(date)] Scaffold renaming complete."
+
 # Patch LOCUS lines in GenBank files immediately after Funannotate finishes
 echo "[$(date)] Patching LOCUS lines in GenBank files..."
 for gbk in $SCRATCHDIR/output/*.gbk; do
     sed -i 's/ bp   DNA/ 1000 bp   DNA/' "$gbk"
 done
-
-# Generate annotations.txt from patched GenBank files
-echo "[$(date)] Generating annotations.txt from patched .gbk..."
-apptainer run "$FUNANNOTATE_SIF" funannotate util annotate \
-  --genbank $SCRATCHDIR/output/*.gbk \
-  --out $SCRATCHDIR/output \
-  --force
 
 # Copy results back to work
 echo "[$(date)] Copying results back to /work..."
