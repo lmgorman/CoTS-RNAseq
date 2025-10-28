@@ -11,67 +11,67 @@
 
 set -e  # Exit immediately if any command fails
 
-# Define scratch directory
+#----------------------------------------------------------
+# 1. Setup environment
+#----------------------------------------------------------
 SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
 mkdir -p $SCRATCHDIR
 cd $SCRATCHDIR
 echo "[$(date)] Job started in $SCRATCHDIR"
 
-# Define the Apptainer container path
-FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif"
-
-# Define the FUNANNOTATE_DB path to the newly downloaded database
-export FUNANNOTATE_DB="/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/funannotate_databases"
-echo "[$(date)] Loading funannotate module..."
-
-# Load modules
 module purge
 module load uri/main
 module load funannotate/1.8.17
 
-# Check if the module was successfully loaded
-echo "[$(date)] Loaded modules: $(module list)"
+FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif"
+FUNANNOTATE_DB="$SCRATCHDIR/funannotate_databases"
+export FUNANNOTATE_DB
 
-# Turn genome into softmasked repeat genome
+echo "[$(date)] Using database path: $FUNANNOTATE_DB"
+
+#----------------------------------------------------------
+# 2. Mask repeats in genome
+#----------------------------------------------------------
+GENOME_ORIG="/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa"
+GENOME_MASKED="$SCRATCHDIR/Porites_evermanni_v1_sm.fa"
+
+echo "[$(date)] Running funannotate mask..."
 apptainer run "$FUNANNOTATE_SIF" funannotate mask \
-             -i /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.fa \
-             -o /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_sm.fa
-             
-# Download BUSCO database if it does not exist
+  -i "$GENOME_ORIG" \
+  -o "$GENOME_MASKED"
 
-# Check if the BUSCO database is already downloaded
+#----------------------------------------------------------
+# 3. Ensure BUSCO DB exists
+#----------------------------------------------------------
 if [ ! -d "$FUNANNOTATE_DB/metazoa" ]; then
-    apptainer run "$FUNANNOTATE_SIF" funannotate setup -b metazoa -d "$FUNANNOTATE_DB"
+  echo "[$(date)] Downloading BUSCO metazoa database..."
+  apptainer run "$FUNANNOTATE_SIF" funannotate setup -b metazoa -d "$FUNANNOTATE_DB"
 else
-    echo "[$(date)] metazoa BUSCO database already exists."
+  echo "[$(date)] metazoa BUSCO database already exists."
 fi
 
-# Define Apptainer container and database
-FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif"
-FUNANNOTATE_DB=/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/database
-
-# Copy genome and optional RNA evidence to scratch
-echo "[$(date)] Copying input data to scratch..."
-cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_sm.fa $SCRATCHDIR
-
-# Create output directory
+#----------------------------------------------------------
+# 4. Run Funannotate predict
+#----------------------------------------------------------
 OUTDIR=$SCRATCHDIR/predict_output
 rm -rf $OUTDIR
 mkdir -p $OUTDIR
 
-# Run Funannotate predict
 echo "[$(date)] Starting Funannotate predict..."
 apptainer run "$FUNANNOTATE_SIF" funannotate predict \
-  -i $SCRATCHDIR/Porites_evermanni_v1_sm.fa \
-  -o $OUTDIR \
+  -i "$GENOME_MASKED" \
+  -o "$OUTDIR" \
   -s "Porites evermanni" \
   --busco_db metazoa \
   --cpus 16 \
   --optimize_augustus \
   --strain v1 \
   --force \
-  --tmpdir $SCRATCHDIR/tmp
+  --tmpdir "$SCRATCHDIR/tmp"
 
+#----------------------------------------------------------
+# 5. Copy results back
+#----------------------------------------------------------
 echo "[$(date)] Predict finished. Copying results back..."
 rsync -av "$OUTDIR/" "/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/funannotate_predict/"
 
