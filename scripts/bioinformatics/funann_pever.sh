@@ -37,6 +37,8 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapp
 
 echo "[$(date)] Starting Funannotate annotation..."
 apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
+  --no-ncbi-check \
+  --no-submission \
   --gff $SCRATCHDIR/Porites_evermanni_v1_FIXED.gff \
   --fasta $SCRATCHDIR/Porites_evermanni_v1.fa \
   -o $SCRATCHDIR/output
@@ -45,8 +47,8 @@ apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
   --busco_db metazoa \
   --header_length 50 \
   --force \
-  --cpus 10 \
-  --no-ncbi-check
+  --cpus 10 
+
 
 # Copy results back to work
 echo "[$(date)] Copying results back to /work..."
