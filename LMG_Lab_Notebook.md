@@ -283,4 +283,4 @@ apptainer run "/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannot
 #Trying somethign different
 Putting it in funannotate predict so i have different inputs to funannotate annotate
 script = funannotate_predict_pever.sh
-Submitted batch job squeue -j 48233643
+Submitted batch job squeue -j 48234573
