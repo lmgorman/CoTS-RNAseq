@@ -25,7 +25,7 @@ seq_dict = SeqIO.to_dict(SeqIO.parse(fasta_file, "fasta"))
 
 # Required for GenBank output
 for record in seq_dict.values():
-    record.annotations["molecule_type"] = "DNA"
+    record.annotations["molecule_type"] = "protein"
 
 # Prepare output records
 records = []
