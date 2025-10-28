@@ -282,3 +282,13 @@ WORKED woohoo
 
 Now re running funannotate script with --no-ncbi check and --no-submission
  squeue -j  48246560
+
+ Also possibly try
+ 4. Run the Utility Script Instead of Full Annotate
+
+If you already have annotation outputs (GFF3, proteins, etc.) and only need functional annotation (like InterPro or PFAM), use:
+```
+funannotate util functional -i predict_out -o annotate_out
+```
+
+That completely avoids the GenBank packaging code paths.
