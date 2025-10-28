@@ -17,9 +17,9 @@ from Bio.SeqRecord import SeqRecord
 import sys
 
 # Input files
-fasta_file = "Ahyacinthus.chrsV1.fasta"
-gff_file = "Ahyacinthus.coding.gff3"
-output_file = "ahya.gbk"
+fasta_file = "Porites_evermanni_v1.fa"
+gff_file = "Porites_evermanni_v1_FIXED.gff"
+output_file = "pever.gbk"
 
 seq_dict = SeqIO.to_dict(SeqIO.parse(fasta_file, "fasta"))
 
