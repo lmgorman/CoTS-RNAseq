@@ -11,6 +11,7 @@ conda activate Lucy
 
 
 #Saved the following script in /scratch/workspace/lucy_gorman_uri_edu-lucyscratch/gff3_to_genbank_pever.py
+#Run script by calling python gff3_to_genbank_pever.py
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
