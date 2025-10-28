@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=agat-ahya
+#SBATCH --job-name=agat-pever
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=100G
@@ -23,8 +23,7 @@ module load uri/main
 module load conda/latest
 
 # Copy input files to scratch
-cp /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.coding.gff3 $SCRATCHDIR
-cp /work/pi_hputnam_uri_edu/refs/Ahyacinthus_genome/Ahyacinthus_genome_V1/Ahyacinthus.transcripts.fasta $SCRATCHDIR
+cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/Porites_evermanni_v1_FIXED.gff $SCRATCHDIR
 echo "[$(date)] Input files copied to scratch directory"
 echo "[$(date)] Files in scratch directory:"
 ls $SCRATCHDIR
@@ -32,17 +31,10 @@ ls $SCRATCHDIR
 # Set conda environment path
 CONDA_ENV_PATH="$SCRATCHDIR/conda-envs/agat-env"
 
-# Combine GFF3 with FASTA (include the ##FASTA tag)
-cp Ahyacinthus.coding.gff3 tmp_ahya.gff3
-echo "##FASTA" >> tmp_ahya.gff3
-cat Ahyacinthus.transcripts.fasta >> tmp_ahya.gff3
-mv tmp_ahya.gff3 combined_ahya.gff3
-echo "[$(date)] Combined GFF3 with transcript FASTA into combined_ahya.gff3"
-
 # Run bp_seqconvert with correct options
 echo "[$(date)] Running bp_seqconvert conversion..."
 conda run -p "$CONDA_ENV_PATH" \
-bp_seqconvert --from gff3 --to genbank < combined_ahya.gff3 > Pever.gb
+bp_seqconvert --from gff3 --to genbank < Porites_evermanni_v1_FIXED.gff > Pever.gb
 echo "[$(date)] GenBank file created."
 
 # Validate output
@@ -54,7 +46,7 @@ else
 fi
 
 # Copy result back to working directory
-DEST_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever
+DEST_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/
 cp ahya.gb "$DEST_DIR" && \
 echo "[$(date)] Output file copied to $DEST_DIR" || \
 { echo "[$(date)] Error copying output file."; exit 1; }
