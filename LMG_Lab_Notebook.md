@@ -270,4 +270,4 @@ Run these to convert windows scripts to Unix format:
 dos2unix yourscript.sh
 chmod +x yourscript.sh
 
-squeue -j 48223591
+squeue -j 48227970
