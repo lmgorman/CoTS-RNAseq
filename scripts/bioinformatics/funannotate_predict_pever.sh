@@ -17,6 +17,13 @@ mkdir -p $SCRATCHDIR
 cd $SCRATCHDIR
 echo "[$(date)] Job started in $SCRATCHDIR"
 
+# Define the Apptainer container path
+FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funannotate-1.8.17.sif"
+
+# Define the FUNANNOTATE_DB path to the newly downloaded database
+export FUNANNOTATE_DB="/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch/funannotate_databases"
+echo "[$(date)] Loading funannotate module..."
+
 # Load modules
 module purge
 module load uri/main
