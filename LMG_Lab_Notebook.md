@@ -281,7 +281,8 @@ Submitted batch job squeue -j 48235692
 WORKED woohoo
 
 Now re running funannotate script with --no-ncbi check and --no-submission
- squeue -j  48246560
+ squeue -j  48246560 
+ Didnt work :-(
 
  Also possibly try
  4. Run the Utility Script Instead of Full Annotate
@@ -293,5 +294,9 @@ funannotate util functional -i predict_out -o annotate_out
 
 That completely avoids the GenBank packaging code paths.
 
+Need to run this job
 
- squeue -j 48323388
+
+#Truncated gff3 and fasta file uysing truncate_headers.py
+Made new script to run these files - funnann_pever_trunc.sh and saved in scratch directory 
+squeue -j 48325496
