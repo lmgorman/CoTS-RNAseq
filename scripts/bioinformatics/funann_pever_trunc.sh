@@ -33,8 +33,14 @@ echo "[$(date)] Copying input data to scratch..."
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
 
+# Ensure FASTA and GFF3 exist in scratch
+if [[ ! -f $SCRATCHDIR/truncated_Porites_evermanni_v1.fasta ]] || [[ ! -f $SCRATCHDIR/truncated_Porites_evermanni_v1_FIXED.gff3 ]]; then
+    echo "Error: FASTA or GFF3 not found in scratch."
+    exit 1
+fi
+
 echo "[$(date)] Starting Funannotate annotation..."
-apptainer run "$FUNANNOTATE_SIF" funannotate annotate \
+apptainer run --bind $SCRATCHDIR:$SCRATCHDIR "$FUNANNOTATE_SIF" funannotate annotate \
   --gff $SCRATCHDIR/truncated_Porites_evermanni_v1_FIXED.gff3 \
   --fasta $SCRATCHDIR/truncated_Porites_evermanni_v1.fasta \
   -o $SCRATCHDIR/output \
