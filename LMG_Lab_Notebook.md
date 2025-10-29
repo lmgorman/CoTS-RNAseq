@@ -299,4 +299,4 @@ Need to run this job
 
 #Truncated gff3 and fasta file uysing truncate_headers.py
 Made new script to run these files - funnann_pever_trunc.sh and saved in scratch directory 
-squeue -j 48325496
+squeue -j 48326047
