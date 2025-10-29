@@ -292,3 +292,6 @@ funannotate util functional -i predict_out -o annotate_out
 ```
 
 That completely avoids the GenBank packaging code paths.
+
+
+ squeue -j 48323388
