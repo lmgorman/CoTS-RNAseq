@@ -2,7 +2,7 @@
 #SBATCH --job-name=funannotate-pever
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=10
-#SBATCH --mem=150G
+#SBATCH --mem=100G
 #SBATCH --time=2-00:00:00
 #SBATCH --constraint=avx512
 #SBATCH -p uri-cpu
