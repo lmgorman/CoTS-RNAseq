@@ -301,3 +301,10 @@ Need to run this job
 Made new script to run these files - funnann_pever_trunc.sh and saved in scratch directory 
 squeue -j 48442247
 Checked my truncated gff3 and fasta headers matched and they do so shouldn't throw up an error in funannotate
+
+
+#Re running truncate script with 
+gff file (non truncated)
+and seeing if the header length set to 20 now works
+
+squeue -j 48445296
