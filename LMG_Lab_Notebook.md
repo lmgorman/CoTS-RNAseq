@@ -304,7 +304,7 @@ Checked my truncated gff3 and fasta headers matched and they do so shouldn't thr
 
 
 #Re running truncate script with 
-gff file (non truncated)
+gff file and fasta (non truncated)
 and seeing if the header length set to 20 now works
 
-squeue -j 48445296
+squeue -j 48448089
