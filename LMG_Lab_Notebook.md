@@ -299,5 +299,5 @@ Need to run this job
 
 #Truncated gff3 and fasta file uysing truncate_headers.py
 Made new script to run these files - funnann_pever_trunc.sh and saved in scratch directory 
-squeue -j 48442238
+squeue -j 48442247
 Checked my truncated gff3 and fasta headers matched and they do so shouldn't throw up an error in funannotate
