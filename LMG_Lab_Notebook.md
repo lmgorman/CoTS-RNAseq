@@ -303,8 +303,30 @@ squeue -j 48442247
 Checked my truncated gff3 and fasta headers matched and they do so shouldn't throw up an error in funannotate
 
 
-#Re running truncate script with 
-gff file and fasta (non truncated)
-and seeing if the header length set to 20 now works
+#Re running truncate script with cleaned CDS 
+```
+awk -F'\t' 'BEGIN{OFS="\t"}
+{
+  if($0 ~ /^#/){print; next}   # keep header lines
+  if($3=="CDS"){
+    split($9,a,";")
+    parent=""
+    other_attrs=""
+    old_id=""
+    for(i in a){
+      if(a[i] ~ /^Parent=/){parent=a[i]; sub("Parent=","",parent)}
+      else if(a[i] ~ /^ID=/){old_id=a[i]; sub("ID=","",old_id)}
+      else{if(other_attrs==""){other_attrs=a[i]} else {other_attrs=other_attrs";"a[i]}}
+    }
+    if(parent!=""){
+      count[parent]++
+      $9="ID="parent".cds"count[parent]";Parent="parent
+      if(old_id!=""){$9=$9";Old_ID="old_id}
+      if(other_attrs!=""){$9=$9";"other_attrs}
+    }
+  }
+  print
+}' truncated_Porites_evermani_FIXED.gff3 > truncated_Porites_evermani_FIXED_clean.gff3
+```
 
-squeue -j 48448089
+squeue -j 48455392
