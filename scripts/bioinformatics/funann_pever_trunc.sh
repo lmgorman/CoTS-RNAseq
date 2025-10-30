@@ -34,14 +34,14 @@ cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_e
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
 
 # Ensure FASTA and GFF3 exist in scratch
-if [[ ! -f $SCRATCHDIR/truncated_Porites_evermanni_v1.fasta ]] || [[ ! -f $SCRATCHDIR/truncated_Porites_evermanni_v1_FIXED.gff3 ]]; then
+if [[ ! -f $SCRATCHDIR/truncated_Porites_evermanni_v1.fasta ]] || [[ ! -f $SCRATCHDIR/truncated_Porites_evermanni_v1_FIXED_clean.gff3 ]]; then
     echo "Error: FASTA or GFF3 not found in scratch."
     exit 1
 fi
 
 echo "[$(date)] Starting Funannotate annotation..."
 apptainer run --bind $SCRATCHDIR:$SCRATCHDIR "$FUNANNOTATE_SIF" funannotate annotate \
-  --gff $SCRATCHDIR/truncated_Porites_evermanni_v1_FIXED.gff3 \
+  --gff $SCRATCHDIR/truncated_Porites_evermanni_v1_FIXED_clean.gff3 \
   --fasta $SCRATCHDIR/truncated_Porites_evermanni_v1.fasta \
   -s "Porites evermanni" \
   -o $SCRATCHDIR/output \
