@@ -348,3 +348,7 @@ awk -F'\t' '{
 }' pever_eggnog_go.tsv > pever_eggnog_go_clean.tsv
 ```
 squeue -j 48488216
+
+Had to change IPR file to match IDs of other files
+
+python truncate_ipr_xml.py iprscan.xml /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/seqid_mapping.tsv iprscan_truncated.xml
