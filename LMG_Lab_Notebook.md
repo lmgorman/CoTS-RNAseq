@@ -329,7 +329,16 @@ Then need to parse the eggnog file with GO terms to my truncated funannotate scr
 `squeue -j  48482654`
 
 
-Head to edit eggnog file to correctly format GO terms and reduce GO terms to 100 per gene
+Head to edit eggnog file to correctly format GO terms...
+```
+grep -v '^#' pever_eggnog.emapper.annotations \
+  | awk -F '\t' '{ if ($10 != "-" && $10 != "") print $1"\t"$10 }' \
+  > go_annotations.tsv
+```
+
+
+
+...and reduce GO terms to 100 per gene
 ```
 awk -F'\t' '{
     n=split($2,a,","); 
@@ -338,3 +347,4 @@ awk -F'\t' '{
     for(i=1;i<=n;i++){printf "%s%s", a[i], (i<n?",":"\n")}
 }' pever_eggnog_go.tsv > pever_eggnog_go_clean.tsv
 ```
+squeue -j 48485004
