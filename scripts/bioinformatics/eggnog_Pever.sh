@@ -16,9 +16,9 @@ module load all/eggnog-mapper/2.1.12-foss-2023a
 # Use pre-assigned scratch directory
 SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
 # Define input and output
-INPUT=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/Porites_evermanni_v1_clean.annot.pep.fa
+INPUT=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_clean.annot.pep.fa
 OUTPUT_BASENAME=pever_eggnog
-FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog
+FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/eggnog
 # Copy input file to scratch
 cp "$INPUT" "$SCRATCHDIR/"
 cd "$SCRATCHDIR"
