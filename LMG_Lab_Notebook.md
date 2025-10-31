@@ -333,6 +333,6 @@ awk -F'\t' 'BEGIN{OFS="\t"}
 Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt have any GO terms so re running eggnog script 
 `eggnog_Pever.sh`
 
-squeue -j 48473677
+squeue -j 48473709
 
 Then need to parse the eggnog file with GO terms to my funannotate script and then it should append GO terms!
