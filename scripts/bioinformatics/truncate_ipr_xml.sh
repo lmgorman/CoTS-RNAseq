@@ -2,8 +2,8 @@
 #SBATCH --job-name=truncate_ipr_xml
 #SBATCH --partition=cpu
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=5G
-#SBATCH --time=02:00:00
+#SBATCH --mem=100G
+#SBATCH --time=24:00:00
 #SBATCH --output=truncate_ipr_xml_%j.log
 #SBATCH --error=truncate_ipr_xml_%j.err
 
