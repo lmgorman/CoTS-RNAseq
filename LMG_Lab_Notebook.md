@@ -275,10 +275,8 @@ squeue -j 48227970
 
 ## Also trying genbank convert
 Converting to genbank format using agat
-agat_pever_gbk.sh
-Submitted batch job `squeue -j 48235692`
-
-WORKED woohoo
+[agat_pever_gbk.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/f888c530b3e9694ecf137e495188b2e408803510/scripts/bioinformatics/agat_pever_gbk.sh)
+`squeue -j 48235692` WORKED woohoo
 
 Now re running funannotate script with --no-ncbi check and --no-submission
 ` squeue -j  48246560 `
