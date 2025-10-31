@@ -328,7 +328,7 @@ Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt
 Then need to parse the eggnog file with GO terms to my truncated funannotate script [funnann_pever_trunc.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/0de2f092cfb54bf53c0c4ae5336914117e536aed/scripts/bioinformatics/funann_pever_trunc.sh) and then it should append GO terms!
 `squeue -j  48482654`
 
-
+Don't know if its this or fact it used my old eggnog annotations...
 Head to edit eggnog file to correctly format GO terms...
 ```
 grep -v '^#' pever_eggnog.emapper.annotations \
@@ -347,4 +347,4 @@ awk -F'\t' '{
     for(i=1;i<=n;i++){printf "%s%s", a[i], (i<n?",":"\n")}
 }' pever_eggnog_go.tsv > pever_eggnog_go_clean.tsv
 ```
-squeue -j 48485004
+squeue -j 48488216
