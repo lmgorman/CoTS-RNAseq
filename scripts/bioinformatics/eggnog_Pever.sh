@@ -26,10 +26,13 @@ cd "$SCRATCHDIR"
 echo "Running eggnog-mapper on $(hostname) at $(date)"
 emapper.py \
   -i $(basename "$INPUT") \
- --itype proteins \
+  --itype proteins \
   -m diamond \
-  -o "$OUTPUT_BASENAME" \
-  --cpu 10
+  --output "$OUTPUT_BASENAME" \
+  --cpu 10 \
+  --go_evidence non-electronic \
+  --data_dir /path/to/eggnog_db \
+  --override
 # Copy results back
 echo "Copying results back to $FINAL_OUTPUT_DIR"
 mkdir -p "$FINAL_OUTPUT_DIR"
