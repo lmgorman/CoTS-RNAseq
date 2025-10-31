@@ -297,8 +297,8 @@ That completely avoids the GenBank packaging code paths.
 Need to run this job
 
 
-#Truncated gff3 and fasta file uysing truncate_headers.py
-Made new script to run these files - funnann_pever_trunc.sh and saved in scratch directory 
+#Truncated gff3 and fasta file using `truncate_headers.py`
+Made new script to run these files - `funnann_pever_trunc.sh` and saved in scratch directory 
 squeue -j 48442247
 Checked my truncated gff3 and fasta headers matched and they do so shouldn't throw up an error in funannotate
 
@@ -335,4 +335,4 @@ Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt
 
 squeue -j 48473709
 
-Then need to parse the eggnog file with GO terms to my funannotate script and then it should append GO terms!
+Then need to parse the eggnog file with GO terms to my truncated funannotate script `funnann_pever_trunc.sh` and then it should append GO terms!
