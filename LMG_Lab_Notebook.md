@@ -283,28 +283,13 @@ Now re running funannotate script with --no-ncbi check and --no-submission
 
  Didnt work :-(
 
- Also possibly try
- 4. Run the Utility Script Instead of Full Annotate
-
-If you already have annotation outputs (GFF3, proteins, etc.) and only need functional annotation (like InterPro or PFAM), use:
-```
-funannotate util functional -i predict_out -o annotate_out
-```
-
-That completely avoids the GenBank packaging code paths.
-
-Need to run this job
-
-
+## Headers too long if GFF3 file, change and make the same IDs between GFF3 and fasta files
 #Truncated gff3 and fasta file using [truncate_headers.py](https://github.com/lmgorman/CoTS-RNAseq/blob/194b7b607b94523d02ada48c8cf2c552d3741ea3/scripts/bioinformatics/truncate_headers.py)
 
 
 Made new script to run these files - [funnann_pever_trunc.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/0de2f092cfb54bf53c0c4ae5336914117e536aed/scripts/bioinformatics/funann_pever_trunc.sh) and saved in scratch directory 
 
 `squeue -j 48442247`
-
-Checked my truncated gff3 and fasta headers matched and they do so shouldn't throw up an error in funannotate
-
 
 #Re running truncate script with cleaned CDS 
 ```
@@ -332,7 +317,10 @@ awk -F'\t' 'BEGIN{OFS="\t"}
 }' truncated_Porites_evermani_FIXED.gff3 > truncated_Porites_evermani_FIXED_clean.gff3
 ```
 
+Funannotate script works but not appending GO terms to IDs - because eggnog wasn't coded to append GO terms
 
+
+# Re-run eggnog script as it is misisng GO terms
 Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt have any GO terms so re running eggnog script 
 [eggnog_Pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/cdbbb733ae938e94cfcfd7b728c10bf069e6f311/scripts/bioinformatics/eggnog_Pever.sh)
 
