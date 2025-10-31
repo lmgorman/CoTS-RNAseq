@@ -276,12 +276,13 @@ squeue -j 48227970
 ## Also trying genbank convert
 Converting to genbank format using agat
 agat_pever_gbk.sh
-Submitted batch job squeue -j 48235692
+Submitted batch job `squeue -j 48235692`
 
 WORKED woohoo
 
 Now re running funannotate script with --no-ncbi check and --no-submission
- squeue -j  48246560 
+` squeue -j  48246560 `
+
  Didnt work :-(
 
  Also possibly try
@@ -297,9 +298,13 @@ That completely avoids the GenBank packaging code paths.
 Need to run this job
 
 
-#Truncated gff3 and fasta file using `truncate_headers.py`
+#Truncated gff3 and fasta file using [truncate_headers.py](https://github.com/lmgorman/CoTS-RNAseq/blob/194b7b607b94523d02ada48c8cf2c552d3741ea3/scripts/bioinformatics/truncate_headers.py)
+
+
 Made new script to run these files - [funnann_pever_trunc.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/0de2f092cfb54bf53c0c4ae5336914117e536aed/scripts/bioinformatics/funann_pever_trunc.sh) and saved in scratch directory 
-squeue -j 48442247
+
+`squeue -j 48442247`
+
 Checked my truncated gff3 and fasta headers matched and they do so shouldn't throw up an error in funannotate
 
 
@@ -333,6 +338,6 @@ awk -F'\t' 'BEGIN{OFS="\t"}
 Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt have any GO terms so re running eggnog script 
 [eggnog_Pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/cdbbb733ae938e94cfcfd7b728c10bf069e6f311/scripts/bioinformatics/eggnog_Pever.sh)
 
-squeue -j 48473709
+`squeue -j 48473709`
 
 Then need to parse the eggnog file with GO terms to my truncated funannotate script [funnann_pever_trunc.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/0de2f092cfb54bf53c0c4ae5336914117e536aed/scripts/bioinformatics/funann_pever_trunc.sh) and then it should append GO terms!
