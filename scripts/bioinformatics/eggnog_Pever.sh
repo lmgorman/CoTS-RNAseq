@@ -24,14 +24,14 @@ cp "$INPUT" "$SCRATCHDIR/"
 cd "$SCRATCHDIR"
 # Run eggnog-mapper
 echo "Running eggnog-mapper on $(hostname) at $(date)"
-emapper.py \
+/modules/uri_apps/software/eggnog-mapper/2.1.12-foss-2023a/bin/emapper.py \
   -i $(basename "$INPUT") \
   --itype proteins \
   -m diamond \
   --output "$OUTPUT_BASENAME" \
   --cpu 10 \
   --go_evidence non-electronic \
-  --data_dir /path/to/eggnog_db \
+  --data_dir /modules/uri_apps/software/eggnog-mapper/2.1.12-foss-2023a/lib/python3.11/site-packages/data \
   --override
 # Copy results back
 echo "Copying results back to $FINAL_OUTPUT_DIR"
