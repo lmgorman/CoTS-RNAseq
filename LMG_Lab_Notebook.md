@@ -329,4 +329,10 @@ awk -F'\t' 'BEGIN{OFS="\t"}
 }' truncated_Porites_evermani_FIXED.gff3 > truncated_Porites_evermani_FIXED_clean.gff3
 ```
 
-squeue -j 48455392
+
+Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt have any GO terms so re running eggnog script 
+`eggnog_Pever.sh`
+
+squeue -j 48473677
+
+Then need to parse the eggnog file with GO terms to my funannotate script and then it should append GO terms!
