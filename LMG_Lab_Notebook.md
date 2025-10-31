@@ -324,6 +324,6 @@ Funannotate script works but not appending GO terms to IDs - because eggnog wasn
 Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt have any GO terms so re running eggnog script 
 [eggnog_Pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/cdbbb733ae938e94cfcfd7b728c10bf069e6f311/scripts/bioinformatics/eggnog_Pever.sh)
 
-`squeue -j 48473709`
+`squeue -j 48475191`
 
 Then need to parse the eggnog file with GO terms to my truncated funannotate script [funnann_pever_trunc.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/0de2f092cfb54bf53c0c4ae5336914117e536aed/scripts/bioinformatics/funann_pever_trunc.sh) and then it should append GO terms!
