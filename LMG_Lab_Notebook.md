@@ -331,7 +331,7 @@ awk -F'\t' 'BEGIN{OFS="\t"}
 
 
 Ok the reason it is not appending GO terms is becayse my eggnog annotation didnt have any GO terms so re running eggnog script 
-`eggnog_Pever.sh`
+[eggnog_Pever.sh](https://github.com/lmgorman/CoTS-RNAseq/blob/cdbbb733ae938e94cfcfd7b728c10bf069e6f311/scripts/bioinformatics/eggnog_Pever.sh)
 
 squeue -j 48473709
 
