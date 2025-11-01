@@ -16,7 +16,7 @@ module load all/eggnog-mapper/2.1.12-foss-2023a
 # Use pre-assigned scratch directory
 SCRATCHDIR=/scratch3/workspace/lucy_gorman_uri_edu-lucyscratch
 # Define input and output
-INPUT=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa
+INPUT=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa #truncated names that match gff3 and fasta files
 OUTPUT_BASENAME=pever_eggnog_trunc
 FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/eggnog
 # Copy input file to scratch
