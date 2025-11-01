@@ -1,17 +1,3 @@
-#Navigate to Porites spp. genome folder
-cd /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por
-#Download the P. evermanni protein fasta file
-wget https://www.genoscope.cns.fr/corals/data/Porites_evermanni_v1.annot.pep.fa 
-#Had to remove asterix from the downloaded file for interpro to work
-see remove_asterix.sh script - https://github.com/lmgorman/CoTS-RNAseq/blob/main/scripts/bioinformatics/remove_asterix.sh
-#Create output directory for interpro
-mkdir /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro
-mkdir /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output
-cd /home/lucy_gorman_uri_edu/scripts
-#Create following shell script in /home/lucy_gorman_uri_edu/scripts called interpro_pever.sh
-
-
-
 #!/bin/bash
 #SBATCH --job-name=annot-Pever-interpro
 #SBATCH --nodes=1
@@ -32,7 +18,7 @@ SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
 # Define input and output locations
 INPUT_FILE=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa
 BASENAME=$(basename "$INPUT_FILE")
-FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output
+FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/interpro/
 # Copy input file to scratch
 cp "$INPUT_FILE" "$SCRATCHDIR/"
 cd "$SCRATCHDIR"
