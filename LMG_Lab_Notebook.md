@@ -353,5 +353,8 @@ Truncated protein file = `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/p
 `squeue -j 48493217` = will have same IDs
 
 Then need to do the same with Interpro scan
+squeue -j 48495216
 
 Then re run funannotate with the correct protein IDs
+
+
