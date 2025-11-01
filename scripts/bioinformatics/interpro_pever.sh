@@ -30,7 +30,7 @@ module load InterProScan/5.73-104.0-foss-2024a
 # Use pre-assigned scratch directory
 SCRATCHDIR=/scratch/workspace/lucy_gorman_uri_edu-lucyscratch
 # Define input and output locations
-INPUT_FILE=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por/out.fa
+INPUT_FILE=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa
 BASENAME=$(basename "$INPUT_FILE")
 FINAL_OUTPUT_DIR=/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output
 # Copy input file to scratch
