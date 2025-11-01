@@ -352,3 +352,11 @@ squeue -j 48488216
 Had to change IPR file to match IDs of other files
 
 python truncate_ipr_xml.py iprscan.xml /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por-ever/seqid_mapping.tsv iprscan_truncated.xml
+
+
+Running eggnog on Truncated protein file 
+`squeue -j 48493217` = will have same IDs
+
+Then need to do the same with Interpro scan
+
+Then re run funannotate with the correct protein IDs
