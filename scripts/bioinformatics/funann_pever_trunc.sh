@@ -32,7 +32,7 @@ FUNANNOTATE_SIF="/modules/opt/linux-ubuntu24.04-x86_64/funannotate/1.8.17/funann
 echo "[$(date)] Copying input data to scratch..."
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml $SCRATCHDIR/iprscan.xml
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations $SCRATCHDIR/eggnog.annotations
-cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_clean.annot.pep.fa $SCRATCHDIR/Porites_evermanni_v1_clean.annot.pep.fa
+cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_clean_fixed.annot.pep.fa $SCRATCHDIR/Porites_evermanni_v1_clean_fixed.annot.pep.fa
 cp /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1.annot.gff $SCRATCHDIR/Porites_evermanni_v1.annot.gff
 
 # Ensure FASTA and GFF3 exist in scratch
@@ -44,7 +44,7 @@ fi
 echo "[$(date)] Starting Funannotate annotation..."
 apptainer run --bind $SCRATCHDIR:$SCRATCHDIR "$FUNANNOTATE_SIF" funannotate annotate \
   --gff $SCRATCHDIR/Porites_evermanni_v1.annot.gff \
-  --fasta $SCRATCHDIR/Porites_evermanni_v1_clean.annot.pep.fa \
+  --fasta $SCRATCHDIR/Porites_evermanni_v1_clean_fixed.annot.pep.fa \
   -s "Porites evermanni" \
   -o $SCRATCHDIR/output \
   --iprscan $SCRATCHDIR/iprscan.xml \
