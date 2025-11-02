@@ -356,6 +356,5 @@ Then need to do the same with Interpro scan
 squeue -j 48495730
 done - took around 17 hours
 
-Then re run funannotate with the correct protein IDs
-Apparently can only use interpro tsv files, rerunning...
-squeue -j 48517867
+
+squeue -j  48527616
