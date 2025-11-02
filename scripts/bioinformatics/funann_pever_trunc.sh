@@ -51,6 +51,7 @@ apptainer run --bind $SCRATCHDIR:$SCRATCHDIR "$FUNANNOTATE_SIF" funannotate anno
   --eggnog $SCRATCHDIR/eggnog.annotations \
   --busco_db metazoa \
   --header_length 50 \
+  --go \
   --force \
   --cpus 10 
 
