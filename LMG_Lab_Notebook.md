@@ -354,7 +354,8 @@ Truncated protein file = `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/p
 
 Then need to do the same with Interpro scan
 squeue -j 48495730
+done - took around 17 hours
 
 Then re run funannotate with the correct protein IDs
 
-
+squeue -j 48517094
