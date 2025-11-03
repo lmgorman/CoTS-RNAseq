@@ -358,3 +358,8 @@ done - took around 17 hours
 
 
 squeue -j  48527646
+
+Ok I am stopping funannotate pipeline as it isn't working for some reason...
+
+Just comparing InterPro results 
+Truncated protein file = `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa`
