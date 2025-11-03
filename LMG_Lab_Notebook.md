@@ -365,3 +365,8 @@ Just comparing InterPro results
 Truncated protein file = `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa`
 grep -o "GO:[0-9]\+" out.fa.tsv | wc -l
 277223 = GO terms
+
+/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output$ grep -o "GO:[0-9]\+" Porites_evermanni_v1_clean.annot.pep.fa.tsv | wc -l
+277223 = GO terms
+
+same yayyyy
