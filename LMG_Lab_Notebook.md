@@ -363,3 +363,5 @@ Ok I am stopping funannotate pipeline as it isn't working for some reason...
 
 Just comparing InterPro results 
 Truncated protein file = `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa`
+grep -o "GO:[0-9]\+" out.fa.tsv | wc -l
+277223 = GO terms
