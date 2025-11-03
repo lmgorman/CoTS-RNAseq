@@ -380,3 +380,5 @@ Downloaded:
 `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/eggnog/pever_eggnog.emapper.annotations`
 `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml`
 and input into OmicsBox with fasta, gff3 and protein files 
+
+Re-ran eggnog in OmicsBox and now doing BLASTing using the Diamond database and query cut-off of 1e-05
