@@ -370,3 +370,6 @@ grep -o "GO:[0-9]\+" out.fa.tsv | wc -l
 277223 = GO terms
 
 same yayyyy
+This file - /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml
+
+Is the one I want to use for other pipeline as it has the correct gene IDs
