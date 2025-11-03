@@ -359,17 +359,19 @@ done - took around 17 hours
 
 squeue -j  48527646
 
+# 02.11.25
+
 Ok I am stopping funannotate pipeline as it isn't working for some reason...
 
 Just comparing InterPro results 
 Truncated protein file = `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/out.fa`
-grep -o "GO:[0-9]\+" out.fa.tsv | wc -l
+`grep -o "GO:[0-9]\+" out.fa.tsv | wc -l`
 277223 = GO terms
 
-/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output$ grep -o "GO:[0-9]\+" Porites_evermanni_v1_clean.annot.pep.fa.tsv | wc -l
+`/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output$ grep -o "GO:[0-9]\+" Porites_evermanni_v1_clean.annot.pep.fa.tsv | wc -l`
 277223 = GO terms
 
 same yayyyy
-This file - /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml
+This file - `/work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/por/interpro/output/Porites_evermanni_v1_clean.annot.pep.fa.xml` is the one I want to use for other pipeline as it has the correct gene IDs
 
-Is the one I want to use for other pipeline as it has the correct gene IDs
+Looking at using Blast2Go for functional analysis of genes 
