@@ -386,3 +386,6 @@ Re-ran eggnog in OmicsBox and now doing BLASTing using the Diamond database and 
 ## Workflow 
 <img width="1481" height="415" alt="image" src="https://github.com/user-attachments/assets/d9955281-9550-46d8-81cf-db0a4636f396" />
 
+### References
+- OmicsBox - Bioinformatics made easy. BioBam Bioinformatics. March 3, 2019. www.biobam.com/omicsbox.
+- Huerta-Cepas J et al. (2019). eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology resource based on 5090 organisms and 2502 viruses. Nucleic acids research, 47(D1), D309-D314.
