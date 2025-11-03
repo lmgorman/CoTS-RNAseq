@@ -382,3 +382,7 @@ Downloaded:
 and input into OmicsBox with fasta, gff3 and protein files 
 
 Re-ran eggnog in OmicsBox and now doing BLASTing using the Diamond database and query cut-off of 1e-05
+
+## Workflow 
+<img width="1481" height="415" alt="image" src="https://github.com/user-attachments/assets/d9955281-9550-46d8-81cf-db0a4636f396" />
+
