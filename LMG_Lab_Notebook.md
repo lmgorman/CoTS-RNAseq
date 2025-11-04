@@ -359,6 +359,8 @@ done - took around 17 hours
 
 squeue -j  48527646
 
+Used gffread to convert to gff3 /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_gffread.annot.gff3
+
 # 02.11.25
 
 Ok I am stopping funannotate pipeline as it isn't working for some reason...
