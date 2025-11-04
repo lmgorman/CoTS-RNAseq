@@ -360,6 +360,7 @@ done - took around 17 hours
 squeue -j  48527646
 
 Used gffread to convert to gff3 /work/pi_hputnam_uri_edu/ashuffmyer/cots-gorman/refs/por-ever/Porites_evermanni_v1_gffread.annot.gff3
+gff3 validator - https://genometools.org/cgi-bin/gff3validator.cgi 
 
 # 02.11.25
 
