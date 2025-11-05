@@ -392,7 +392,9 @@ Re-ran eggnog in OmicsBox and now doing BLASTing using the Diamond database and 
 
 ## 04.11.25
 Trying diamond BLAST - tried BLAST expectation value of 1.0e-5 and returned no hits, fairly strict - took 48 minutes
-Trying again with BLAST expectation value of 1.0e-3
+Trying again with BLAST expectation value of 1.0e-3 = WORKED, paped with moderate sensitivity
+
+Now GO mapping using default parameters
 
 ### References
 - OmicsBox - Bioinformatics made easy. BioBam Bioinformatics. March 3, 2019. www.biobam.com/omicsbox.
