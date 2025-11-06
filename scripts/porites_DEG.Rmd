@@ -271,6 +271,11 @@ identical(metadata_por_ordered$sample, colnames(gcount_filt_por))
 metadata_por$eatenvscontrol <- relevel(metadata_por$eatenvscontrol, ref = "control")
 ```
 
+#Save this file for gene annotation in functional enrichment
+```{r save_filtered_file_for_functional_enrichment}
+write.csv(gcount_filt_por, "data/all_genes_por.csv", row.names = TRUE)
+```
+
 # Estimating the size factors
 ```{r Estimate size factors}
 gdds_por <- DESeqDataSetFromMatrix(countData = gcount_filt_por,
