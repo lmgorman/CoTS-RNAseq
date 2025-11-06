@@ -288,7 +288,7 @@ parent_enrich_plot1_por <- ggplot(p05_res_reduced_por, aes(x=weightFisher,y=reor
               axis.title = element_text(size = 8), 
               plot.title = element_text(hjust = 0.5, size = 8));parent_enrich_plot1_por
 
-ggsave("figures/acropora/parent_enrich_plot1_por.pdf", plot = parent_enrich_plot1_por, width = 8, height = 15, units = "in")
+ggsave("figures/porites/parent_enrich_plot1_por.pdf", plot = parent_enrich_plot1_por, width = 8, height = 15, units = "in")
 dev.off()  # close and save
 
 ```
@@ -307,7 +307,7 @@ parent_enrich_plot3_por <- ggplot(p05_res_reduced_por,
   theme(axis.text.y = element_text(size=8),
         axis.title = element_text(size=9),
         plot.title = element_text(hjust=0.5, size=10));parent_enrich_plot3_por
-ggsave(parent_enrich_plot3_por, filename="figures/acropora/por_parent_enrichment_individual_terms.png", width=10, height=11)
+ggsave(parent_enrich_plot3_por, filename="figures/porites/por_parent_enrichment_individual_terms.png", width=10, height=11)
 
 #summarize by parent term
 parent_summary_por <- p05_res_reduced_por %>%
@@ -325,7 +325,7 @@ parent_enrich_plot4_por<-ggplot(parent_summary_por, aes(x = meanGeneRatio, y = r
   scale_size_continuous(name="Number of Terms") +
   theme_classic(base_size=10) +
   labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4_por
-ggsave(parent_enrich_plot4_por, filename="figures/acropora/por_parent_enrichment_parent_terms.png", width=10, height=7)
+ggsave(parent_enrich_plot4_por, filename="figures/porites/por_parent_enrichment_parent_terms.png", width=10, height=7)
 ```
 
 # What about classic fisher results...
@@ -400,7 +400,7 @@ parent_enrich_plot3_por_classic <- ggplot(p05_clas_res_reduced_por,
   scale_color_gradient(low="lightblue", high="darkblue", name="-log10(classicFisher)") +
   theme_classic(base_size=10) +
   labs(x="Gene Ratio", y="GO Term") +
-  theme(axis.text.y = element_text(size=8),
+  theme(axis.text.y = element_text(size=5),
         axis.title = element_text(size=9),
         plot.title = element_text(hjust=0.5, size=10));parent_enrich_plot3_por_classic
 ggsave(parent_enrich_plot3_por_classic, filename="figures/porites/por_parent_enrichment_individual_terms_classic.png", width=10, height=11)
