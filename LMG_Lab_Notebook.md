@@ -396,6 +396,13 @@ Trying again with BLAST expectation value of 1.0e-3 = WORKED, paped with moderat
 
 Now GO mapping using default parameters
 
+Worked wooo!
+
+# 06.11.25
+Chat to Ariana about Wald test - could I use LRT or another one in DEG calculations
+Get output of DEGs, Go terms, BLAST results and amino acid sequence 
+
+
 ### References
 - OmicsBox - Bioinformatics made easy. BioBam Bioinformatics. March 3, 2019. www.biobam.com/omicsbox.
 - Huerta-Cepas J et al. (2019). eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology resource based on 5090 organisms and 2502 viruses. Nucleic acids research, 47(D1), D309-D314.
