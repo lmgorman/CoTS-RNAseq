@@ -271,10 +271,6 @@ identical(metadata_por_ordered$sample, colnames(gcount_filt_por))
 metadata_por$eatenvscontrol <- relevel(metadata_por$eatenvscontrol, ref = "control")
 ```
 
-#Save this file for gene annotation in functional enrichment
-```{r save_filtered_file_for_functional_enrichment}
-write.csv(gcount_filt_por, "data/all_genes_por.csv", row.names = TRUE)
-```
 
 # Estimating the size factors
 ```{r Estimate size factors}
@@ -463,6 +459,16 @@ names(gcount_filt_por2)
 length(names(gcount_filt_por2))
 ```
 Column names are now correct and there are 12 as expected.
+
+
+#Save this file for gene annotation in functional enrichment
+```{r save_filtered_file_for_functional_enrichment}
+write.csv(gcount_filt_por2, "data/all_genes_por.csv", row.names = TRUE)
+```
+
+
+
+
 
 ```{r edit metadata}
 # Print the sample names in the metadata_por file. 
