@@ -79,13 +79,29 @@ library("topGO")
 1. Read in file with vst transformed counts of all genes detected and kept after filtering. 
 ```{r}
 #Need to work out which file this is from porites_DEG script
-all_genes_por<-read.csv("output/X.csv")
+all_genes_por<-read.csv("data/all_genes_por.csv")
+colnames(all_genes_por)[1] <- "gene_id"
+transposed_all_genes_por <- t(all_genes_por)
+print(transposed_all_genes_por)
+transposed_all_genes_por <- as.data.frame(t(all_genes_por))
+# Set proper column names using row names (which were originally column headers)
+colnames(transposed_all_genes_por) <- transposed_all_genes_por[1, ]  # First row as column names
+transposed_all_genes_por <- transposed_all_genes_por[-1, ] 
 ```
 2. Read in file of DEG's between eaten and control
 ```{r}
 por_eatenvscontrol_DEG_list<-read.csv("data/DEG_por.csv")
-por_eatenvscontrol_DEG_counts<-read.csv("X.csv")
 por_eatenvscontrol_DEG_list$contrast<-factor(por_eatenvscontrol_DEG_list$contrast, levels=c("eaten", "control"))
+```
+
+# Read in annotation files 
+```{r, Lucys functional annotation from omicsbox}
+Por_annot <- read.delim("data/Acropora_hyacinthus.annotations.txt",  header=TRUE, na.strings = "---NA---")
+dim(Por_annot)
+
+probes <- all_genes_acr$gene_id
+filtered_genes <- Ahya_annot_lucy[Ahya_annot_lucy$GeneID %in% probes,]
+write.csv(filtered_genes,file='data/Ahya_annot_lucy_filtered.csv') 
 ```
 
 # Read in annotation files 
