@@ -671,7 +671,7 @@ eatenvscontrol_por2$gene <- rownames(eatenvscontrol_por2)
 # Check the result
 head(eatenvscontrol_por2)
 rownames(eatenvscontrol_por2) <- NULL
-dim(eatenvscontrol_por2)
+dim(eatenvscontrol_por2) # 18 DEGs
 #save data of DEGS to directory
 write.csv(eatenvscontrol_por2,"data/DEG_por.csv", row.names = FALSE)
 ```

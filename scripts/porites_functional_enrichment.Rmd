@@ -104,7 +104,7 @@ probes <- all_genes_por$gene_id
 filtered_genes_por <- Por_annot[Por_annot$Sequence.Name %in% probes,]
 filtered_genes_por<- filtered_genes_por %>% 
   rename(GeneID = Sequence.Name)
-write.csv(filtered_genes_por,file='data/Por_annot_filtered.csv') #22,214 genes
+write.csv(filtered_genes_por,file='data/Por_annot_filtered.csv') #22,214 genes we found in our RNA gene expression dataset have annotations
 ```
 
 # TopGO 
@@ -119,7 +119,6 @@ In topGO we need:
 Background/GO information: 
 ```{r}
 geneID2GO_por<-filtered_genes_por%>%dplyr::select(GeneID, Annotation.GO.ID)
-#geneID2GO<-Ahya_annot_seq_name_filtered_lucy 
 geneID2GO_por <- as.data.frame(geneID2GO_por)
 background_por <- geneID2GO_por%>%pull("GeneID")
 
@@ -129,28 +128,29 @@ geneID2GO_por<-geneID2GO_por%>%
   separate_rows(Annotation.GO.ID, sep = ";")
 #creates list with each GO term appended to the geneID
 geneID2GO_por <- split(as.character(geneID2GO_por$Annotation.GO.ID), geneID2GO_por$GeneID)
+#so now our geneID2GO_por object has all our genes in our dataset that have GO terms
 ```
 
 Run TopGO
 
 ```{r}
-por_test_set<-por_eatenvscontrol_DEG_list%>%pull(GeneID)
+por_test_set<-por_eatenvscontrol_DEG_list%>%pull(GeneID) #this is our DEG genes
 # 1. Make sure background is a character vector
 background_por <- as.character(background_por)
 # 2. Make sure acr_test_set is character too
 por_test_set <- as.character(por_test_set)
 # 3. Build geneList_por as a named factor
-geneList_por <- factor(background_por %in% por_test_set, levels = c(FALSE, TRUE))
-# 4. Check structure
+geneList_por <- factor(background_por %in% por_test_set, levels = c(FALSE, TRUE)) # 4. Check structure
 str(geneList_por)
 #Make sure the geneList_por is an integer NOT a logical
-geneList_por <- as.integer(background_por %in% por_test_set)
+geneList_por <- as.integer(background_por %in% por_test_set) #this is how many of our DEGs have annotations..
+sum(geneList_por) #18 DEGs have GO terms = makes sense as I only have 18 DEGs
 names(geneList_por) <- background_por
 table(geneList_por) 
 
 str(geneID2GO_por, max.level = 1)
 head(geneID2GO_por, 3)
-sum(names(geneList_por) %in% names(geneID2GO_por))
+sum(names(geneList_por) %in% names(geneID2GO_por))# 17861
 
 GOdata_por <- new("topGOdata",
               description = "por_DEGs",
