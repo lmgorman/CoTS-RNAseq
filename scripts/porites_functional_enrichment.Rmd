@@ -92,17 +92,334 @@ transposed_all_genes_por <- transposed_all_genes_por[-1, ]
 ```{r}
 por_eatenvscontrol_DEG_list<-read.csv("data/DEG_por.csv")
 por_eatenvscontrol_DEG_list$contrast<-factor(por_eatenvscontrol_DEG_list$contrast, levels=c("eaten", "control"))
+por_eatenvscontrol_DEG_list<- por_eatenvscontrol_DEG_list %>% 
+  rename(GeneID = gene)
 ```
 
 # Read in annotation files 
 ```{r, Lucys functional annotation from omicsbox}
-Por_annot <- read.delim("data/Acropora_hyacinthus.annotations.txt",  header=TRUE, na.strings = "---NA---")
+Por_annot <- read.delim("data/Pevermanni_metadata.txt",  header=TRUE, na.strings = "---NA---")
 dim(Por_annot)
-
-probes <- all_genes_acr$gene_id
-filtered_genes <- Ahya_annot_lucy[Ahya_annot_lucy$GeneID %in% probes,]
-write.csv(filtered_genes,file='data/Ahya_annot_lucy_filtered.csv') 
+probes <- all_genes_por$gene_id
+filtered_genes_por <- Por_annot[Por_annot$Sequence.Name %in% probes,]
+filtered_genes_por<- filtered_genes_por %>% 
+  rename(GeneID = Sequence.Name)
+write.csv(filtered_genes_por,file='data/Por_annot_filtered.csv') #22,214 genes
 ```
 
-# Read in annotation files 
-Genome used for RNA-seq - https://www.genoscope.cns.fr/corals/genomes.html = no functional enrichment annotations so will need to run this ourselves 
+# TopGO 
+
+In topGO we need: 
+
+- Ontology: character string specifying the ontology of interest (BP, MF or CC).
+- allGenes: named vector of type numeric or factor. The names attribute contains the genes identifiers. The genes listed in this object define the gene universe.
+- nodeSize: an integer larger or equal to 1. This parameter is used to prune the GO hierarchy from the terms which have less than nodeSize annotated genes (after the true path rule is applied).
+- annotationFun: function which maps genes identifiers to GO terms. There are a couple of annotation function included in the package trying to address the user’s needs. The annotation functions take three arguments. One of those arguments is specifying where the mappings can be found, and needs to be provided by the user. annFUN.gene2GO this function is used when the annotations are provided as a gene-to-GOs mapping.
+
+Background/GO information: 
+```{r}
+geneID2GO_por<-filtered_genes_por%>%dplyr::select(GeneID, Annotation.GO.ID)
+#geneID2GO<-Ahya_annot_seq_name_filtered_lucy 
+geneID2GO_por <- as.data.frame(geneID2GO_por)
+background_por <- geneID2GO_por%>%pull("GeneID")
+
+#remove genes with NA in go term and separate rows based on GO terms 
+geneID2GO_por<-geneID2GO_por%>%
+  filter(!(Annotation.GO.ID == ""))%>%
+  separate_rows(Annotation.GO.ID, sep = ";")
+#creates list with each GO term appended to the geneID
+geneID2GO_por <- split(as.character(geneID2GO_por$Annotation.GO.ID), geneID2GO_por$GeneID)
+```
+
+Run TopGO
+
+```{r}
+por_test_set<-por_eatenvscontrol_DEG_list%>%pull(GeneID)
+# 1. Make sure background is a character vector
+background_por <- as.character(background_por)
+# 2. Make sure acr_test_set is character too
+por_test_set <- as.character(por_test_set)
+# 3. Build geneList_por as a named factor
+geneList_por <- factor(background_por %in% por_test_set, levels = c(FALSE, TRUE))
+# 4. Check structure
+str(geneList_por)
+#Make sure the geneList_por is an integer NOT a logical
+geneList_por <- as.integer(background_por %in% por_test_set)
+names(geneList_por) <- background_por
+table(geneList_por) 
+
+str(geneID2GO_por, max.level = 1)
+head(geneID2GO_por, 3)
+sum(names(geneList_por) %in% names(geneID2GO_por))
+
+GOdata_por <- new("topGOdata",
+              description = "por_DEGs",
+              ontology = "BP",
+              allGenes = geneList_por,
+              geneSelectionFun = function(x) x == 1,
+              nodeSize = 5,
+              gene2GO = geneID2GO_por, annot = annFUN.gene2GO) #Gene
+
+GOdata_por
+numSigGenes(GOdata_por) #6 sig genes
+sum(feasible(GOdata_por)) #13991
+```
+
+Run fisher test. 
+```{r}
+resultFisher_por <- runTest(GOdata_por, algorithm = "classic", statistic = "fisher")
+resultFisher_por
+hist(score(resultFisher_por), 50, xlab = "p-values")
+
+#33 terms with p<0.01
+
+resultWeight_por <- runTest(GOdata_por, algorithm = "weight01", statistic = "fisher")
+resultWeight_por
+hist(score(resultWeight_por), 50, xlab = "p-values")
+#9 terms with p<0.01
+
+# p < 0.05 for weighted fisher
+#Generate GO term table from resultWeight
+allGO_por <- GenTable(GOdata_por,
+                  weight01Fisher = resultWeight_por,
+                  orderBy = "weight01Fisher",
+                  topNodes = 1000)  # get many to filter later
+
+# Convert p-values to numeric
+allGO_por$weight01Fisher <- as.numeric(allGO_por$weight01Fisher)
+
+# Filter for p < 0.05
+signifGO_por <- subset(allGO_por, weight01Fisher < 0.05)
+
+# See how many significant terms
+nrow(signifGO_por) #16 GO terms
+head(signifGO_por)
+
+#p<0.05 for classic fisher
+classicGO_por <- GenTable(GOdata_por,
+                      classicFisher = resultFisher_por,
+                      orderBy = "classicFisher",
+                      topNodes = 1000)
+
+classicGO_por$classicFisher <- as.numeric(classicGO_por$classicFisher)
+signifClassic_por <- subset(classicGO_por, classicFisher < 0.05)
+
+nrow(signifClassic_por)#126 GO terms
+head(signifClassic_por)
+```
+
+Which test should be used? 
+
+```{r}
+allRes_por <- GenTable(GOdata_por, classicFisher = resultFisher_por, weightFisher = resultWeight_por, orderBy = "weightFisher", ranksOf = "classicFisher", topNodes = length(score(resultFisher_por)))
+
+# Convert character columns to numeric
+allRes_por$classicFisher <- as.numeric(allRes_por$classicFisher)
+allRes_por$weightFisher <- as.numeric(allRes_por$weightFisher)
+
+#adjust p-values 
+allRes_por$bh_adjust <- p.adjust(allRes_por$classicFisher, method="BH") #add adjusted p-values
+
+#adjust p-values 
+allRes_por$bh_adjust_weight <- p.adjust(allRes_por$weightFisher, method="BH") #add adjusted p-values
+```
+
+```{r}
+showSigOfNodes(GOdata_por, score(resultFisher_por), firstSigNodes = 5, useInfo = 'def')
+dev.off()
+
+showSigOfNodes(GOdata_por, score(resultWeight_por), firstSigNodes = 5, useInfo = 'def')
+dev.off()
+```
+
+The subgraph induced by the top 5 GO terms identified by the classic algorithm for scoring GO terms for enrichment. Boxes indicate the 5 most significant terms. Box color represents the relative significance, ranging from dark red (most significant) to light yellow (least significant). Black arrows indicate is-a relationships and red arrows part-of relationships.
+
+Proceed using weighted fisher test results.  
+```{r}
+p05_res_por <- allRes_por %>% dplyr::filter(weightFisher < 0.05)
+  
+#Reduce/collapse GO term set with the rrvgo package 
+simMatrix_por <- calculateSimMatrix(p05_res_por$GO.ID,
+                                orgdb="org.Ce.eg.db", #c. elegans database
+                                ont="BP",
+                                method="Rel")
+```
+
+```{r}
+ #calculate similarity 
+scores_por <- setNames(-log(as.numeric(p05_res_por$weightFisher)), p05_res_por$GO.ID)
+reducedTerms_por <- reduceSimMatrix(simMatrix_por,
+                                scores_por,
+                                threshold=0.7,
+                                orgdb="org.Ce.eg.db")
+dim(reducedTerms_por)# 12 10
+```
+
+```{r}
+#keep only the goterms from the reduced list
+p05_res_reduced_por <- p05_res_por %>%
+  filter(GO.ID %in% reducedTerms_por$go)
+
+#add in parent terms to list of go terms 
+p05_res_reduced_por$ParentTerm <- reducedTerms_por$parentTerm[match(p05_res_reduced_por$GO.ID, reducedTerms_por$go)]
+
+length(unique(p05_res_reduced_por$ParentTerm))#7
+
+p05_res_reduced_por <- p05_res_reduced_por %>% group_by(ParentTerm) %>% mutate("N_in_Parent" = dplyr::n()) %>% ungroup()
+length(unique(p05_res_reduced_por$ParentTerm)) #7
+```
+
+```{r}
+write.csv(p05_res_reduced_por, "output/por_parent_topGO_results.csv")
+```
+
+```{r}
+parent_enrich_plot1_por <- ggplot(p05_res_reduced_por, aes(x=weightFisher,y=reorder(Term,weightFisher)))+
+  facet_grid(ParentTerm ~ ., scales="free", labeller = label_wrap_gen(width = 10, multi_line = TRUE))+
+  geom_point(size=2, color="black")+
+  geom_segment(aes(x=0, xend=weightFisher, y=Term, yend=Term)) +
+  #geom_hline(yintercept = 0, linetype="solid", color = 'black', linewidth=0.5, show.legend = TRUE)+
+  #scale_y_continuous(limits=c(0,40))+
+   #scale_x_discrete(labels = label_wrap(30)) +
+  #scale_fill_gradientn(colours=c("white","#fddbc7","#f4a582","#d6604d","#b2182b"), na.value = "grey98",limits = c(0, 100)) +
+  #labs(title = "Enriched Biological Process Parent GO Terms, Brown Module", x="Parent Term", y="Number of Significant (p < 0.01) GO Terms in Module", colour="p-value") +
+  theme_classic() + 
+  theme(axis.text.y = element_text(size = 8), 
+              axis.title = element_text(size = 8), 
+              plot.title = element_text(hjust = 0.5, size = 8));parent_enrich_plot1_por
+
+ggsave("figures/acropora/parent_enrich_plot1_por.pdf", plot = parent_enrich_plot1_por, width = 8, height = 15, units = "in")
+dev.off()  # close and save
+
+```
+
+```{r}
+p05_res_reduced_por$GeneRatio <- p05_res_reduced_por$Significant / p05_res_reduced_por$Annotated
+parent_enrich_plot3_por <- ggplot(p05_res_reduced_por,
+       aes(x = GeneRatio,
+           y = reorder(Term, GeneRatio),
+           color = -log10(weightFisher))) +
+  geom_point(size=1) +
+  geom_segment(aes(x=0, xend=GeneRatio, y=Term, yend=Term), color="grey70") +
+  scale_color_gradient(low="lightblue", high="darkblue", name="-log10(weightFisher)") +
+  theme_classic(base_size=10) +
+  labs(x="Gene Ratio", y="GO Term") +
+  theme(axis.text.y = element_text(size=8),
+        axis.title = element_text(size=9),
+        plot.title = element_text(hjust=0.5, size=10));parent_enrich_plot3_por
+ggsave(parent_enrich_plot3_por, filename="figures/acropora/por_parent_enrichment_individual_terms.png", width=10, height=11)
+
+#summarize by parent term
+parent_summary_por <- p05_res_reduced_por %>%
+  group_by(ParentTerm) %>%
+  summarise(
+    maxLogP = max(-log10(weightFisher)),
+    meanGeneRatio = mean(Significant/Annotated),
+    nTerms = length(maxLogP)
+  ) %>%
+  arrange(desc(maxLogP))
+
+parent_enrich_plot4_por<-ggplot(parent_summary_por, aes(x = meanGeneRatio, y = reorder(ParentTerm, meanGeneRatio), color = maxLogP, size = nTerms)) +
+  geom_point(size=2) +
+  scale_color_gradient(low = "lightblue", high = "darkblue", name="Max -log10(weightFisher)") +
+  scale_size_continuous(name="Number of Terms") +
+  theme_classic(base_size=10) +
+  labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4_por
+ggsave(parent_enrich_plot4_por, filename="figures/acropora/por_parent_enrichment_parent_terms.png", width=10, height=7)
+```
+
+# What about classic fisher results...
+
+Proceed using classic fisher test results.  
+```{r}
+p05_clas_res_por <- allRes_por %>% dplyr::filter(classicFisher < 0.05)
+  
+#Reduce/collapse GO term set with the rrvgo package 
+simMatrix_por_class <- calculateSimMatrix(p05_clas_res_por$GO.ID,
+                                orgdb="org.Ce.eg.db", #c. elegans database
+                                ont="BP",
+                                method="Rel")
+```
+
+```{r}
+ #calculate similarity 
+scores_por_class <- setNames(-log(as.numeric(p05_clas_res_por$classicFisher)), p05_clas_res_por$GO.ID)
+reducedTerms_por_class <- reduceSimMatrix(simMatrix_por_class,
+                                scores_por_class,
+                                threshold=0.7,
+                                orgdb="org.Ce.eg.db")
+dim(reducedTerms_por_class)# 74 10
+```
+
+```{r}
+#keep only the goterms from the reduced list
+p05_clas_res_reduced_por <- p05_clas_res_por %>%
+  filter(GO.ID %in% reducedTerms_por_class$go)
+
+#add in parent terms to list of go terms 
+p05_clas_res_reduced_por$ParentTerm <- reducedTerms_por_class$parentTerm[match(p05_clas_res_reduced_por$GO.ID, reducedTerms_por_class$go)]
+
+length(unique(p05_clas_res_reduced_por$ParentTerm))#14
+
+p05_clas_res_reduced_por <- p05_clas_res_reduced_por %>% group_by(ParentTerm) %>% mutate("N_in_Parent" = dplyr::n()) %>% ungroup()
+length(unique(p05_clas_res_reduced_por$ParentTerm)) #14
+```
+
+```{r}
+write.csv(p05_clas_res_reduced_por, "output/por_parent_topGO_results_classicfisher.csv")
+```
+
+```{r}
+parent_enrich_plot1_por_class <- ggplot(p05_clas_res_reduced_por, aes(x=classicFisher,y=reorder(Term,classicFisher)))+
+  facet_grid(ParentTerm ~ ., scales="free", labeller = label_wrap_gen(width = 10, multi_line = TRUE))+
+  geom_point(size=2, color="black")+
+  geom_segment(aes(x=0, xend=classicFisher, y=Term, yend=Term)) +
+  #geom_hline(yintercept = 0, linetype="solid", color = 'black', linewidth=0.5, show.legend = TRUE)+
+  #scale_y_continuous(limits=c(0,40))+
+   #scale_x_discrete(labels = label_wrap(30)) +
+  #scale_fill_gradientn(colours=c("white","#fddbc7","#f4a582","#d6604d","#b2182b"), na.value = "grey98",limits = c(0, 100)) +
+  #labs(title = "Enriched Biological Process Parent GO Terms, Brown Module", x="Parent Term", y="Number of Significant (p < 0.01) GO Terms in Module", colour="p-value") +
+  theme_classic() + 
+  theme(axis.text.y = element_text(size = 8), 
+              axis.title = element_text(size = 8), 
+              plot.title = element_text(hjust = 0.5, size = 8));parent_enrich_plot1_por_class
+
+ggsave("figures/porites/parent_enrich_plot1_por_class.pdf", plot = parent_enrich_plot1_por, width = 8, height = 15, units = "in")
+dev.off()  # close and save
+
+```
+
+```{r}
+p05_clas_res_reduced_por$GeneRatio <- p05_clas_res_reduced_por$Significant / p05_clas_res_reduced_por$Annotated
+parent_enrich_plot3_por_classic <- ggplot(p05_clas_res_reduced_por,
+       aes(x = GeneRatio,
+           y = reorder(Term, GeneRatio),
+           color = -log10(classicFisher))) +
+  geom_point(size=1) +
+  geom_segment(aes(x=0, xend=GeneRatio, y=Term, yend=Term), color="grey70") +
+  scale_color_gradient(low="lightblue", high="darkblue", name="-log10(classicFisher)") +
+  theme_classic(base_size=10) +
+  labs(x="Gene Ratio", y="GO Term") +
+  theme(axis.text.y = element_text(size=8),
+        axis.title = element_text(size=9),
+        plot.title = element_text(hjust=0.5, size=10));parent_enrich_plot3_por_classic
+ggsave(parent_enrich_plot3_por_classic, filename="figures/porites/por_parent_enrichment_individual_terms_classic.png", width=10, height=11)
+
+#summarize by parent term
+parent_summary_por_class <- p05_clas_res_reduced_por %>%
+  group_by(ParentTerm) %>%
+  summarise(
+    maxLogP = max(-log10(classicFisher)),
+    meanGeneRatio = mean(Significant/Annotated),
+    nTerms = length(maxLogP)
+  ) %>%
+  arrange(desc(maxLogP))
+
+parent_enrich_plot4_por_class<-ggplot(parent_summary_por_class, aes(x = meanGeneRatio, y = reorder(ParentTerm, meanGeneRatio), color = maxLogP, size = nTerms)) +
+  geom_point(size=2) +
+  scale_color_gradient(low = "lightblue", high = "darkblue", name="Max -log10(classicFisher)") +
+  scale_size_continuous(name="Number of Terms") +
+  theme_classic(base_size=10) +
+  labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4_por_class
+ggsave(parent_enrich_plot4_por_class, filename="figures/porites/por_parent_enrichment_parent_terms_classic.png", width=10, height=7)
+```

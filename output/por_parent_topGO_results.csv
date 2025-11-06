@@ -1,0 +1,13 @@
+"","GO.ID","Term","Annotated","Significant","Expected","Rank in classicFisher","classicFisher","weightFisher","bh_adjust","bh_adjust_weight","ParentTerm","N_in_Parent"
+"1","GO:0009167","purine ribonucleoside monophosphate meta...",189,2,0.08,7,0.00263,0.0026,1,1,"purine ribonucleoside monophosphate metabolic process",4
+"2","GO:0046034","ATP metabolic process",215,2,0.09,11,0.00339,0.0034,1,1,"purine ribonucleoside monophosphate metabolic process",4
+"3","GO:0045008","depyrimidination",8,1,0,12,0.00343,0.0034,1,1,"purine ribonucleoside monophosphate metabolic process",4
+"4","GO:0048567","ectodermal digestive tract morphogenesis",8,1,0,13,0.00343,0.0034,1,1,"ectodermal digestive tract morphogenesis",1
+"5","GO:0006123","mitochondrial electron transport, cytoch...",9,1,0,15,0.00385,0.0039,1,1,"mitochondrial electron transport, cytochrome c to oxygen",3
+"6","GO:0033539","fatty acid beta-oxidation using acyl-CoA...",22,1,0.01,32,0.0094,0.0094,1,1,"purine ribonucleoside monophosphate metabolic process",4
+"7","GO:0008535","respiratory chain complex IV assembly",23,1,0.01,33,0.00982,0.0098,1,1,"respiratory chain complex IV assembly",1
+"8","GO:0006783","heme biosynthetic process",25,1,0.01,34,0.01068,0.0107,1,1,"heme biosynthetic process",1
+"9","GO:0006119","oxidative phosphorylation",121,2,0.05,2,0.00109,0.0175,1,1,"mitochondrial electron transport, cytochrome c to oxygen",3
+"10","GO:0022900","electron transport chain",154,2,0.07,5,0.00175,0.0218,1,1,"mitochondrial electron transport, cytochrome c to oxygen",3
+"11","GO:0006805","xenobiotic metabolic process",651,2,0.28,65,0.02862,0.0286,1,1,"xenobiotic metabolic process",1
+"12","GO:1902600","proton transmembrane transport",96,1,0.04,75,0.04048,0.0405,1,1,"proton transmembrane transport",1
