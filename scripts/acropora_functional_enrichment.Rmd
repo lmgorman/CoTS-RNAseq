@@ -347,3 +347,19 @@ parent_enrich_plot4<-ggplot(parent_summary, aes(x = meanGeneRatio, y = reorder(P
   labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4
 ggsave(parent_enrich_plot4, filename="figures/acropora/parent_enrichment_parent_terms.png", width=10, height=7)
 ```
+
+Create a file of fasta of DEGs and append these to the GO terms
+```{r}
+library("seqinr")
+acr_fasta_sequences <- read.fasta(file = "data/Ahyacinthus.proteins.fasta", seqtype = "AA", as.string = TRUE)
+# Convert to data frame
+acr_fasta_sequences <- data.frame(id = names(acr_fasta_sequences), sequence = unlist(acr_fasta_sequences))
+selected_fasta_acr <- acr_fasta_sequences[acr_fasta_sequences$id %in% acr_eatenvscontrol_DEG_list$GeneID, ]
+filtered_annot_acr <- Ahya_annot_lucy[Ahya_annot_lucy$GeneID %in% selected_fasta$id, ]
+Acropora_DEGs_metadata <- merge(selected_fasta_acr, filtered_annot_acr, by.x = "id", by.y = "Sequence.Name")
+#Remove multiple semi-colons
+Acropora_DEGs_metadata <- Acropora_DEGs_metadata %>%
+  mutate(across(where(is.character), ~ gsub(";+", "", .)))
+#Write file for further analysis
+write.csv(Acropora_DEGs_metadata,file='data/Acropora_DEGs_metadata') 
+```

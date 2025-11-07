@@ -23,7 +23,7 @@ options(stringsAsFactors = FALSE) #Set Strings to character
 ```
 
 ```{r}
-if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
+if ("tidyversea" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
 if ("genefilter" %in% rownames(installed.packages()) == 'FALSE') install.packages('genefilter') 
 if ("DESeq2" %in% rownames(installed.packages()) == 'FALSE') install.packages('DESeq2') 
 if ("RColorBrewer" %in% rownames(installed.packages()) == 'FALSE') install.packages('RColorBrewer') 
@@ -422,4 +422,21 @@ parent_enrich_plot4_por_class<-ggplot(parent_summary_por_class, aes(x = meanGene
   theme_classic(base_size=10) +
   labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4_por_class
 ggsave(parent_enrich_plot4_por_class, filename="figures/porites/por_parent_enrichment_parent_terms_classic.png", width=10, height=7)
+```
+
+
+Create a file of fasta of DEGs and append these to the GO terms
+```{r}
+library("seqinr")
+por_fasta_sequences <- read.fasta(file = "data/Porites_evermanni_v1.annot.pep.fa", seqtype = "AA", as.string = TRUE)
+# Convert to data frame
+por_fasta_sequences <- data.frame(id = names(por_fasta_sequences), sequence = unlist(por_fasta_sequences))
+selected_fasta <- por_fasta_sequences[por_fasta_sequences$id %in% por_eatenvscontrol_DEG_list$GeneID, ]
+filtered_annot <- Por_annot[Por_annot$Sequence.Name %in% selected_fasta$id, ]
+Porites_DEGs_metadata <- merge(selected_fasta, filtered_annot, by.x = "id", by.y = "Sequence.Name")
+#Remove multiple semi-colons
+Porites_DEGs_metadata <- Porites_DEGs_metadata %>%
+  mutate(across(where(is.character), ~ gsub(";+", "", .)))
+#Write file for further analysis
+write.csv(Porites_DEGs_metadata,file='data/Porites_DEGs_metadata.csv') 
 ```
