@@ -354,12 +354,11 @@ library("seqinr")
 acr_fasta_sequences <- read.fasta(file = "data/Ahyacinthus.proteins.fasta", seqtype = "AA", as.string = TRUE)
 # Convert to data frame
 acr_fasta_sequences <- data.frame(id = names(acr_fasta_sequences), sequence = unlist(acr_fasta_sequences))
-selected_fasta_acr <- acr_fasta_sequences[acr_fasta_sequences$id %in% acr_eatenvscontrol_DEG_list$GeneID, ]
-filtered_annot_acr <- Ahya_annot_lucy[Ahya_annot_lucy$GeneID %in% selected_fasta$id, ]
-Acropora_DEGs_metadata <- merge(selected_fasta_acr, filtered_annot_acr, by.x = "id", by.y = "Sequence.Name")
-#Remove multiple semi-colons
-Acropora_DEGs_metadata <- Acropora_DEGs_metadata %>%
-  mutate(across(where(is.character), ~ gsub(";+", "", .)))
+#Remove -RA from end of sequence names
+acr_fasta_sequences$id <- sub("-RA", "", acr_fasta_sequences$id)
+selected_fasta_acr <- acr_fasta_sequences[acr_fasta_sequences$id %in% acr_eatenvscontrol_DEG_list$gene_ID, ]
+filtered_annot_acr <- Ahya_annot_lucy[Ahya_annot_lucy$GeneID %in% selected_fasta_acr$id, ]
+Acropora_DEGs_metadata <- merge(selected_fasta_acr, filtered_annot_acr, by.x = "id", by.y = "GeneID")
 #Write file for further analysis
 write.csv(Acropora_DEGs_metadata,file='data/Acropora_DEGs_metadata') 
 ```
