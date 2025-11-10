@@ -118,23 +118,23 @@ In topGO we need:
 
 Background/GO information: 
 ```{r}
-geneID2GO_por<-filtered_genes_por%>%dplyr::select(GeneID, Annotation.GO.ID)
+geneID2GO_por<-filtered_genes_por%>%dplyr::select(Sequence.Name, Annotation.GO.ID)
 geneID2GO_por <- as.data.frame(geneID2GO_por)
-background_por <- geneID2GO_por%>%pull("GeneID")
+background_por <- geneID2GO_por%>%pull("Sequence.Name")
 
 #remove genes with NA in go term and separate rows based on GO terms 
 geneID2GO_por<-geneID2GO_por%>%
   filter(!(Annotation.GO.ID == ""))%>%
   separate_rows(Annotation.GO.ID, sep = ";")
 #creates list with each GO term appended to the geneID
-geneID2GO_por <- split(as.character(geneID2GO_por$Annotation.GO.ID), geneID2GO_por$GeneID)
+geneID2GO_por <- split(as.character(geneID2GO_por$Annotation.GO.ID), geneID2GO_por$Sequence.Name)
 #so now our geneID2GO_por object has all our genes in our dataset that have GO terms
 ```
 
 Run TopGO
 
 ```{r}
-por_test_set<-por_eatenvscontrol_DEG_list%>%pull(GeneID) #this is our DEG genes
+por_test_set<-por_eatenvscontrol_DEG_list%>%pull(gene) #this is our DEG genes
 # 1. Make sure background is a character vector
 background_por <- as.character(background_por)
 # 2. Make sure acr_test_set is character too
@@ -239,7 +239,7 @@ Proceed using weighted fisher test results.
 p05_res_por <- allRes_por %>% dplyr::filter(weightFisher < 0.05)
   
 #Reduce/collapse GO term set with the rrvgo package 
-simMatrix_por <- calculateSimMatrix(p05_res_por$GO.ID,
+simMatrix_por <- rrvgo::calculateSimMatrix(p05_res_por$GO.ID,
                                 orgdb="org.Ce.eg.db", #c. elegans database
                                 ont="BP",
                                 method="Rel")
@@ -431,7 +431,7 @@ library("seqinr")
 por_fasta_sequences <- read.fasta(file = "data/Porites_evermanni_v1.annot.pep.fa", seqtype = "AA", as.string = TRUE)
 # Convert to data frame
 por_fasta_sequences <- data.frame(id = names(por_fasta_sequences), sequence = unlist(por_fasta_sequences))
-selected_fasta <- por_fasta_sequences[por_fasta_sequences$id %in% por_eatenvscontrol_DEG_list$GeneID, ]
+selected_fasta <- por_fasta_sequences[por_fasta_sequences$id %in% por_eatenvscontrol_DEG_list$gene, ]
 filtered_annot <- Por_annot[Por_annot$Sequence.Name %in% selected_fasta$id, ]
 Porites_DEGs_metadata <- merge(selected_fasta, filtered_annot, by.x = "id", by.y = "Sequence.Name")
 #Remove multiple semi-colons
@@ -439,4 +439,9 @@ Porites_DEGs_metadata <- Porites_DEGs_metadata %>%
   mutate(across(where(is.character), ~ gsub(";+", "", .)))
 #Write file for further analysis
 write.csv(Porites_DEGs_metadata,file='data/Porites_DEGs_metadata.csv') 
+#Write file of just DEG amino acids for BLASTing against my venom databases
+# Turn the dataframe into a named list
+Por_sequences <- AAStringSet(selected_fasta$sequence)
+names(Por_sequences) <- selected_fasta$id
+writeXStringSet(Por_sequences, filepath = "data/Porites_DEGs.fasta")
 ```
