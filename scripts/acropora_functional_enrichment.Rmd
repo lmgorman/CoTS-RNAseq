@@ -360,5 +360,10 @@ selected_fasta_acr <- acr_fasta_sequences[acr_fasta_sequences$id %in% acr_eatenv
 filtered_annot_acr <- Ahya_annot_lucy[Ahya_annot_lucy$GeneID %in% selected_fasta_acr$id, ]
 Acropora_DEGs_metadata <- merge(selected_fasta_acr, filtered_annot_acr, by.x = "id", by.y = "GeneID")
 #Write file for further analysis
-write.csv(Acropora_DEGs_metadata,file='data/Acropora_DEGs_metadata') 
+write.csv(Acropora_DEGs_metadata,file='data/Acropora_DEGs_metadata.csv') 
+#Write file of just DEG amino acids for BLASTing against my venom databases
+# Turn the dataframe into a named list
+Acr_sequences <- AAStringSet(selected_fasta_acr$sequence)
+names(Acr_sequences) <- selected_fasta_acr$id
+writeXStringSet(Acr_sequences, filepath = "data/Acr_DEGs.fasta")
 ```
