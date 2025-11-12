@@ -9,6 +9,7 @@
 #SBATCH -o toxcodan-pever-%j.out
 #SBATCH -e toxcodan-pever-%j.error
 
-module load conda
+module load uri/main
+module load conda/latest
 conda activate ToxcodanGenome
 
