@@ -9,10 +9,6 @@
 #SBATCH -o /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/logs/toxcodan-paus-%j.out
 #SBATCH -e /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/logs/toxcodan-paus-%j.error
 
-# Ensure Conda uses /work directories
-export CONDA_PKGS_DIRS=/work/pi_hputnam_uri_edu/lgorman/.conda/pkgs
-export CONDA_ENVS_DIRS=/work/pi_hputnam_uri_edu/lgorman/.conda/envs
-
 # -----------------------------
 # Load modules
 # -----------------------------
@@ -20,7 +16,7 @@ module load uri/main
 module load conda/latest
 
 # Activate environment
-conda activate ToxcodanGenome
+conda activate /work/pi_hputnam_uri_edu/lgorman/.conda/envs/ToxcodanGenome
 
 
 # Run script
