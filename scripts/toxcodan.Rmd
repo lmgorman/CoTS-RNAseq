@@ -12,5 +12,38 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library("seqinr")
 library("tidyverse")
-toxprot <- read.fasta(file = "data/Ahyacinthus.proteins.fasta", seqtype = "AA", as.string = TRUE)
+toxprot <- read.fasta(file = "D:/CoTS-RNAseq/ToxCodAn/uniprotkb_2025_11_12.fasta", seqtype = "AA", as.string = TRUE)
+custom_blast <- read.fasta(file = "D:/CoTS-RNAseq/ToxCodAn/customtoxin_blast.fasta", seqtype = "AA", as.string = TRUE)
+# Convert to data frame
+toxprot_sequences <- data.frame(id = names(toxprot), sequence = unlist(toxprot))
+custom_blast_sequences <- data.frame(id = names(custom_blast), sequence = unlist(custom_blast))
+toxprot_sequences$in_custom_blast_sequences <- toxprot_sequences$sequence %in% custom_blast_sequences$sequence
+toxprot_sequences
+matched_sequences <- merge(toxprot_sequences, custom_blast_sequences, by = "sequence")
+matched
+tox_prot_unique <- toxprot_sequences[!(toxprot_sequences$sequence %in% custom_blast_sequences$sequence), ]
+tox_prot_unique # sequences in my literature search not in the toxprot database so add these to toxprot database
+custom_blast_unique <- custom_blast_sequences[!(custom_blast_sequences$sequence %in% toxprot_sequences$sequence), ]
+toxprot_sequences <- toxprot_sequences[, -3] 
+toxprot_updated <- rbind(custom_blast_sequences, tox_prot_unique)
+custom_bast_updated <- rbind(toxprot_sequences, custom_blast_unique) #421
+toxprot_updated #419 toxin proteins
+tox_only <- toxprot_updated[!(toxprot_updated$sequence %in% custom_bast_updated$sequence), ]
+tox_only
+custom_only <- custom_bast_updated[!(custom_bast_updated$sequence %in% toxprot_updated$sequence), ]
+custom_only
+#Lists duplicate sequences
+dup_sequences <- names(which(table(custom_bast_updated$sequence) > 1))
+custom_bast_updated[custom_bast_updated$sequence %in% dup_sequences, ]
+#Look at duplicate sequences in custom_bast_updated dataframe
+table_counts <- table(custom_bast_updated$sequence)
+table_counts[table_counts > 1]
+#extract sequence ID of duplicates
+dup_sequences <- names(table_counts[table_counts > 1])
+duplicates_df <- custom_bast_updated[custom_bast_updated$sequence %in% dup_sequences, ]
+duplicates_df #looks fine, mostly isoforms i think
+#Write this file out to use as database for ToxCodAn
+toxprot_updated <- AAStringSet(custom_bast_updated$sequence)
+names(custom_bast_updated) <- toxprot_updated$id
+writeXStringSet(toxprot_updated, filepath = "D:/CoTS-RNAseq/ToxCodAn/custom_toxin_database.fasta")
 ```
