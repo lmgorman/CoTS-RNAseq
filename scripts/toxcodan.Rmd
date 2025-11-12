@@ -1,0 +1,16 @@
+---
+title: "ToxCodAn"
+author: "LM Gorman"
+date: "2025-11-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("seqinr")
+library("tidyverse")
+toxprot <- read.fasta(file = "data/Ahyacinthus.proteins.fasta", seqtype = "AA", as.string = TRUE)
+```
