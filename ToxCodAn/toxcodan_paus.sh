@@ -1,4 +1,5 @@
 /work/pi_hputnam_uri_edu/lgorman/.conda/envs
+/home/lucy_gorman_uri_edu/.condarc
 
 
 
