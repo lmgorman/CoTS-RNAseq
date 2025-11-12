@@ -21,4 +21,5 @@ conda activate ToxcodanGenome
 python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py \
     -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Paus_genomic.fna \
     -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta \
-    -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results
+    -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results \
+    -c 10
