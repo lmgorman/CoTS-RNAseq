@@ -1,3 +1,7 @@
+/work/pi_hputnam_uri_edu/lgorman/.conda/envs
+
+
+
 #!/bin/bash
 #SBATCH --job-name=toxcodan-paus
 #SBATCH --nodes=1
