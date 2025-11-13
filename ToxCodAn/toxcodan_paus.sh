@@ -16,11 +16,13 @@ module load uri/main
 module load conda/latest
 
 # Activate environment
+source $(conda info --base)/etc/profile.d/conda.sh
 conda activate /home/lucy_gorman_uri_edu/.conda/envs/ToxcodanGenome
 
 
 # Run script
-python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py \
+/home/lucy_gorman_uri_edu/.conda/envs/ToxcodanGenome/bin/python \
+    /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py \ 
     -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Paus_genomic.fna \
     -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/anthozoan_db_gen.fasta.fasta \
     -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results \
