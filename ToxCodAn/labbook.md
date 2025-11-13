@@ -10,6 +10,6 @@ To use the method from
 (https://github.com/pedronachtigall/ToxCodAn-Genome)
 
 
-Prus
-Having trouble
-(https://www.ebi.ac.uk/ena/browser/view/PRJEB25136) - chat to Ariana
+
+Downloaded their anthozoan CDS
+https://github.com/pedronachtigall/ToxCodAn-Genome/blob/main/Databases/Anthozoa_db.fasta
