@@ -294,3 +294,7 @@ Warning: [blastx] Query is Empty!
 2025-11-13 15:50:04 >>>> ToxCodAn-Genome finished!
         >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Aten_expanded/toxin_annotation.gtf
 ```
+
+The other hit was to 015907225.1 which is the 
+>XM_015907225.1 PREDICTED: Acropora digitifera anthrax toxin receptor 2-like (LOC107341763), mRNA
+= not a toxin but rather a receptor for a toxin in other organisms so can discount this from our results
