@@ -18,20 +18,18 @@ custom_blast <- read.fasta(file = "D:/CoTS-RNAseq/ToxCodAn/customtoxin_blast.fas
 toxprot_sequences <- data.frame(id = names(toxprot), sequence = unlist(toxprot))
 custom_blast_sequences <- data.frame(id = names(custom_blast), sequence = unlist(custom_blast))
 toxprot_sequences$in_custom_blast_sequences <- toxprot_sequences$sequence %in% custom_blast_sequences$sequence
-toxprot_sequences
+
 matched_sequences <- merge(toxprot_sequences, custom_blast_sequences, by = "sequence")
-matched
-tox_prot_unique <- toxprot_sequences[!(toxprot_sequences$sequence %in% custom_blast_sequences$sequence), ]
-tox_prot_unique # sequences in my literature search not in the toxprot database so add these to toxprot database
-custom_blast_unique <- custom_blast_sequences[!(custom_blast_sequences$sequence %in% toxprot_sequences$sequence), ]
-toxprot_sequences <- toxprot_sequences[, -3] 
-toxprot_updated <- rbind(custom_blast_sequences, tox_prot_unique)
+
+tox_prot_unique <- toxprot_sequences[!(toxprot_sequences$sequence %in% custom_blast_sequences$sequence), ] #208
+
+tox_prot_unique # sequences in the toxprot database 
+custom_blast_unique <- custom_blast_sequences[!(custom_blast_sequences$sequence %in% toxprot_sequences$sequence), ] #79 not found in tox prot
+tox_prot_unique <- tox_prot_unique[, -3] 
+toxprot_updated <- rbind(custom_blast_sequences, tox_prot_unique) #419
+toxprot_sequences <- toxprot_sequences[, -3]
 custom_bast_updated <- rbind(toxprot_sequences, custom_blast_unique) #421
-toxprot_updated #419 toxin proteins
-tox_only <- toxprot_updated[!(toxprot_updated$sequence %in% custom_bast_updated$sequence), ]
-tox_only
-custom_only <- custom_bast_updated[!(custom_bast_updated$sequence %in% toxprot_updated$sequence), ]
-custom_only
+
 #Lists duplicate sequences
 dup_sequences <- names(which(table(custom_bast_updated$sequence) > 1))
 custom_bast_updated[custom_bast_updated$sequence %in% dup_sequences, ]
@@ -44,6 +42,6 @@ duplicates_df <- custom_bast_updated[custom_bast_updated$sequence %in% dup_seque
 duplicates_df #looks fine, mostly isoforms i think
 #Write this file out to use as database for ToxCodAn
 toxprot_updated <- AAStringSet(custom_bast_updated$sequence)
-names(custom_bast_updated) <- toxprot_updated$id
+names(toxprot_updated) <- custom_bast_updated$id
 writeXStringSet(toxprot_updated, filepath = "D:/CoTS-RNAseq/ToxCodAn/custom_toxin_database.fasta")
 ```
