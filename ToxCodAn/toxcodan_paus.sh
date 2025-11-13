@@ -1,3 +1,5 @@
+#Use interactively on one line! ToxCodAn does NOT like the line breaks in the script
+
 #!/bin/bash
 #SBATCH --job-name=toxcodan-paus
 #SBATCH --nodes=1
