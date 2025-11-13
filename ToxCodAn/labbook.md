@@ -9,6 +9,14 @@ Created new genome directory to save the genomes into
 To use the method from
 (https://github.com/pedronachtigall/ToxCodAn-Genome)
 
+salloc -p uri-cpu -c 4 --mem=32G
+module load uri/main
+module load conda/latest
+
+# Activate environment
+source $(conda info --base)/etc/profile.d/conda.sh
+conda activate /home/lucy_gorman_uri_edu/.conda/envs/ToxcodanGenome
+
 
 
 Downloaded their anthozoan CDS
