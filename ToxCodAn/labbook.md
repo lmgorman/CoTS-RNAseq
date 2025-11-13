@@ -9,13 +9,15 @@ Created new genome directory to save the genomes into
 To use the method from
 (https://github.com/pedronachtigall/ToxCodAn-Genome)
 
+```
 salloc -p uri-cpu -c 4 --mem=32G
+
 module load uri/main
 module load conda/latest
+```
 
 # Activate environment
-source $(conda info --base)/etc/profile.d/conda.sh
-conda activate /home/lucy_gorman_uri_edu/.conda/envs/ToxcodanGenome
+`conda activate /home/lucy_gorman_uri_edu/.conda/envs/ToxcodanGenome`
 
 
 
@@ -170,3 +172,104 @@ Warning: [blastx] Query is Empty!
 
 ## P. compressa
 `python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Porites_compressa.fasta -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Pcomp_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10`
+
+ >>> Number of toxin loci identified in the genome:
+                TOTAL -> 0
+2025-11-13 15:30:18 >>>> comparing annotated toxins to the uniprot/toxprot database...
+        Uniprot/Toxprot database -> /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta
+Warning: [blastx] Query is Empty!
+        >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Pcomp_expanded/uniprot_report.txt
+2025-11-13 15:30:20 >>>> ToxCodAn-Genome finished!
+
+## P. lutea 
+python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/plut_final_2.1.fasta -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Plut_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+
+FASTA index file /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/plut_final_2.1.fasta.fai created.
+        >>> Number of toxin loci identified in the genome:
+                TOTAL -> 0
+2025-11-13 15:32:17 >>>> comparing annotated toxins to the uniprot/toxprot database...
+        Uniprot/Toxprot database -> /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta
+Warning: [blastx] Query is Empty!
+        >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Plut_expanded/uniprot_report.txt
+2025-11-13 15:32:19 >>>> ToxCodAn-Genome finished!
+        >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Plut_expanded/toxin_annotation.gtf
+
+## P. astreoides
+python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Pastreoides.fasta -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Past_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+
+ToxCodAn-Genome stopped to run, due to the following issue:
+    No matching region containing a full-length toxin CDS was detected between the genome and the toxin database used as input.
+
+## A. hyacinthus 
+python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Ahyacinthus_genomic.fna -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Ahya_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+
+```
+2025-11-13 15:35:42 >>>> searching for toxin regions in genome using the database file...
+2025-11-13 15:35:53 >>>> retrieving and filtering matched regions...
+2025-11-13 15:35:53 >>>> processing overlapped regions...
+2025-11-13 15:35:55 >>>> generating final output...
+        >>> Number of toxin loci identified in the genome:
+                ACRMI -> 1
+                TOTAL -> 1
+2025-11-13 15:35:56 >>>> comparing annotated toxins to the uniprot/toxprot database...
+        Uniprot/Toxprot database -> /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta
+        >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Ahya_expanded/uniprot_report.txt
+2025-11-13 15:35:58 >>>> ToxCodAn-Genome finished!
+        >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Ahya_expanded/toxin_annotation.gtf
+```
+
+## A. millepora 
+python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Amil_genomic.fna -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Amil_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+
+```
+2025-11-13 15:37:31 >>>> searching for toxin regions in genome using the database file...
+2025-11-13 15:37:43 >>>> retrieving and filtering matched regions...
+2025-11-13 15:37:43 >>>> processing overlapped regions...
+2025-11-13 15:37:44 >>>> generating final output...
+        >>> Number of toxin loci identified in the genome:
+                015907225.1 -> 1
+                ACRMI -> 1
+                TOTAL -> 2
+2025-11-13 15:37:45 >>>> comparing annotated toxins to the uniprot/toxprot database...
+        Uniprot/Toxprot database -> /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta
+        >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Amil_expanded/uniprot_report.txt
+2025-11-13 15:37:46 >>>> ToxCodAn-Genome finished!
+        >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Amil_expanded/toxin_annotation.gtf
+```
+
+## A. cervicornis 
+python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Acervicornis_genome.fna -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Acerv_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+
+2025-11-13 15:40:30 >>>> searching for toxin regions in genome using the database file...
+2025-11-13 15:40:38 >>>> retrieving and filtering matched regions...
+2025-11-13 15:40:38 >>>> processing overlapped regions...
+2025-11-13 15:40:39 >>>> generating final output...
+FASTA index file /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Acervicornis_genome.fna.fai created.
+        >>> Number of toxin loci identified in the genome:
+                015907225.1 -> 1
+                TOTAL -> 1
+2025-11-13 15:40:41 >>>> comparing annotated toxins to the uniprot/toxprot database...
+        Uniprot/Toxprot database -> /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta
+        >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Acerv_expanded/uniprot_report.txt
+2025-11-13 15:40:43 >>>> ToxCodAn-Genome finished!
+        >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Acerv_expanded/toxin_annotation.gtf
+
+ ## Adigitifera
+ python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Adigitifera_genome.fna -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Adig_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+
+
+```
+ 2025-11-13 15:42:12 >>>> searching for toxin regions in genome using the database file...
+2025-11-13 15:42:23 >>>> retrieving and filtering matched regions...
+2025-11-13 15:42:23 >>>> processing overlapped regions...
+2025-11-13 15:42:24 >>>> generating final output...
+        >>> Number of toxin loci identified in the genome:
+                015907225.1 -> 1
+                ACRMI -> 1
+                TOTAL -> 2
+2025-11-13 15:42:24 >>>> comparing annotated toxins to the uniprot/toxprot database...
+        Uniprot/Toxprot database -> /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta
+        >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Adig_expanded/uniprot_report.txt
+2025-11-13 15:42:26 >>>> ToxCodAn-Genome finished!
+        >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Adig_expanded/toxin_annotation.gtf
+```
