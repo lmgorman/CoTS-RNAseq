@@ -255,7 +255,9 @@ FASTA index file /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Acerv
         >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Acerv_expanded/toxin_annotation.gtf
 
  ## Adigitifera
+ ```
  python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Adigitifera_genome.fna -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Adig_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+```
 
 
 ```
@@ -272,4 +274,23 @@ FASTA index file /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/Acerv
         >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Adig_expanded/uniprot_report.txt
 2025-11-13 15:42:26 >>>> ToxCodAn-Genome finished!
         >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Adig_expanded/toxin_annotation.gtf
+```
+
+## A tenuis 
+python /work/pi_hputnam_uri_edu/lgorman/ToxCodAn-Genome/bin/toxcodan-genome.py -g /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/aten.fasta -d /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/expanded_toxin_db_cleaned.fasta -o /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Aten_expanded -u /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta -p 20 -l 20 -s 20 -c 10
+
+```
+2025-11-13 15:49:49 >>>> searching for toxin regions in genome using the database file...
+2025-11-13 15:49:59 >>>> retrieving and filtering matched regions...
+2025-11-13 15:50:00 >>>> processing overlapped regions...
+2025-11-13 15:50:00 >>>> generating final output...
+FASTA index file /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/aten.fasta.fai created.
+        >>> Number of toxin loci identified in the genome:
+                TOTAL -> 0
+2025-11-13 15:50:02 >>>> comparing annotated toxins to the uniprot/toxprot database...
+        Uniprot/Toxprot database -> /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/genome/custom_toxin_database.fasta
+Warning: [blastx] Query is Empty!
+        >>> Check the uniprot/toxprot report: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Aten_expanded/uniprot_report.txt
+2025-11-13 15:50:04 >>>> ToxCodAn-Genome finished!
+        >>> Check the final annotation output: /work/pi_hputnam_uri_edu/20250107_COTS_LG/ToxCodAn/results/Aten_expanded/toxin_annotation.gtf
 ```
