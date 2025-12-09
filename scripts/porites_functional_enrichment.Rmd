@@ -52,7 +52,7 @@ library("tidyverse")
 library("genefilter")
 library("DESeq2")
 library("RColorBrewer")
-library("WGCNA")
+#library("WGCNA")
 library("flashClust")
 library("gridExtra")
 library("ComplexHeatmap")
@@ -444,4 +444,49 @@ write.csv(Porites_DEGs_metadata,file='data/Porites_DEGs_metadata.csv')
 Por_sequences <- AAStringSet(selected_fasta$sequence)
 names(Por_sequences) <- selected_fasta$id
 writeXStringSet(Por_sequences, filepath = "data/Porites_DEGs.fasta")
+
+#Do same for all genes
+library(sequinr)
+library(dplyr)
+
+# 1. Read protein FASTA
+por_fasta_sequences <- read.fasta(
+  file = "data/Porites_evermanni_v1.annot.pep.fa",
+  seqtype = "AA",
+  as.string = TRUE
+)
+
+# Convert FASTA list into a dataframe
+por_fasta_df <- data.frame(
+  id = names(por_fasta_sequences),
+  sequence = unlist(por_fasta_sequences),
+  stringsAsFactors = FALSE
+)
+
+# 2. Subset FASTA sequences for your filtered gene list
+# Replace `gene` with the name of your gene column in filtered_genes_por
+selected_fasta <- por_fasta_df %>%
+  filter(id %in% filtered_genes_por$gene)
+
+# 3. (Optional) Filter annotation table
+# Only run this if you have Por_annot loaded and want annotation info
+filtered_annot <- Por_annot %>%
+  filter(Sequence.Name %in% selected_fasta$id)
+
+# 4. Merge FASTA sequences + annotation (optional)
+# If you do NOT have annotation, remove this and just keep selected_fasta
+Porites_metadata <- merge(
+  selected_fasta,
+  filtered_annot,
+  by.x = "id",
+  by.y = "Sequence.Name",
+  all.x = TRUE
+)
+
+# 5. Clean up repeated semicolons in character fields
+Porites_metadata <- Porites_metadata %>%
+  mutate(across(where(is.character), ~ gsub(";+", "", .)))
+
+# 6. Write output
+write.csv(Porites_metadata, file = "data/all_expressed_Porites.csv", row.names = FALSE)
 ```

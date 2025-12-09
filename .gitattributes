@@ -1,3 +1,4 @@
 *.annotations.txt filter=lfs diff=lfs merge=lfs -text
 Ahya_annot_lucy_filtered.csv filter=lfs diff=lfs merge=lfs -text
+Ahya_allgenes.csv filter=lfs diff=lfs merge=lfs -text
 data/Ahya_allgenes.csv filter=lfs diff=lfs merge=lfs -text
