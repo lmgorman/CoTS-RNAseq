@@ -377,6 +377,8 @@ fasta_database_coralvenom <- database_coralvenom %>%
   select(Database, Protein_family, Sequence_ID, Sequence)
 fasta_database_coralvenom$ID <- paste(fasta_database_coralvenom$Database, fasta_database_coralvenom$Protein_family, fasta_database_coralvenom$Sequence_ID)
 
+fasta_database_coralvenom$ID <- gsub(" ", "_", fasta_database_coralvenom$ID)
+
 fasta_coralvenom <- fasta_database_coralvenom %>%
   select(ID, Sequence)
 
