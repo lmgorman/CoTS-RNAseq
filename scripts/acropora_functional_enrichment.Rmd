@@ -367,3 +367,26 @@ Acr_sequences <- AAStringSet(selected_fasta_acr$sequence)
 names(Acr_sequences) <- selected_fasta_acr$id
 writeXStringSet(Acr_sequences, filepath = "data/Acr_DEGs.fasta")
 ```
+
+Convert database from Gorman et al. 2025 to fasta format for BLASTing
+```{r}
+#Need to work out which file this is from acropora_DEG script
+database_coralvenom <-read.csv("data/Database_ourvenompaper_060125.csv", col.names = c("Database","Protein_family","Sequence_ID","evalue","Query_cover","InterProScan","Sequence","Pseudogene","BLAST_results"))
+
+fasta_database_coralvenom <- database_coralvenom %>%
+  select(Database, Protein_family, Sequence_ID, Sequence)
+fasta_database_coralvenom$ID <- paste(fasta_database_coralvenom$Database, fasta_database_coralvenom$Protein_family, fasta_database_coralvenom$Sequence_ID)
+
+fasta_coralvenom <- fasta_database_coralvenom %>%
+  select(ID, Sequence)
+
+# Remove newlines, carriage returns, tabs, spaces
+fasta_coralvenom_AA <- fasta_database_coralvenom$Sequence
+fasta_coralvenom_AA <- gsub("[\r\n\t ]", "", fasta_coralvenom_AA)
+
+# Ensure character and uppercase
+fasta_coralvenom_AA <- toupper(as.character(fasta_coralvenom_AA))
+fasta_coralvenom_AA <- AAStringSet(fasta_coralvenom_AA)
+names(fasta_coralvenom_AA) <- fasta_database_coralvenom$ID
+
+writeXStringSet(fasta_coralvenom_AA, filepath = "data/fasta_coralvenom_ourdatabase.fasta")
