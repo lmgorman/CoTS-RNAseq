@@ -27,7 +27,7 @@ A. hyacinthus and Porites sp. that had been preyed on by CoTS (“eaten”) and 
 
 
 
-**Figure 1.** _Porites_ sp. (**A**, **B**) and _Acropora hyacinthus_ (**C**, **D**) individuals during the 2022/24 CoTS outbreak in Moorea, French Polynesia. Control colonies for each species were chosen based on no observable CoTS feeding scars (**A**, **C**). Colonies being fed upon by CoTS (**B**, **D**) were chosen that were actively consumed by CoTS during sampling and harboured both an observable feeding scar (skeleton devoid of coral tissue (red arrow)) in addition to harbouring areas with remaining coral tissue (pink arrow) for sampling. 
+**Figure 1.** _Porites_ sp. (**A**, **B**) and _Acropora hyacinthus_ (**C**, **D**) individuals during the 2022/24 CoTS outbreak in Mo'orea, French Polynesia. Control colonies for each species were chosen based on no observable CoTS feeding scars (**A**, **C**). Colonies being fed upon by CoTS (**B**, **D**) were chosen that were actively consumed by CoTS during sampling and harboured both an observable feeding scar (skeleton devoid of coral tissue (red arrow)) in addition to harbouring areas with remaining coral tissue (pink arrow) for sampling. 
 
 
 # RNA extraction
