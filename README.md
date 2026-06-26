@@ -1,10 +1,6 @@
 # CoTS-RNAseq
 Bioinformatics analysis of RNA-seq data collected from corals (_Acropora hyacinthus_ and _Porites_ sp.) being eaten by CoTS in Moorea, French Polynesia during the 2023/24 CoTS outbreak.
 
-
-New study showing A. hyacinthus in French Polynesia and Mo'orea is likely Acropora turbinata<sup>1</sup> 
-
-
 Four treatments:
 
 _Acropora hyacinthus_ eaten: 497R, 568R, 410R, 549R, 414R, 321R A, 581R, 370R
@@ -26,14 +22,16 @@ Fed and unfed upon _Porites_ sp. and _A. hyacinthus_ colonies were chosen (**Fig
 
 
 
-<img width="389" alt="Fig1smallsnipfile" src="https://github.com/user-attachments/assets/9aa1e0fd-fe4d-4bc0-9086-7615f6f57231" />
+
+<img width="1217" height="886" alt="image" src="https://github.com/user-attachments/assets/2432de55-0f61-4a06-b590-2b78fa5c042d" />
 
 
-**Figure 1.** _Porites_ sp. (**A**, **B**) and _Acropora hyacinthus_ (**C**, **D**) individuals during the 2022/24 CoTS outbreak in Moorea, French Polynesia. Control colonies for each species were chosen based on no observable CoTS feeding scars (**A**, **C**). Colonies being fed upon by CoTS (**B**, **D**) were chosen that were actively consumed by CoTS during sampling and harboured both an observable feeding scar (skeleton devoid of coral tissue (red arrow)) in addition to harbouring areas with remaining coral tissue (pink arrow) for sampling. The white arrow in **A** depicts a feeding scar caused by corallivorous fish which were present on both fed and unfed _Porites_ sp. colonies. 
+
+**Figure 1.** _Porites_ sp. (**A**, **B**) and _Acropora hyacinthus_ (**C**, **D**) individuals during the 2022/24 CoTS outbreak in Moorea, French Polynesia. Control colonies for each species were chosen based on no observable CoTS feeding scars (**A**, **C**). Colonies being fed upon by CoTS (**B**, **D**) were chosen that were actively consumed by CoTS during sampling and harboured both an observable feeding scar (skeleton devoid of coral tissue (red arrow)) in addition to harbouring areas with remaining coral tissue (pink arrow) for sampling. 
 
 
 # RNA extraction
-Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortexed due to the tissue still remaining on the coral skeleton. Contrastingly, in _Acropora hyacinthus_ samples, the tissue had successfully dissociated from the skeleton, so these samples were not cut. 300-1500 µL of sample was then transferred to a new tube and RNA was extracted using the Zymo RNA/ DNA quick prep mini kit. QC of RNA was conducted on both a nanodrop and a bioanalyser. Samples with a 260/280 ratio between 1.8-2.2 and containing two RNA peaks (18S and 28S) on the bioanalyser were sent to MGX-Montpellier GenomiX<sup>2</sup>  for sequencing. Altogether, eight biological replicates for each treatment (_n_ = 4) were sent for sequencing.
+Prior to extraction, _Porites_ sp. samples were cut up using scissors and vortexed due to the tissue still remaining on the coral skeleton. Contrastingly, in _Acropora hyacinthus_ samples, the tissue had successfully dissociated from the skeleton, so these samples were not cut. 300-1500 µL of sample was then transferred to a new tube and RNA was extracted using the Zymo RNA/ DNA quick prep mini kit. QC of RNA was conducted on both a nanodrop and a bioanalyser. Samples with a 260/280 ratio between 1.8-2.2 and containing two RNA peaks (18S and 28S) on the bioanalyser were sent to MGX-Montpellier GenomiX<sup>1</sup>  for sequencing. Altogether, eight biological replicates for each treatment (_n_ = 4) were sent for sequencing.
 
 
 # Pure venom extraction 
@@ -48,5 +46,4 @@ See here - https://github.com/AHuffmyer/ASH_Putnam_Lab_Notebook/blob/master/_pos
 See here - https://github.com/lmgorman/CoTS-RNAseq/blob/bee3172fc9aed27c553984132a5a2e36353e6cb4/LMG_Lab_Notebook.md
 
 # References
-1. Rassmussen Sage H., Cowman Peter F., Baird Andrew H., Crosbie Augustine J., Quattrini Andrea M., Bonito Victor, Sinniger Frederic, Harii Saki, Cabaitan Patrick C., Fadli Nur, Tan Chun-Hong, Hung Julia Yun-Hsuan, Rongo Teina, Huang Danwei, Halafihi Tuikolongahau, Bridge Tom C. L. (2025) The tables have turned: taxonomy, systematics and biogeography of the Acropora hyacinthus (Scleractinia: Acroporidae) complex. Invertebrate Systematics 39, IS24049. https://doi.org/10.1071/IS24049
-2. MGX-Montpellier GenomiX, Univ. Montpellier, CNRS, INSERM, Montpellier, France
+1. MGX-Montpellier GenomiX, Univ. Montpellier, CNRS, INSERM, Montpellier, France
