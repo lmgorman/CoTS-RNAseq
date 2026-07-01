@@ -346,6 +346,13 @@ parent_enrich_plot4<-ggplot(parent_summary, aes(x = meanGeneRatio, y = reorder(P
   theme_classic(base_size=10) +
   labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4
 ggsave(parent_enrich_plot4, filename="figures/acropora/parent_enrichment_parent_terms.png", width=10, height=7)
+
+ggsave(
+  "figures/acropora/parent_enrich_plot4_acr.svg",
+  parent_enrich_plot4,
+  width = 9,
+  height = 5
+)
 ```
 
 Create a file of fasta of DEGs and append these to the GO terms
@@ -392,3 +399,4 @@ fasta_coralvenom_AA <- AAStringSet(fasta_coralvenom_AA)
 names(fasta_coralvenom_AA) <- fasta_database_coralvenom$ID
 
 writeXStringSet(fasta_coralvenom_AA, filepath = "data/fasta_coralvenom_ourdatabase.fasta")
+```

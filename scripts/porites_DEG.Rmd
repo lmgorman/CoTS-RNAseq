@@ -836,10 +836,17 @@ ggsave(
 )
 ```
 
+```{r, expression counts of genes}
+# Matrix of VST expression values
+vst_all_por <- assay(rld_por)
 
-```{r, counts}
-vst_df_por <- as.data.frame(rld_sig_genes_por)
-vst_df_por$gene <- rownames(vst_df_por)
-head(vst_df_por)
-write.csv(vst_df_por, "data/porites_vst_genes.csv")
+# Data frame for export
+vst_all_por_df <- cbind(
+  gene = rownames(vst_all_por),
+  as.data.frame(vst_all_por)
+)
+
+write.csv(vst_all_por_df,
+          "data/porites_all_genes_vst_expression.csv",
+          row.names = FALSE)
 ```

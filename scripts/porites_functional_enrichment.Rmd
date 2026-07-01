@@ -25,13 +25,19 @@ options(stringsAsFactors = FALSE) #Set Strings to character
 ```{r}
 if ("tidyversea" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
 if ("genefilter" %in% rownames(installed.packages()) == 'FALSE') install.packages('genefilter') 
-if ("DESeq2" %in% rownames(installed.packages()) == 'FALSE') install.packages('DESeq2') 
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("DESeq2")
 if ("RColorBrewer" %in% rownames(installed.packages()) == 'FALSE') install.packages('RColorBrewer') 
 if ("WGCNA" %in% rownames(installed.packages()) == 'FALSE') install.packages('WGCNA') 
 if ("flashClust" %in% rownames(installed.packages()) == 'FALSE') install.packages('flashClust') 
 if ("gridExtra" %in% rownames(installed.packages()) == 'FALSE') install.packages('gridExtra') 
-if ("ComplexHeatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('ComplexHeatmap') 
-if ("goseq" %in% rownames(installed.packages()) == 'FALSE') install.packages('goseq') 
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("ComplexHeatmap")
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("goseq")
 if ("dplyr" %in% rownames(installed.packages()) == 'FALSE') install.packages('dplyr') 
 if ("clusterProfiler" %in% rownames(installed.packages()) == 'FALSE') install.packages('clusterProfiler') 
 if ("pheatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('pheatmap') 
@@ -118,23 +124,23 @@ In topGO we need:
 
 Background/GO information: 
 ```{r}
-geneID2GO_por<-filtered_genes_por%>%dplyr::select(Sequence.Name, Annotation.GO.ID)
+geneID2GO_por<-filtered_genes_por%>%dplyr::select(GeneID, Annotation.GO.ID)
 geneID2GO_por <- as.data.frame(geneID2GO_por)
-background_por <- geneID2GO_por%>%pull("Sequence.Name")
+background_por <- geneID2GO_por%>%pull("GeneID")
 
 #remove genes with NA in go term and separate rows based on GO terms 
 geneID2GO_por<-geneID2GO_por%>%
   filter(!(Annotation.GO.ID == ""))%>%
   separate_rows(Annotation.GO.ID, sep = ";")
 #creates list with each GO term appended to the geneID
-geneID2GO_por <- split(as.character(geneID2GO_por$Annotation.GO.ID), geneID2GO_por$Sequence.Name)
+geneID2GO_por <- split(as.character(geneID2GO_por$Annotation.GO.ID), geneID2GO_por$GeneID)
 #so now our geneID2GO_por object has all our genes in our dataset that have GO terms
 ```
 
 Run TopGO
 
 ```{r}
-por_test_set<-por_eatenvscontrol_DEG_list%>%pull(gene) #this is our DEG genes
+por_test_set<-por_eatenvscontrol_DEG_list%>%pull(GeneID) #this is our DEG genes
 # 1. Make sure background is a character vector
 background_por <- as.character(background_por)
 # 2. Make sure acr_test_set is character too
@@ -326,6 +332,13 @@ parent_enrich_plot4_por<-ggplot(parent_summary_por, aes(x = meanGeneRatio, y = r
   theme_classic(base_size=10) +
   labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4_por
 ggsave(parent_enrich_plot4_por, filename="figures/porites/por_parent_enrichment_parent_terms.png", width=10, height=7)
+
+ggsave(
+  "figures/porites/parent_enrich_plot4_por.svg",
+  parent_enrich_plot4_por,
+  width = 9,
+  height = 5
+)
 ```
 
 # What about classic fisher results...
@@ -422,6 +435,13 @@ parent_enrich_plot4_por_class<-ggplot(parent_summary_por_class, aes(x = meanGene
   theme_classic(base_size=10) +
   labs(x="Mean Gene Ratio", y="Parent GO Term");parent_enrich_plot4_por_class
 ggsave(parent_enrich_plot4_por_class, filename="figures/porites/por_parent_enrichment_parent_terms_classic.png", width=10, height=7)
+
+ggsave(
+  "figures/porites/parent_enrich_plot4_por_class.svg",
+  parent_enrich_plot4_por_class,
+  width = 9,
+  height = 5
+) 
 ```
 
 
@@ -444,6 +464,7 @@ write.csv(Porites_DEGs_metadata,file='data/Porites_DEGs_metadata.csv')
 Por_sequences <- AAStringSet(selected_fasta$sequence)
 names(Por_sequences) <- selected_fasta$id
 writeXStringSet(Por_sequences, filepath = "data/Porites_DEGs.fasta")
+
 
 #Do same for all genes
 library(sequinr)
@@ -490,3 +511,4 @@ Porites_metadata <- Porites_metadata %>%
 # 6. Write output
 write.csv(Porites_metadata, file = "data/all_expressed_Porites.csv", row.names = FALSE)
 ```
+
