@@ -55,6 +55,7 @@ options(stringsAsFactors = FALSE)
 
 library("vegan")
 library("factoextra")
+library("ggrepel")
 library("viridis")
 library("DESeq2")
 library("tidyverse")
@@ -72,6 +73,7 @@ library("magrittr")
 library("rtracklayer")
 library("GenomicRanges")
 library("plyranges")
+library("ggrepel")
 library("GSEABase")
 library("GOSim")
 library("stats")
@@ -627,17 +629,28 @@ No significant difference in total gene expression - there may be individual DEG
 
  #Plot a PCA after removing low quality samples by eatenvscontrol phenotype for all genes. 
 ```{r Plot a PCA after removing low quality samples}
-gPCAdata_por2 <- plotPCA(gvst_por2, intgroup = c("eatenvscontrol"), returnData=TRUE)
+gPCAdata_por2 <- plotPCA(gvst_por2, ntop = nrow(gvst_por2), intgroup = c("eatenvscontrol"), returnData=TRUE)
 percentVar_por2 <- round(100*attr(gPCAdata_por2, "percentVar")) #plot PCA of samples with all data
 
 allgenesfilt_PCA_por2 <- ggplot(gPCAdata_por2, aes(PC1, PC2, color=eatenvscontrol)) + 
   geom_point(size=3) + 
   ggtitle(expression(bold("All genes (24301 genes)")))+
-  geom_text(aes(x = PC1, y = PC2, label = name), vjust = -0.5) +
+  geom_text_repel(
+  aes(label = name),
+  box.padding = 0.5,
+  point.padding = 0.3,
+  max.overlaps = Inf
+) +
   xlab(paste0("PC1: ",percentVar_por2[1],"% variance")) +
-  ylab(paste0("PC2: ",percentVar_por[2],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_por2[2],"% variance")) +
   scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange"))+
-  geom_text(x=0, y=-20, label="p[eatenvscontrol]=0.57", color="black")+
+  annotate(
+    "text",
+    x = 0,
+    y = -20,
+    label = "p[eatenvscontrol]=0.57",
+    color = "black"
+  ) +
   theme_classic() + #Set background color
   theme(panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines 
@@ -652,6 +665,12 @@ ggsave("figures/porites/pca_por2.jpeg", allgenesfilt_PCA_por2, width=8, height=4
 allgenes_ellipse_por2<-allgenesfilt_PCA_por2 + stat_ellipse();allgenes_ellipse_por2
 ggsave("figures/porites/pca_ellipse_por2.pdf", allgenes_ellipse_por2, width=9, height=5)
 ggsave("figures/porites/pca_ellipse_por2.jpeg", allgenes_ellipse_por2, width=9, height=5)
+ggsave(
+  "figures/porites/pca_por_ellipse_2.svg",
+  allgenes_ellipse_por2,
+  width = 9,
+  height = 5
+)
 ```
 
 # Run DEG analysis of eatenvscontrol after removing low quality samples  
@@ -747,5 +766,80 @@ DEG_por2_eatenvscontrol_heatmap <- pheatmap(assay(DEG_eatenvscontrol_vst_por2), 
 
 save_pheatmap_pdf(DEG_por2_eatenvscontrol_heatmap, "figures/porites/DEG_por2_eatenvscontrol_heatmap.pdf", width=15, height=20)
 dev.off()
+
+ggsave(
+  "figures/porites/DEG_por2_eatenvscontrol_heatmap.svg",
+  DEG_por2_eatenvscontrol_heatmap,
+  width = 9,
+  height = 5
+)
 ```
 
+# Plot PCA of DEGs
+```{r Plot a PCA of DEGs}
+# Get the gene IDs of the significant genes
+sig_gene_ids_por <- sig_genes_por2$gene
+
+# rlog transformation (can also use vst for variance-stabilizing)
+rld_por <- vst(DEG_T_por2)
+
+# Get the transformed counts
+rld_mat_por <- assay(rld_por)
+
+# Subset the transformed counts to include only significant genes
+rld_sig_genes_por <- rld_mat_por[sig_gene_ids_por, ]
+# Run PCA (t() is important to transpose for PCA, where rows are samples)
+pca_por <- prcomp(t(rld_sig_genes_por), scale. = TRUE)
+
+percentVar_pordeg <- pca_por$sdev^2 / sum(pca_por$sdev^2)
+
+# Convert to percentages
+percentVar_pordeg <- round(percentVar_pordeg * 100, 1)
+
+percentVar_pordeg
+#PC1 # 54.8 and PC2 = 18.7
+
+# Create a dataframe with PCA results
+pca_df_por <- as.data.frame(pca_por$x)
+pca_df_por$sample <- rownames(pca_df_por)
+sample_meta_por2 <- as.data.frame(colData(DEG_T_por2))
+sample_meta_por2$sample <- rownames(sample_meta_por2)
+
+# Merge PCA results with sample metadata
+pca_df_por <- left_join(pca_df_por, sample_meta_por2, by = "sample")
+por_pca_deg <- ggplot(pca_df_por, aes(x = PC1, y = PC2, colour = eatenvscontrol)) +
+  geom_point(size = 3) +
+  geom_text_repel(
+  aes(label = sample),
+  box.padding = 0.5,
+  point.padding = 0.3,
+  max.overlaps = Inf
+)+
+  labs(title = "PCA of Porites DEGs (padj < 0.05)", x = "PC1", y = "PC2") +
+  scale_color_manual(name="Eaten vs Control", values=c("control"="gray", "eaten"="orange")) +
+  theme_minimal()
+plot(por_pca_deg)
+
+ggsave("figures/porites/por_pca_deg.pdf", por_pca_deg, width=8, height=4)
+ggsave("figures/porites/por_pca_deg.jpeg", por_pca_deg, width=8, height=4)
+
+#Add a plot with elipses.  
+por_pca_deg_ellipse<-por_pca_deg + stat_ellipse();por_pca_deg_ellipse
+ggsave("figures/porites/por_pca_deg_ellipse.pdf", por_pca_deg_ellipse, width=9, height=5)
+ggsave("figures/porites/por_pca_deg_ellipse.jpeg", por_pca_deg_ellipse, width=9, height=5)
+
+ggsave(
+  "figures/porites/por_pca_deg_ellipse2.svg",
+  por_pca_deg_ellipse,
+  width = 9,
+  height = 5
+)
+```
+
+
+```{r, counts}
+vst_df_por <- as.data.frame(rld_sig_genes_por)
+vst_df_por$gene <- rownames(vst_df_por)
+head(vst_df_por)
+write.csv(vst_df_por, "data/porites_vst_genes.csv")
+```
